@@ -413,7 +413,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 284 pt</span>
+    <span id="score-text">0 / 283 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -451,7 +451,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/32)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/31)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -507,13 +507,13 @@
 
 <script>
   const gameDate = '2026-09-14';
-  const centerLetter = 'l';
-  let outerLetters = ["j", "g", "t", "o", "n", "i"];
-  const solutions = new Set(["ili", "longi", "longili", "longilo", "longiloj", "longilojn", "longilon", "longini", "longino", "longinoj", "longinojn", "longinon", "longinto", "longintoj", "longintojn", "longinton", "longito", "longitoj", "longitojn", "longiton", "longo", "longoj", "longojn", "longon", "longonto", "longontoj", "longontojn", "longonton", "longoto", "longotoj", "longotojn", "longoton"]);
-  const dict = {"ili": "", "longi": "", "longili": "", "longilo": "", "longiloj": "", "longilojn": "", "longilon": "", "longini": "", "longino": "", "longinoj": "", "longinojn": "", "longinon": "", "longinto": "", "longintoj": "", "longintojn": "", "longinton": "", "longito": "", "longitoj": "", "longitojn": "", "longiton": "", "longo": "", "longoj": "", "longojn": "", "longon": "", "longonto": "", "longontoj": "", "longontojn": "", "longonton": "", "longoto": "", "longotoj": "", "longotojn": "", "longoton": ""};
-  const hintsMatrix = {"I": {"3": 1, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0}, "L": {"3": 0, "5": 2, "6": 2, "7": 7, "8": 10, "9": 8, "10": 2}};
-  const lengthsList = [3, 5, 6, 7, 8, 9, 10];
-  const maxScore = 284;
+  const centerLetter = 'g';
+  let outerLetters = ["o", "i", "l", "n", "j", "t"];
+  const solutions = new Set(["longi", "longili", "longilo", "longiloj", "longilojn", "longilon", "longini", "longino", "longinoj", "longinojn", "longinon", "longinto", "longintoj", "longintojn", "longinton", "longito", "longitoj", "longitojn", "longiton", "longo", "longoj", "longojn", "longon", "longonto", "longontoj", "longontojn", "longonton", "longoto", "longotoj", "longotojn", "longoton"]);
+  const dict = {"longi": "", "longili": "", "longilo": "", "longiloj": "", "longilojn": "", "longilon": "", "longini": "", "longino": "", "longinoj": "", "longinojn": "", "longinon": "", "longinto": "", "longintoj": "", "longintojn": "", "longinton": "", "longito": "", "longitoj": "", "longitojn": "", "longiton": "", "longo": "", "longoj": "", "longojn": "", "longon": "", "longonto": "", "longontoj": "", "longontojn": "", "longonton": "", "longoto": "", "longotoj": "", "longotojn": "", "longoton": ""};
+  const hintsMatrix = {"L": {"5": 2, "6": 2, "7": 7, "8": 10, "9": 8, "10": 2}};
+  const lengthsList = [5, 6, 7, 8, 9, 10];
+  const maxScore = 283;
   const totalTutis = 4;
   
   let currentInput = "";
