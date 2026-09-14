@@ -335,6 +335,11 @@
     margin-bottom: 14px;
   }
 
+  .hints-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
   .hints-table {
     width: 100%;
     border-collapse: collapse;
@@ -413,7 +418,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 2002 pt</span>
+    <span id="score-text">0 / 3222 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -451,7 +456,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/262)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/363)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -460,14 +465,14 @@
 <div class="section-card">
   <div class="card-title">
     <span>Spuroj & Pangeromoj</span>
-    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/9 tutis</span>
+    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/30 tutis</span>
   </div>
   <div id="hints-table-container"></div>
 </div>
 
 <footer>
   <div class="creator-tag">Kreita de Esperantulo de la VA</div>
-  <div class="version-tag">Versio 1.2</div>
+  <div class="version-tag">Versio 1.2.1</div>
   <div style="margin-top:4px;">Bazita sur Fundamento kaj ReVo • <a href="https://github.com/JordiACG25/Vortabelo" target="_blank">Fontkodo ĉe GitHub</a></div>
 </footer>
 
@@ -479,12 +484,12 @@
     </div>
     <div class="rule-item">• Trovu kiom eble plej multajn Esperantajn vortojn uzante la 7 proponitajn literojn.</div>
     <div class="rule-item">• Ĉiu vorto devas havi almenaŭ 3 literojn.</div>
-    <div class="rule-item">• Ĉiu vorto <strong>nepre devas enhavi la centran literon</strong> (flavan).</div>
+    <div class="rule-item">• Ĉiu vorto nepre devas enhavi la centran literon (flavan).</div>
     <div class="rule-item">• Vi rajtas uzi la samajn literojn plurfoje en la sama vorto.</div>
-    <div class="rule-item">• <strong>Permesitaj formoj:</strong> Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), partikloj, numeraloj, participoj kaj regule derivitaj formoj (-il-, -ej-, -in-...).</div>
-    <div class="rule-item">• <strong>Malpermesitaj formoj:</strong> Konjugaciitaj verboj (-as, -is, -os, -us, -u) kaj mallongigoj.</div>
-    <div class="rule-item">• <strong>Tuti / Pangeromo:</strong> Vorto kiu uzas ĉiujn 7 literojn de la tago donas 10 kromajn poentojn!</div>
-    <div class="rule-item">• <strong>Klavaro:</strong> Vi povas tajpi 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' aŭ per 'h' por ricevi la ĉapelajn literojn aŭtomate.</div>
+    <div class="rule-item">• Permesitaj formoj: Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), partikloj, numeraloj, tabelvortoj, participoj kaj derivitaj formoj (mal-, re-, ge-, -il-, -ej-, -in-...).</div>
+    <div class="rule-item">• Malpermesitaj formoj: Konjugaciitaj verboj (-as, -is, -os, -us, -u) kaj mallongigoj.</div>
+    <div class="rule-item">• Tuti / Pangeromo: Vorto kiu uzas ĉiujn 7 literojn de la tago donas 10 kromajn poentojn!</div>
+    <div class="rule-item">• Klavaro: Tajpu 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' por ricevi la ĉapelajn literojn aŭtomate.</div>
   </div>
 </div>
 
@@ -507,14 +512,14 @@
 
 <script>
   const gameDate = '2026-09-14';
-  const centerLetter = 'n';
-  let outerLetters = ["u", "i", "d", "l", "o", "j"];
-  const solutions = new Set(["doni", "donili", "donilili", "donililo", "donililoj", "donililojn", "donililon", "donilini", "donilino", "donilinoj", "donilinojn", "donilinon", "donilo", "doniloj", "donilojn", "donilon", "doniluli", "donilulo", "doniluloj", "donilulojn", "donilulon", "donini", "doninili", "doninilo", "doniniloj", "doninilojn", "doninilon", "doninini", "doninino", "donininoj", "donininojn", "donininon", "donino", "doninoj", "doninojn", "doninon", "doninuli", "doninulo", "doninuloj", "doninulojn", "doninulon", "dono", "donoj", "donojn", "donon", "donuli", "donulili", "donulilo", "donuliloj", "donulilojn", "donulilon", "donulini", "donulino", "donulinoj", "donulinojn", "donulinon", "donulo", "donuloj", "donulojn", "donulon", "donululi", "donululo", "donululoj", "donululojn", "donululon", "duilojn", "duilon", "duojn", "duon", "ililojn", "ililon", "ilini", "ilino", "ilinoj", "ilinojn", "ilinon", "ilojn", "ilon", "ilulojn", "ilulon", "juni", "junili", "junilili", "junililo", "junililoj", "junililojn", "junililon", "junilini", "junilino", "junilinoj", "junilinojn", "junilinon", "junilo", "juniloj", "junilojn", "junilon", "juniluli", "junilulo", "juniluloj", "junilulojn", "junilulon", "junini", "juninili", "juninilo", "juniniloj", "juninilojn", "juninilon", "juninini", "juninino", "junininoj", "junininojn", "junininon", "junino", "juninoj", "juninojn", "juninon", "juninuli", "juninulo", "juninuloj", "juninulojn", "juninulon", "juno", "junoj", "junojn", "junon", "junuli", "junulili", "junulilo", "junuliloj", "junulilojn", "junulilon", "junulini", "junulino", "junulinoj", "junulinojn", "junulinon", "junulo", "junuloj", "junulojn", "junulon", "junululi", "junululo", "junululoj", "junululojn", "junululon", "luni", "lunili", "lunilili", "lunililo", "lunililoj", "lunililojn", "lunililon", "lunilini", "lunilino", "lunilinoj", "lunilinojn", "lunilinon", "lunilo", "luniloj", "lunilojn", "lunilon", "luniluli", "lunilulo", "luniluloj", "lunilulojn", "lunilulon", "lunini", "luninili", "luninilo", "luniniloj", "luninilojn", "luninilon", "luninini", "luninino", "lunininoj", "lunininojn", "lunininon", "lunino", "luninoj", "luninojn", "luninon", "luninuli", "luninulo", "luninuloj", "luninulojn", "luninulon", "luno", "lunoj", "lunojn", "lunon", "lunuli", "lunulili", "lunulilo", "lunuliloj", "lunulilojn", "lunulilon", "lunulini", "lunulino", "lunulinoj", "lunulinojn", "lunulinon", "lunulo", "lunuloj", "lunulojn", "lunulon", "lunululi", "lunululo", "lunululoj", "lunululojn", "lunululon", "nun", "nuni", "nunili", "nunilo", "nuniloj", "nunilojn", "nunilon", "nuno", "nunoj", "nunojn", "nunon", "oni", "onili", "onilo", "oniloj", "onilojn", "onilon", "onini", "onino", "oninoj", "oninojn", "oninon", "ono", "onoj", "onojn", "onon", "onuli", "onulo", "onuloj", "onulojn", "onulon", "unu", "unui", "unuili", "unuilo", "unuiloj", "unuilojn", "unuilon", "unuini", "unuino", "unuinoj", "unuinojn", "unuinon", "unuo", "unuoj", "unuojn", "unuon", "unuuli", "unuulo", "unuuloj", "unuulojn", "unuulon"]);
-  const dict = {"doni": "", "donili": "", "donilili": "", "donililo": "", "donililoj": "", "donililojn": "", "donililon": "", "donilini": "", "donilino": "", "donilinoj": "", "donilinojn": "", "donilinon": "", "donilo": "", "doniloj": "", "donilojn": "", "donilon": "", "doniluli": "", "donilulo": "", "doniluloj": "", "donilulojn": "", "donilulon": "", "donini": "", "doninili": "", "doninilo": "", "doniniloj": "", "doninilojn": "", "doninilon": "", "doninini": "", "doninino": "", "donininoj": "", "donininojn": "", "donininon": "", "donino": "", "doninoj": "", "doninojn": "", "doninon": "", "doninuli": "", "doninulo": "", "doninuloj": "", "doninulojn": "", "doninulon": "", "dono": "", "donoj": "", "donojn": "", "donon": "", "donuli": "", "donulili": "", "donulilo": "", "donuliloj": "", "donulilojn": "", "donulilon": "", "donulini": "", "donulino": "", "donulinoj": "", "donulinojn": "", "donulinon": "", "donulo": "", "donuloj": "", "donulojn": "", "donulon": "", "donululi": "", "donululo": "", "donululoj": "", "donululojn": "", "donululon": "", "duilojn": "", "duilon": "", "duojn": "", "duon": "", "ililojn": "", "ililon": "", "ilini": "", "ilino": "", "ilinoj": "", "ilinojn": "", "ilinon": "", "ilojn": "", "ilon": "", "ilulojn": "", "ilulon": "", "juni": "", "junili": "", "junilili": "", "junililo": "", "junililoj": "", "junililojn": "", "junililon": "", "junilini": "", "junilino": "", "junilinoj": "", "junilinojn": "", "junilinon": "", "junilo": "", "juniloj": "", "junilojn": "", "junilon": "", "juniluli": "", "junilulo": "", "juniluloj": "", "junilulojn": "", "junilulon": "", "junini": "", "juninili": "", "juninilo": "", "juniniloj": "", "juninilojn": "", "juninilon": "", "juninini": "", "juninino": "", "junininoj": "", "junininojn": "", "junininon": "", "junino": "", "juninoj": "", "juninojn": "", "juninon": "", "juninuli": "", "juninulo": "", "juninuloj": "", "juninulojn": "", "juninulon": "", "juno": "", "junoj": "", "junojn": "", "junon": "", "junuli": "", "junulili": "", "junulilo": "", "junuliloj": "", "junulilojn": "", "junulilon": "", "junulini": "", "junulino": "", "junulinoj": "", "junulinojn": "", "junulinon": "", "junulo": "", "junuloj": "", "junulojn": "", "junulon": "", "junululi": "", "junululo": "", "junululoj": "", "junululojn": "", "junululon": "", "luni": "", "lunili": "", "lunilili": "", "lunililo": "", "lunililoj": "", "lunililojn": "", "lunililon": "", "lunilini": "", "lunilino": "", "lunilinoj": "", "lunilinojn": "", "lunilinon": "", "lunilo": "", "luniloj": "", "lunilojn": "", "lunilon": "", "luniluli": "", "lunilulo": "", "luniluloj": "", "lunilulojn": "", "lunilulon": "", "lunini": "", "luninili": "", "luninilo": "", "luniniloj": "", "luninilojn": "", "luninilon": "", "luninini": "", "luninino": "", "lunininoj": "", "lunininojn": "", "lunininon": "", "lunino": "", "luninoj": "", "luninojn": "", "luninon": "", "luninuli": "", "luninulo": "", "luninuloj": "", "luninulojn": "", "luninulon": "", "luno": "", "lunoj": "", "lunojn": "", "lunon": "", "lunuli": "", "lunulili": "", "lunulilo": "", "lunuliloj": "", "lunulilojn": "", "lunulilon": "", "lunulini": "", "lunulino": "", "lunulinoj": "", "lunulinojn": "", "lunulinon": "", "lunulo": "", "lunuloj": "", "lunulojn": "", "lunulon": "", "lunululi": "", "lunululo": "", "lunululoj": "", "lunululojn": "", "lunululon": "", "nun": "", "nuni": "", "nunili": "", "nunilo": "", "nuniloj": "", "nunilojn": "", "nunilon": "", "nuno": "", "nunoj": "", "nunojn": "", "nunon": "", "oni": "", "onili": "", "onilo": "", "oniloj": "", "onilojn": "", "onilon": "", "onini": "", "onino": "", "oninoj": "", "oninojn": "", "oninon": "", "ono": "", "onoj": "", "onojn": "", "onon": "", "onuli": "", "onulo": "", "onuloj": "", "onulojn": "", "onulon": "", "unu": "", "unui": "", "unuili": "", "unuilo": "", "unuiloj": "", "unuilojn": "", "unuilon": "", "unuini": "", "unuino": "", "unuinoj": "", "unuinojn": "", "unuinon": "", "unuo": "", "unuoj": "", "unuojn": "", "unuon": "", "unuuli": "", "unuulo": "", "unuuloj": "", "unuulojn": "", "unuulon": ""};
-  const hintsMatrix = {"D": {"3": 0, "4": 3, "5": 3, "6": 8, "7": 7, "8": 21, "9": 18, "10": 9}, "I": {"3": 0, "4": 1, "5": 3, "6": 4, "7": 3, "8": 0, "9": 0, "10": 0}, "J": {"3": 0, "4": 2, "5": 2, "6": 7, "7": 6, "8": 21, "9": 18, "10": 9}, "L": {"3": 0, "4": 2, "5": 2, "6": 7, "7": 6, "8": 21, "9": 18, "10": 9}, "N": {"3": 1, "4": 2, "5": 2, "6": 3, "7": 2, "8": 1, "9": 0, "10": 0}, "O": {"3": 2, "4": 2, "5": 7, "6": 6, "7": 3, "8": 0, "9": 0, "10": 0}, "U": {"3": 1, "4": 2, "5": 2, "6": 7, "7": 6, "8": 3, "9": 0, "10": 0}};
-  const lengthsList = [3, 4, 5, 6, 7, 8, 9, 10];
-  const maxScore = 2002;
-  const totalTutis = 9;
+  const centerLetter = 'v';
+  let outerLetters = ["j", "o", "g", "n", "e", "t"];
+  const solutions = new Set(["genove", "genovege", "genovego", "genovegoj", "genovegojn", "genovegon", "genoveje", "genovejo", "genovejoj", "genovejojn", "genovejon", "genovete", "genoveto", "genovetoj", "genovetojn", "genoveton", "genovo", "genovoj", "genovojn", "genovon", "genovote", "genovoto", "genovotoj", "genovotojn", "genovoton", "gevene", "gevenege", "gevenego", "gevenegoj", "gevenegojn", "gevenegon", "geveneje", "gevenejo", "gevenejoj", "gevenejojn", "gevenejon", "gevenete", "geveneto", "gevenetoj", "gevenetojn", "geveneton", "geveno", "gevenoj", "gevenojn", "gevenon", "gevenote", "gevenoto", "gevenotoj", "gevenotojn", "gevenoton", "gevoje", "gevojege", "gevojego", "gevojegoj", "gevojegojn", "gevojegon", "gevojeje", "gevojejo", "gevojejoj", "gevojejojn", "gevojejon", "gevojete", "gevojeto", "gevojetoj", "gevojetojn", "gevojeton", "gevojo", "gevojoj", "gevojojn", "gevojon", "gevojote", "gevojoto", "gevojotoj", "gevojotojn", "gevojoton", "nove", "novege", "novegege", "novegego", "novegegoj", "novegegojn", "novegegon", "novegeje", "novegejo", "novegejoj", "novegejojn", "novegejon", "novegen", "novegete", "novegeto", "novegetoj", "novegetojn", "novegeton", "novego", "novegoj", "novegojn", "novegon", "noveje", "novejege", "novejego", "novejegoj", "novejegojn", "novejegon", "novejeje", "novejejo", "novejejoj", "novejejojn", "novejejon", "novejen", "novejete", "novejeto", "novejetoj", "novejetojn", "novejeton", "novejo", "novejoj", "novejojn", "novejon", "noven", "novete", "novetege", "novetego", "novetegoj", "novetegojn", "novetegon", "noveteje", "novetejo", "novetejoj", "novetejojn", "novetejon", "noveten", "novetete", "noveteto", "novetetoj", "novetetojn", "noveteton", "noveto", "novetoj", "novetojn", "noveton", "novo", "novoj", "novojn", "novon", "novonte", "novonten", "novonto", "novontoj", "novontojn", "novonton", "novote", "novotege", "novotego", "novotegoj", "novotegojn", "novotegon", "novoteje", "novotejo", "novotejoj", "novotejojn", "novotejon", "novoten", "novotete", "novoteto", "novotetoj", "novotetojn", "novoteton", "novoto", "novotoj", "novotojn", "novoton", "vene", "venege", "venegege", "venegego", "venegegoj", "venegegojn", "venegegon", "venegeje", "venegejo", "venegejoj", "venegejojn", "venegejon", "venegen", "venegete", "venegeto", "venegetoj", "venegetojn", "venegeton", "venego", "venegoj", "venegojn", "venegon", "veneje", "venejege", "venejego", "venejegoj", "venejegojn", "venejegon", "venejeje", "venejejo", "venejejoj", "venejejojn", "venejejon", "venejen", "venejete", "venejeto", "venejetoj", "venejetojn", "venejeton", "venejo", "venejoj", "venejojn", "venejon", "venen", "venete", "venetege", "venetego", "venetegoj", "venetegojn", "venetegon", "veneteje", "venetejo", "venetejoj", "venetejojn", "venetejon", "veneten", "venetete", "veneteto", "venetetoj", "venetetojn", "veneteton", "veneto", "venetoj", "venetojn", "veneton", "veno", "venoj", "venojn", "venon", "venonte", "venonten", "venonto", "venontoj", "venontojn", "venonton", "venote", "venotege", "venotego", "venotegoj", "venotegojn", "venotegon", "venoteje", "venotejo", "venotejoj", "venotejojn", "venotejon", "venoten", "venotete", "venoteto", "venotetoj", "venotetojn", "venoteton", "venoto", "venotoj", "venotojn", "venoton", "voje", "vojege", "vojegege", "vojegego", "vojegegoj", "vojegegojn", "vojegegon", "vojegeje", "vojegejo", "vojegejoj", "vojegejojn", "vojegejon", "vojegen", "vojegete", "vojegeto", "vojegetoj", "vojegetojn", "vojegeton", "vojego", "vojegoj", "vojegojn", "vojegon", "vojeje", "vojejege", "vojejego", "vojejegoj", "vojejegojn", "vojejegon", "vojejeje", "vojejejo", "vojejejoj", "vojejejojn", "vojejejon", "vojejen", "vojejete", "vojejeto", "vojejetoj", "vojejetojn", "vojejeton", "vojejo", "vojejoj", "vojejojn", "vojejon", "vojen", "vojete", "vojetege", "vojetego", "vojetegoj", "vojetegojn", "vojetegon", "vojeteje", "vojetejo", "vojetejoj", "vojetejojn", "vojetejon", "vojeten", "vojetete", "vojeteto", "vojetetoj", "vojetetojn", "vojeteton", "vojeto", "vojetoj", "vojetojn", "vojeton", "vojo", "vojoj", "vojojn", "vojon", "vojonte", "vojonten", "vojonto", "vojontoj", "vojontojn", "vojonton", "vojote", "vojotege", "vojotego", "vojotegoj", "vojotegojn", "vojotegon", "vojoteje", "vojotejo", "vojotejoj", "vojotejojn", "vojotejon", "vojoten", "vojotete", "vojoteto", "vojotetoj", "vojotetojn", "vojoteton", "vojoto", "vojotoj", "vojotojn", "vojoton"]);
+  const dict = {"genove": "", "genovege": "", "genovego": "", "genovegoj": "", "genovegojn": "", "genovegon": "", "genoveje": "", "genovejo": "", "genovejoj": "", "genovejojn": "", "genovejon": "", "genovete": "", "genoveto": "", "genovetoj": "", "genovetojn": "", "genoveton": "", "genovo": "", "genovoj": "", "genovojn": "", "genovon": "", "genovote": "", "genovoto": "", "genovotoj": "", "genovotojn": "", "genovoton": "", "gevene": "", "gevenege": "", "gevenego": "", "gevenegoj": "", "gevenegojn": "", "gevenegon": "", "geveneje": "", "gevenejo": "", "gevenejoj": "", "gevenejojn": "", "gevenejon": "", "gevenete": "", "geveneto": "", "gevenetoj": "", "gevenetojn": "", "geveneton": "", "geveno": "", "gevenoj": "", "gevenojn": "", "gevenon": "", "gevenote": "", "gevenoto": "", "gevenotoj": "", "gevenotojn": "", "gevenoton": "", "gevoje": "", "gevojege": "", "gevojego": "", "gevojegoj": "", "gevojegojn": "", "gevojegon": "", "gevojeje": "", "gevojejo": "", "gevojejoj": "", "gevojejojn": "", "gevojejon": "", "gevojete": "", "gevojeto": "", "gevojetoj": "", "gevojetojn": "", "gevojeton": "", "gevojo": "", "gevojoj": "", "gevojojn": "", "gevojon": "", "gevojote": "", "gevojoto": "", "gevojotoj": "", "gevojotojn": "", "gevojoton": "", "nove": "", "novege": "", "novegege": "", "novegego": "", "novegegoj": "", "novegegojn": "", "novegegon": "", "novegeje": "", "novegejo": "", "novegejoj": "", "novegejojn": "", "novegejon": "", "novegen": "", "novegete": "", "novegeto": "", "novegetoj": "", "novegetojn": "", "novegeton": "", "novego": "", "novegoj": "", "novegojn": "", "novegon": "", "noveje": "", "novejege": "", "novejego": "", "novejegoj": "", "novejegojn": "", "novejegon": "", "novejeje": "", "novejejo": "", "novejejoj": "", "novejejojn": "", "novejejon": "", "novejen": "", "novejete": "", "novejeto": "", "novejetoj": "", "novejetojn": "", "novejeton": "", "novejo": "", "novejoj": "", "novejojn": "", "novejon": "", "noven": "", "novete": "", "novetege": "", "novetego": "", "novetegoj": "", "novetegojn": "", "novetegon": "", "noveteje": "", "novetejo": "", "novetejoj": "", "novetejojn": "", "novetejon": "", "noveten": "", "novetete": "", "noveteto": "", "novetetoj": "", "novetetojn": "", "noveteton": "", "noveto": "", "novetoj": "", "novetojn": "", "noveton": "", "novo": "", "novoj": "", "novojn": "", "novon": "", "novonte": "", "novonten": "", "novonto": "", "novontoj": "", "novontojn": "", "novonton": "", "novote": "", "novotege": "", "novotego": "", "novotegoj": "", "novotegojn": "", "novotegon": "", "novoteje": "", "novotejo": "", "novotejoj": "", "novotejojn": "", "novotejon": "", "novoten": "", "novotete": "", "novoteto": "", "novotetoj": "", "novotetojn": "", "novoteton": "", "novoto": "", "novotoj": "", "novotojn": "", "novoton": "", "vene": "", "venege": "", "venegege": "", "venegego": "", "venegegoj": "", "venegegojn": "", "venegegon": "", "venegeje": "", "venegejo": "", "venegejoj": "", "venegejojn": "", "venegejon": "", "venegen": "", "venegete": "", "venegeto": "", "venegetoj": "", "venegetojn": "", "venegeton": "", "venego": "", "venegoj": "", "venegojn": "", "venegon": "", "veneje": "", "venejege": "", "venejego": "", "venejegoj": "", "venejegojn": "", "venejegon": "", "venejeje": "", "venejejo": "", "venejejoj": "", "venejejojn": "", "venejejon": "", "venejen": "", "venejete": "", "venejeto": "", "venejetoj": "", "venejetojn": "", "venejeton": "", "venejo": "", "venejoj": "", "venejojn": "", "venejon": "", "venen": "", "venete": "", "venetege": "", "venetego": "", "venetegoj": "", "venetegojn": "", "venetegon": "", "veneteje": "", "venetejo": "", "venetejoj": "", "venetejojn": "", "venetejon": "", "veneten": "", "venetete": "", "veneteto": "", "venetetoj": "", "venetetojn": "", "veneteton": "", "veneto": "", "venetoj": "", "venetojn": "", "veneton": "", "veno": "", "venoj": "", "venojn": "", "venon": "", "venonte": "", "venonten": "", "venonto": "", "venontoj": "", "venontojn": "", "venonton": "", "venote": "", "venotege": "", "venotego": "", "venotegoj": "", "venotegojn": "", "venotegon": "", "venoteje": "", "venotejo": "", "venotejoj": "", "venotejojn": "", "venotejon": "", "venoten": "", "venotete": "", "venoteto": "", "venotetoj": "", "venotetojn": "", "venoteton": "", "venoto": "", "venotoj": "", "venotojn": "", "venoton": "", "voje": "", "vojege": "", "vojegege": "", "vojegego": "", "vojegegoj": "", "vojegegojn": "", "vojegegon": "", "vojegeje": "", "vojegejo": "", "vojegejoj": "", "vojegejojn": "", "vojegejon": "", "vojegen": "", "vojegete": "", "vojegeto": "", "vojegetoj": "", "vojegetojn": "", "vojegeton": "", "vojego": "", "vojegoj": "", "vojegojn": "", "vojegon": "", "vojeje": "", "vojejege": "", "vojejego": "", "vojejegoj": "", "vojejegojn": "", "vojejegon": "", "vojejeje": "", "vojejejo": "", "vojejejoj": "", "vojejejojn": "", "vojejejon": "", "vojejen": "", "vojejete": "", "vojejeto": "", "vojejetoj": "", "vojejetojn": "", "vojejeton": "", "vojejo": "", "vojejoj": "", "vojejojn": "", "vojejon": "", "vojen": "", "vojete": "", "vojetege": "", "vojetego": "", "vojetegoj": "", "vojetegojn": "", "vojetegon": "", "vojeteje": "", "vojetejo": "", "vojetejoj": "", "vojetejojn": "", "vojetejon": "", "vojeten": "", "vojetete": "", "vojeteto": "", "vojetetoj": "", "vojetetojn": "", "vojeteton": "", "vojeto": "", "vojetoj": "", "vojetojn": "", "vojeton": "", "vojo": "", "vojoj": "", "vojojn": "", "vojon": "", "vojonte": "", "vojonten": "", "vojonto": "", "vojontoj": "", "vojontojn": "", "vojonton": "", "vojote": "", "vojotege": "", "vojotego": "", "vojotegoj": "", "vojotegojn": "", "vojotegon": "", "vojoteje": "", "vojotejo": "", "vojotejoj": "", "vojotejojn": "", "vojotejon": "", "vojoten": "", "vojotete": "", "vojoteto": "", "vojotetoj": "", "vojotetojn": "", "vojoteton": "", "vojoto": "", "vojotoj": "", "vojotojn": "", "vojoton": ""};
+  const hintsMatrix = {"G": {"4": 0, "5": 0, "6": 6, "7": 6, "8": 27, "9": 24, "10": 12}, "N": {"4": 2, "5": 3, "6": 9, "7": 14, "8": 31, "9": 25, "10": 12}, "V": {"4": 4, "5": 6, "6": 18, "7": 28, "8": 62, "9": 50, "10": 24}};
+  const lengthsList = [4, 5, 6, 7, 8, 9, 10];
+  const maxScore = 3222;
+  const totalTutis = 30;
   
   let currentInput = "";
   let foundWords = new Set();
@@ -644,15 +649,17 @@
 
   const eoAlphabet = "abcĉdefgĝhĥijĵklmnoprsŝtuŭvz";
   function compareEo(a, b) {
-    const minLen = Math.min(a.length, b.length);
+    const lowerA = a.toLowerCase();
+    const lowerB = b.toLowerCase();
+    const minLen = Math.min(lowerA.length, lowerB.length);
     for (let i = 0; i < minLen; i++) {
-      const idxA = eoAlphabet.indexOf(a[i]);
-      const idxB = eoAlphabet.indexOf(b[i]);
+      const idxA = eoAlphabet.indexOf(lowerA[i]);
+      const idxB = eoAlphabet.indexOf(lowerB[i]);
       const posA = idxA === -1 ? 999 : idxA;
       const posB = idxB === -1 ? 999 : idxB;
       if (posA !== posB) return posA - posB;
     }
-    return a.length - b.length;
+    return lowerA.length - lowerB.length;
   }
 
   function renderFoundWordsList() {
@@ -789,13 +796,14 @@
 
   function renderHintsTable() {
     const container = document.getElementById("hints-table-container");
-    let html = '<table class="hints-table"><thead><tr><th>Lit</th>';
+    let html = '<div class="hints-table-wrapper"><table class="hints-table"><thead><tr><th>Lit</th>';
     for (let l of lengthsList) {
       html += '<th>' + l + '</th>';
     }
     html += '<th>Σ</th></tr></thead><tbody>';
 
-    for (let ini of Object.keys(hintsMatrix).sort(compareEo)) {
+    const sortedInitials = Object.keys(hintsMatrix).sort(compareEo);
+    for (let ini of sortedInitials) {
       let rowSum = 0;
       html += '<tr><td>' + ini + '</td>';
       for (let l of lengthsList) {
@@ -805,7 +813,7 @@
       }
       html += '<td>' + rowSum + '</td></tr>';
     }
-    html += '</tbody></table>';
+    html += '</tbody></table></div>';
     container.innerHTML = html;
   }
 
@@ -813,7 +821,7 @@
     const rank = document.getElementById("user-rank").innerText;
     const user = localStorage.getItem("vortabelo_username");
     const userStr = user ? ("Ludanto: " + user + "\n") : "";
-    const txt = "Vortabelo v1.2 (" + gameDate + ")\n" +
+    const txt = "Vortabelo v1.2.1 (" + gameDate + ")\n" +
                 userStr +
                 "Nivelo: " + rank + " | " + score + " pt\n" +
                 "Trovitaj vortoj: " + foundWords.size + "/" + solutions.size;
@@ -823,12 +831,12 @@
   }
 
   const surogatoMap = {
-    "cx": "ĉ", "ch": "ĉ",
-    "gx": "ĝ", "gh": "ĝ",
-    "hx": "ĥ", "hh": "ĥ",
-    "jx": "ĵ", "jh": "ĵ",
-    "sx": "ŝ", "sh": "ŝ",
-    "ux": "ŭ", "uh": "ŭ"
+    "cx": "ĉ",
+    "gx": "ĝ",
+    "hx": "ĥ",
+    "jx": "ĵ",
+    "sx": "ŝ",
+    "ux": "ŭ"
   };
 
   window.addEventListener("keydown", (e) => {
@@ -841,9 +849,9 @@
       shuffleLetters();
     } else {
       const k = e.key.toLowerCase();
-      if (["x", "h"].includes(k) && currentInput.length > 0) {
+      if (k === "x" && currentInput.length > 0) {
         const lastChar = currentInput.slice(-1);
-        const combo = lastChar + k;
+        const combo = lastChar + "x";
         if (surogatoMap[combo]) {
           currentInput = currentInput.slice(0, -1) + surogatoMap[combo];
           updateInput();
