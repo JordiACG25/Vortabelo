@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vortabelo - Esperanta Vortludo</title>
+<title>Vortabelo - Esperanta Paraulògic</title>
 <style>
   :root {
     --primary: #0f766e;
@@ -324,7 +324,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 436 pt</span>
+    <span id="score-text">0 / 303 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -362,7 +362,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/63)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/46)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -401,13 +401,13 @@
 
 <script>
   const gameDate = '2026-09-14';
-  const centerLetter = 'j';
-  let outerLetters = ["l", "u", "t", "n", "e", "a"];
-  const solutions = new Set(["altaj", "altajn", "altantaj", "altantajn", "altataj", "altatajn", "alteja", "altejaj", "altejajn", "altejan", "alteje", "altetaj", "altetajn", "altulaj", "altulajn", "jen", "juna", "junaj", "junajn", "junan", "junanta", "junantaj", "junantajn", "junantan", "junante", "junata", "junataj", "junatajn", "junatan", "junate", "june", "juneja", "junejaj", "junejajn", "junejan", "juneje", "junen", "juneta", "junetaj", "junetajn", "junetan", "junete", "junula", "junulaj", "junulajn", "junulan", "junule", "lunaj", "lunajn", "lunantaj", "lunantajn", "lunataj", "lunatajn", "luneja", "lunejaj", "lunejajn", "lunejan", "luneje", "lunetaj", "lunetajn", "lunulaj", "lunulajn", "tuj"]);
-  const dict = {"altaj": "", "altajn": "", "altantaj": "", "altantajn": "", "altataj": "", "altatajn": "", "alteja": "", "altejaj": "", "altejajn": "", "altejan": "", "alteje": "", "altetaj": "", "altetajn": "", "altulaj": "", "altulajn": "", "jen": "", "juna": "", "junaj": "", "junajn": "", "junan": "", "junanta": "", "junantaj": "", "junantajn": "", "junantan": "", "junante": "", "junata": "", "junataj": "", "junatajn": "", "junatan": "", "junate": "", "june": "", "juneja": "", "junejaj": "", "junejajn": "", "junejan": "", "juneje": "", "junen": "", "juneta": "", "junetaj": "", "junetajn": "", "junetan": "", "junete": "", "junula": "", "junulaj": "", "junulajn": "", "junulan": "", "junule": "", "lunaj": "", "lunajn": "", "lunantaj": "", "lunantajn": "", "lunataj": "", "lunatajn": "", "luneja": "", "lunejaj": "", "lunejajn": "", "lunejan": "", "luneje": "", "lunetaj": "", "lunetajn": "", "lunulaj": "", "lunulajn": "", "tuj": ""};
-  const hintsMatrix = {"A": {"3": 0, "4": 0, "5": 1, "6": 3, "7": 5, "8": 5, "9": 1}, "J": {"3": 1, "4": 2, "5": 3, "6": 9, "7": 10, "8": 6, "9": 1}, "L": {"3": 0, "4": 0, "5": 1, "6": 3, "7": 5, "8": 5, "9": 1}, "T": {"3": 1, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0}};
-  const lengthsList = [3, 4, 5, 6, 7, 8, 9];
-  const maxScore = 436;
+  const centerLetter = 'e';
+  let outerLetters = ["j", "l", "a", "n", "u", "t"];
+  const solutions = new Set(["altante", "altate", "alte", "alteja", "altejaj", "altejajn", "altejan", "alteje", "alten", "alteta", "altetaj", "altetajn", "altetan", "altete", "altule", "jen", "junante", "junate", "june", "juneja", "junejaj", "junejajn", "junejan", "juneje", "junen", "juneta", "junetaj", "junetajn", "junetan", "junete", "junule", "lunante", "lunate", "lune", "luneja", "lunejaj", "lunejajn", "lunejan", "luneje", "lunen", "luneta", "lunetaj", "lunetajn", "lunetan", "lunete", "lunule"]);
+  const dict = {"altante": "", "altate": "", "alte": "", "alteja": "", "altejaj": "", "altejajn": "", "altejan": "", "alteje": "", "alten": "", "alteta": "", "altetaj": "", "altetajn": "", "altetan": "", "altete": "", "altule": "", "jen": "", "junante": "", "junate": "", "june": "", "juneja": "", "junejaj": "", "junejajn": "", "junejan": "", "juneje": "", "junen": "", "juneta": "", "junetaj": "", "junetajn": "", "junetan": "", "junete": "", "junule": "", "lunante": "", "lunate": "", "lune": "", "luneja": "", "lunejaj": "", "lunejajn": "", "lunejan": "", "luneje": "", "lunen": "", "luneta": "", "lunetaj": "", "lunetajn": "", "lunetan": "", "lunete": "", "lunule": ""};
+  const hintsMatrix = {"A": {"3": 0, "4": 1, "5": 1, "6": 6, "7": 5, "8": 2}, "J": {"3": 1, "4": 1, "5": 1, "6": 6, "7": 5, "8": 2}, "L": {"3": 0, "4": 1, "5": 1, "6": 6, "7": 5, "8": 2}};
+  const lengthsList = [3, 4, 5, 6, 7, 8];
+  const maxScore = 303;
   const totalTutis = 2;
   
   let currentInput = "";
