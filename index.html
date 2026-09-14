@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="eo">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vortabelo - Esperanta Paraulògic</title>
+<style>
+  :root {
+    --primary: #0f766e;
+    --primary-light: #ccfbf1;
+    --center-color: #f59e0b;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --text: #0f172a;
+    --border: #e2e8f0;
+    --error: #ef4444;
+  }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--bg);
+    color: var(--text);
+    margin: 0;
+    padding: 12px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  h1 { margin: 0; font-size: 1.8rem; color: var(--primary); }
+  .subtitle { font-size: 0.85rem; color: #64748b; margin-top: 2px; }
+
+  .rank-container {
+    width: 100%;
+    max-width: 380px;
+    margin-bottom: 12px;
+  }
+  .rank-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--primary);
+    transition: width 0.3s ease;
+  }
+
+  /* Zona d'entrada i alerta flotant */
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 52px;
+    margin-bottom: 8px;
+  }
+  #error-toast {
+    position: absolute;
+    top: -10px;
+    background: #1e293b;
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    pointer-events: none;
+    z-index: 10;
+  }
+  #error-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  #input-box {
+    height: 40px;
+    font-size: 1.7rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 220px;
+    border-bottom: 2px solid var(--primary);
+    text-transform: uppercase;
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  /* Estil d'error amb animació */
+  #input-box.error {
+    color: var(--error) !important;
+    border-bottom-color: var(--error) !important;
+    animation: shake 0.35s ease-in-out;
+  }
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-6px); }
+    40%, 80% { transform: translateX(6px); }
+  }
+
+  .hive {
+    position: relative;
+    width: 260px;
+    height: 250px;
+    margin-bottom: 14px;
+  }
+  .hex {
+    position: absolute;
+    width: 72px;
+    height: 72px;
+    background: var(--primary-light);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.08s ease;
+  }
+  .hex:active { transform: scale(0.92); }
+  .hex.center { background: var(--center-color); color: #000; }
+
+  .pos-0 { top: 89px; left: 94px; }
+  .pos-1 { top: 11px; left: 94px; }
+  .pos-2 { top: 50px; left: 160px; }
+  .pos-3 { top: 128px; left: 160px; }
+  .pos-4 { top: 167px; left: 94px; }
+  .pos-5 { top: 128px; left: 28px; }
+  .pos-6 { top: 50px; left: 28px; }
+
+  .controls {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+  }
+  button.action-btn {
+    padding: 8px 16px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 999px;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  button.action-btn:hover { opacity: 0.9; }
+  button.btn-secondary {
+    background: #e2e8f0;
+    color: #334155;
+  }
+
+  #definition-box {
+    max-width: 380px;
+    width: 100%;
+    background: var(--card-bg);
+    border: 2px solid var(--primary);
+    border-left: 6px solid var(--primary);
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  #def-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  #def-title { font-size: 1.1rem; font-weight: 700; color: var(--primary); text-transform: uppercase; }
+  #def-link { font-size: 0.8rem; color: #0284c7; text-decoration: none; }
+  #def-body { font-size: 0.9rem; line-height: 1.35; color: #334155; }
+
+  .section-card {
+    max-width: 380px;
+    width: 100%;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px;
+    box-sizing: border-box;
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #475569;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+  }
+  #words-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .word-tag {
+    background: #f1f5f9;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+  .word-tag.tuti { background: #fef08a; font-weight: bold; color: #854d0e; }
+  .hints-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    font-size: 0.85rem;
+    color: #475569;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Vortabelo</h1>
+  <div class="subtitle">Taga defio - 2026-09-14</div>
+</header>
+
+<div class="rank-container">
+  <div class="rank-meta">
+    <span id="user-rank">Novulo</span>
+    <span id="score-text">0 / 933 pt</span>
+  </div>
+  <div class="progress-bar">
+    <div id="progress-fill" class="progress-fill"></div>
+  </div>
+</div>
+
+<div class="input-wrapper">
+  <div id="error-toast"></div>
+  <div id="input-box"></div>
+</div>
+
+<div class="hive">
+  <div id="hex-0" class="hex center pos-0" onclick="addLetter(centerLetter)"></div>
+  <div id="hex-1" class="hex pos-1" onclick="addLetter(outerLetters[0])"></div>
+  <div id="hex-2" class="hex pos-2" onclick="addLetter(outerLetters[1])"></div>
+  <div id="hex-3" class="hex pos-3" onclick="addLetter(outerLetters[2])"></div>
+  <div id="hex-4" class="hex pos-4" onclick="addLetter(outerLetters[3])"></div>
+  <div id="hex-5" class="hex pos-5" onclick="addLetter(outerLetters[4])"></div>
+  <div id="hex-6" class="hex pos-6" onclick="addLetter(outerLetters[5])"></div>
+</div>
+
+<div class="controls">
+  <button class="action-btn btn-secondary" onclick="deleteLetter()">Forigi</button>
+  <button class="action-btn btn-secondary" onclick="shuffleLetters()">Miksi</button>
+  <button class="action-btn" onclick="submitWord()">Enmeti</button>
+</div>
+
+<div id="definition-box" style="display: none;">
+  <div id="def-header">
+    <span id="def-title"></span>
+    <a id="def-link" href="#" target="_blank">Vortaro.net ↗</a>
+  </div>
+  <div id="def-body"></div>
+</div>
+
+<div class="section-card">
+  <div class="card-title">
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/206)</span>
+    <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii rezulton</button>
+  </div>
+  <div id="words-list"></div>
+</div>
+
+<div class="section-card">
+  <div class="card-title">
+    <span>Spuroj (Komencaj literoj)</span>
+    <span style="font-size:0.8rem; font-weight:normal; color:#0f766e;">Tutis: 2</span>
+  </div>
+  <div class="hints-grid" id="hints-box"></div>
+</div>
+
+<script>
+  const gameDate = '2026-09-14';
+  const centerLetter = 's';
+  let outerLetters = ["k", "c", "n", "o", "t", "e"];
+  const solutions = new Set(["ces", "cocks", "connotes", "cons", "consent", "contents", "contest", "cooks", "cos", "coss", "cost", "costs", "eesto", "ekesto", "ekkonos", "eks", "eksentos", "ekskoko", "eksonos", "ens", "eos", "esceto", "ese", "esek", "esenc", "esence", "esenco", "esencon", "esk", "essen", "essence", "est", "este", "eston", "estono", "estonte", "estonteco", "estontecon", "estonto", "estonton", "estos", "etos", "etoso", "keenness", "kest", "kesteto", "kesto", "keston", "knees", "knocks", "knots", "kokos", "koks", "kokso", "konos", "konsent", "konsenteco", "konsento", "konsenton", "konsentos", "kos", "kosten", "kosto", "koston", "kostos", "kso", "kson", "neces", "necese", "neceseco", "neceso", "necess", "necks", "neos", "nest", "nesto", "neston", "nets", "nonsense", "nooks", "noose", "nos", "nose", "noses", "notes", "notos", "oks", "okso", "oneness", "ones", "ons", "oset", "osk", "oso", "ost", "osten", "osto", "oston", "scene", "scenes", "sceno", "scent", "scn", "sco", "sconces", "scot", "sct", "sec", "sect", "sects", "see", "seek", "seen", "sees", "sek", "sekc", "sekco", "sekeco", "seks", "sekse", "sekso", "sekson", "sekstet", "seksteto", "seksto", "sekte", "sen", "senc", "sence", "senco", "sencon", "senkonekte", "senkonteste", "senkoste", "sens", "sense", "sensekse", "sensence", "senses", "sensone", "sent", "sentenc", "sentence", "sentences", "sentenco", "sentencon", "sento", "senton", "sentos", "ses", "sescent", "seso", "sesono", "sesto", "set", "sets", "skot", "skote", "skoto", "sock", "socket", "socks", "soen", "sok", "son", "sonne", "sonnettes", "sono", "sonon", "sonos", "sons", "sont", "soon", "soot", "sos", "ssen", "sss", "ste", "steet", "sten", "stet", "stetten", "sto", "stock", "stocken", "stone", "stones", "stossen", "teens", "teks", "teksto", "tekston", "tenos", "tens", "tense", "tenso", "tes", "tess", "test", "testo", "tones", "tos", "toss", "tots", "tsetseo", "tss"]);
+  const dict = {"ces": "", "cocks": "", "connotes": "", "cons": "", "consent": "", "contents": "", "contest": "", "cooks": "", "cos": "", "coss": "", "cost": "", "costs": "", "eesto": "", "ekesto": "", "ekkonos": "", "eks": "", "eksentos": "", "ekskoko": "", "eksonos": "", "ens": "", "eos": "", "esceto": "", "ese": "", "esek": "", "esenc": "", "esence": "", "esenco": "", "esencon": "", "esk": "", "essen": "", "essence": "", "est": "", "este": "", "eston": "", "estono": "", "estonte": "", "estonteco": "", "estontecon": "", "estonto": "", "estonton": "", "estos": "", "etos": "", "etoso": "", "keenness": "", "kest": "", "kesteto": "", "kesto": "", "keston": "", "knees": "", "knocks": "", "knots": "", "kokos": "", "koks": "", "kokso": "", "konos": "", "konsent": "", "konsenteco": "", "konsento": "", "konsenton": "", "konsentos": "", "kos": "", "kosten": "", "kosto": "", "koston": "", "kostos": "", "kso": "", "kson": "", "neces": "", "necese": "", "neceseco": "", "neceso": "", "necess": "", "necks": "", "neos": "", "nest": "", "nesto": "", "neston": "", "nets": "", "nonsense": "", "nooks": "", "noose": "", "nos": "", "nose": "", "noses": "", "notes": "", "notos": "", "oks": "", "okso": "", "oneness": "", "ones": "", "ons": "", "oset": "", "osk": "", "oso": "", "ost": "", "osten": "", "osto": "", "oston": "", "scene": "", "scenes": "", "sceno": "", "scent": "", "scn": "", "sco": "", "sconces": "", "scot": "", "sct": "", "sec": "", "sect": "", "sects": "", "see": "", "seek": "", "seen": "", "sees": "", "sek": "", "sekc": "", "sekco": "", "sekeco": "", "seks": "", "sekse": "", "sekso": "", "sekson": "", "sekstet": "", "seksteto": "", "seksto": "", "sekte": "", "sen": "", "senc": "", "sence": "", "senco": "", "sencon": "", "senkonekte": "", "senkonteste": "", "senkoste": "", "sens": "", "sense": "", "sensekse": "", "sensence": "", "senses": "", "sensone": "", "sent": "", "sentenc": "", "sentence": "", "sentences": "", "sentenco": "", "sentencon": "", "sento": "", "senton": "", "sentos": "", "ses": "", "sescent": "", "seso": "", "sesono": "", "sesto": "", "set": "", "sets": "", "skot": "", "skote": "", "skoto": "", "sock": "", "socket": "", "socks": "", "soen": "", "sok": "", "son": "", "sonne": "", "sonnettes": "", "sono": "", "sonon": "", "sonos": "", "sons": "", "sont": "", "soon": "", "soot": "", "sos": "", "ssen": "", "sss": "", "ste": "", "steet": "", "sten": "", "stet": "", "stetten": "", "sto": "", "stock": "", "stocken": "", "stone": "", "stones": "", "stossen": "", "teens": "", "teks": "", "teksto": "", "tekston": "", "tenos": "", "tens": "", "tense": "", "tenso": "", "tes": "", "tess": "", "test": "", "testo": "", "tones": "", "tos": "", "toss": "", "tots": "", "tsetseo": "", "tss": ""};
+  const hints = {"C": 12, "E": 31, "K": 24, "N": 19, "O": 12, "S": 90, "T": 18};
+  const maxScore = 933;
+  
+  let currentInput = "";
+  let foundWords = new Set();
+  let score = 0;
+  let isShaking = false;
+
+  const ranks = [
+    { min: 0.85, name: "Zamenhof" },
+    { min: 0.70, name: "Majstro" },
+    { min: 0.50, name: "Flua" },
+    { min: 0.35, name: "Progresanto" },
+    { min: 0.20, name: "Lernanto" },
+    { min: 0.08, name: "Komencanto" },
+    { min: 0.00, name: "Novulo" }
+  ];
+
+  function renderHexes() {
+    document.getElementById("hex-0").innerText = centerLetter.toUpperCase();
+    for (let i = 0; i < 6; i++) {
+      document.getElementById("hex-" + (i + 1)).innerText = outerLetters[i].toUpperCase();
+    }
+  }
+
+  function shuffleLetters() {
+    outerLetters.sort(() => Math.random() - 0.5);
+    renderHexes();
+  }
+
+  function updateInput() {
+    document.getElementById("input-box").innerText = currentInput;
+  }
+
+  function addLetter(ch) {
+    if (isShaking) return;
+    currentInput += ch;
+    updateInput();
+  }
+
+  function deleteLetter() {
+    if (isShaking) return;
+    currentInput = currentInput.slice(0, -1);
+    updateInput();
+  }
+
+  function getWordPoints(w) {
+    let l = w.length;
+    let pts = (l === 3 ? 1 : (l === 4 ? 2 : l));
+    if (new Set(w).size === 7) pts += 10;
+    return pts;
+  }
+
+  function updateRankAndScore() {
+    document.getElementById("score-text").innerText = score + " / " + maxScore + " pt";
+    let ratio = maxScore > 0 ? (score / maxScore) : 0;
+    document.getElementById("progress-fill").style.width = Math.min(100, Math.round(ratio * 100)) + "%";
+
+    for (let r of ranks) {
+      if (ratio >= r.min) {
+        document.getElementById("user-rank").innerText = r.name;
+        break;
+      }
+    }
+  }
+
+  function saveProgress() {
+    localStorage.setItem("vortabelo_" + gameDate, JSON.stringify(Array.from(foundWords)));
+  }
+
+  function loadProgress() {
+    const saved = localStorage.getItem("vortabelo_" + gameDate);
+    if (saved) {
+      const arr = JSON.parse(saved);
+      for (let w of arr) {
+        if (solutions.has(w)) {
+          foundWords.add(w);
+          score += getWordPoints(w);
+          appendWordTag(w, false);
+        }
+      }
+      document.getElementById("found-count").innerText = foundWords.size;
+      updateRankAndScore();
+    }
+  }
+
+  async function fetchWiktionaryDef(word) {
+    try {
+      const url = "https://eo.wiktionary.org/api/rest_v1/page/definition/" + encodeURIComponent(word);
+      const res = await fetch(url);
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (data.eo && data.eo.length > 0) {
+        for (let item of data.eo) {
+          if (item.definitions && item.definitions.length > 0) {
+            let d = item.definitions[0].definition.replace(/<[^>]*>/g, "").trim();
+            if (d) return d;
+          }
+        }
+      }
+    } catch(e) {}
+    return null;
+  }
+
+  async function displayDef(w) {
+    const box = document.getElementById("definition-box");
+    const t = document.getElementById("def-title");
+    const l = document.getElementById("def-link");
+    const b = document.getElementById("def-body");
+
+    t.innerText = w;
+    l.href = "https://vortaro.net/#" + encodeURIComponent(w);
+    box.style.display = "block";
+
+    if (dict[w] && dict[w].length > 0) {
+      b.innerText = dict[w];
+    } else {
+      b.innerText = "Ŝarĝante difinon el Vikivortaro...";
+      const wikDef = await fetchWiktionaryDef(w);
+      if (wikDef) {
+        dict[w] = wikDef;
+        b.innerText = wikDef;
+      } else {
+        b.innerText = "Literatura vorto en Esperanto. Klaku supre por vidi ĝin en Vortaro.net.";
+      }
+    }
+  }
+
+  function appendWordTag(w, triggerDef = true) {
+    const isTuti = new Set(w).size === 7;
+    const tag = document.createElement("span");
+    tag.className = "word-tag" + (isTuti ? " tuti" : "");
+    tag.innerText = w + (isTuti ? " ★" : "");
+    tag.onclick = () => displayDef(w);
+    document.getElementById("words-list").appendChild(tag);
+    if (triggerDef) displayDef(w);
+  }
+
+  // Notificació visual vermella i shake sense alert()
+  function triggerError(msg) {
+    const inputEl = document.getElementById("input-box");
+    const toast = document.getElementById("error-toast");
+    
+    isShaking = true;
+    inputEl.classList.add("error");
+    toast.innerText = msg;
+    toast.classList.add("show");
+
+    setTimeout(() => {
+      inputEl.classList.remove("error");
+      toast.classList.remove("show");
+      currentInput = "";
+      updateInput();
+      isShaking = false;
+    }, 700);
+  }
+
+  function submitWord() {
+    if (isShaking) return;
+    const w = currentInput.toLowerCase();
+    
+    if (w.length < 3) {
+      triggerError("Tro mallonga!");
+      return;
+    }
+    if (!w.includes(centerLetter)) {
+      triggerError("Mankas la centra litero!");
+      return;
+    }
+    if (foundWords.has(w)) {
+      displayDef(w);
+      triggerError("Jam trovita!");
+      return;
+    }
+    if (!solutions.has(w)) {
+      triggerError("Nekonata vorto!");
+      return;
+    }
+
+    // Encís vàlid
+    foundWords.add(w);
+    score += getWordPoints(w);
+    document.getElementById("found-count").innerText = foundWords.size;
+    updateRankAndScore();
+    appendWordTag(w, true);
+    saveProgress();
+    currentInput = "";
+    updateInput();
+  }
+
+  function renderHints() {
+    const box = document.getElementById("hints-box");
+    box.innerHTML = "";
+    for (let k of Object.keys(hints).sort()) {
+      const d = document.createElement("div");
+      d.innerText = k + ": " + hints[k] + " vortoj";
+      box.appendChild(d);
+    }
+  }
+
+  function shareResults() {
+    const rank = document.getElementById("user-rank").innerText;
+    const txt = "Vortabelo (" + gameDate + ")\n" +
+                "Nivelo: " + rank + " | " + score + " pt\n" +
+                "Trovitaj vortoj: " + foundWords.size + "/" + solutions.size;
+    navigator.clipboard.writeText(txt).then(() => {
+      alert("Rezulto kopiita al la tondejo!");
+    });
+  }
+
+  const surogatoMap = {
+    "cx": "ĉ", "ch": "ĉ",
+    "gx": "ĝ", "gh": "ĝ",
+    "hx": "ĥ", "hh": "ĥ",
+    "jx": "ĵ", "jh": "ĵ",
+    "sx": "ŝ", "sh": "ŝ",
+    "ux": "ŭ", "uh": "ŭ"
+  };
+
+  window.addEventListener("keydown", (e) => {
+    if (e.key === "Backspace") {
+      deleteLetter();
+    } else if (e.key === "Enter") {
+      submitWord();
+    } else if (e.key === " ") {
+      shuffleLetters();
+    } else {
+      const k = e.key.toLowerCase();
+      if (["x", "h"].includes(k) && currentInput.length > 0) {
+        const lastChar = currentInput.slice(-1);
+        const combo = lastChar + k;
+        if (surogatoMap[combo]) {
+          currentInput = currentInput.slice(0, -1) + surogatoMap[combo];
+          updateInput();
+          return;
+        }
+      }
+      if ([centerLetter, ...outerLetters].includes(k)) {
+        addLetter(k);
+      }
+    }
+  });
+
+  renderHexes();
+  renderHints();
+  loadProgress();
+</script>
+</body>
+</html>
