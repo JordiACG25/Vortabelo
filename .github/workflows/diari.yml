@@ -1,0 +1,34 @@
+name: Actualitzacio diaria de Vortabelo
+
+on:
+  schedule:
+    # S'executa cada nit a les 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Permet provar-lo manualment quan vulguis
+
+permissions:
+  contents: write
+
+jobs:
+  actualitzar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descarregar codi del repositori
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Executar generador del joc
+        run: |
+          python generar_web_joc.py
+
+      - name: Desar i publicar canvis
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Actualitzacio automatica del panell diari" && git push)
