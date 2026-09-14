@@ -4,7 +4,7 @@ import re
 import os
 import datetime
 
-print("Carregant dades i reconstruint vocabulari oficial per a Vortabelo v1.2.1...")
+print("Carregant dades i reconstruint vocabulari oficial per a Vortabelo v1.2.2...")
 
 definicions_raw = {}
 arrels_lexic = set()
@@ -59,6 +59,24 @@ for mot in arrels_lexic.union(paraules_set):
     if len(tronc) >= 2:
         troncs_extrets.add(tronc)
 
+# AFEGIR ARRELS FONAMENTALS GARANTIDES (dies, mesos, colors, vocabulari base)
+arrels_basiques = [
+    "lund", "mard", "merkred", "ĵaŭd", "vendred", "sabat", "dimanĉ",
+    "januar", "februar", "mart", "april", "maj", "juni", "juli", "aŭgust", "septembr", "oktobr", "novembr", "decembr",
+    "printemp", "somer", "aŭtun", "vintr",
+    "nigr", "blank", "ruĝ", "verd", "blu", "flav", "griz", "brun",
+    "knab", "vir", "hom", "infan", "patr", "edz", "fil", "frat", "amik",
+    "arb", "flor", "best", "hund", "kat", "bird", "fiŝ",
+    "akv", "fajr", "ter", "aer", "sun", "lun", "stel", "nub", "vent",
+    "dom", "ĉambr", "pord", "fenestr", "tabl", "seĝ", "lit", "lig",
+    "manĝ", "trink", "dorm", "pens", "sci", "kompren", "leg", "skrib",
+    "grand", "bon", "bel", "nov", "jun", "alt", "long", "fort", "san",
+    "vort", "liter", "lingv", "nom", "temp", "tag", "nokt", "maten", "vesper"
+]
+for ab in arrels_basiques:
+    troncs_extrets.add(ab)
+
+# Generem totes les flexions directes
 for tr in troncs_extrets:
     for t in terminacions_nominals:
         derivat = tr + t
@@ -90,7 +108,7 @@ for tr in troncs_extrets:
 particules_preposicions = [
     "jen", "en", "antaŭ", "post", "apud", "inter", "sub", "sur", "tra", "trans",
     "por", "per", "kun", "sen", "pri", "pro", "kontraŭ", "dum", "ĝis", "ekster",
-    "ĉirkaŭ", "malgraŭ", "anstataŭ", "laŭ", "po", "lit", "lig",
+    "ĉirkaŭ", "malgraŭ", "anstataŭ", "laŭ", "po",
     "unu", "du", "tri", "kvar", "kvin", "ses", "sep", "ok", "naŭ", "dek", "cent", "mil",
     "tuj", "nun", "jam", "tro", "tre", "plu", "for", "mem", "preskaŭ", "apenaŭ"
 ]
@@ -123,7 +141,7 @@ for p in pref_tabel:
             paraules_set.add(base + "n")
 
 # 8. Participis basics
-verbs_arrels_comuns = ["est", "vid", "ir", "far", "dir", "hav", "don", "pren", "sci", "ven", "pas", "star", "viv", "lig", "litig"]
+verbs_arrels_comuns = ["est", "vid", "ir", "far", "dir", "hav", "don", "pren", "sci", "ven", "pas", "star", "viv"]
 afixos_participi = ["ant", "int", "ont", "at", "it", "ot"]
 terminacions_part = ["a", "aj", "an", "ajn", "o", "oj", "on", "ojn", "e"]
 
@@ -695,7 +713,7 @@ html_template = """<!DOCTYPE html>
 
 <footer>
   <div class="creator-tag">Kreita de Esperantulo de la VA</div>
-  <div class="version-tag">Versio 1.2.1</div>
+  <div class="version-tag">Versio 1.2.2</div>
   <div style="margin-top:4px;">Bazita sur Fundamento kaj ReVo • <a href="https://github.com/JordiACG25/Vortabelo" target="_blank">Fontkodo ĉe GitHub</a></div>
 </footer>
 
@@ -1044,7 +1062,7 @@ html_template = """<!DOCTYPE html>
     const rank = document.getElementById("user-rank").innerText;
     const user = localStorage.getItem("vortabelo_username");
     const userStr = user ? ("Ludanto: " + user + "\\n") : "";
-    const txt = "Vortabelo v1.2.1 (" + gameDate + ")\\n" +
+    const txt = "Vortabelo v1.2.2 (" + gameDate + ")\\n" +
                 userStr +
                 "Nivelo: " + rank + " | " + score + " pt\\n" +
                 "Trovitaj vortoj: " + foundWords.size + "/" + solutions.size;
@@ -1113,4 +1131,4 @@ final_html = (
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(final_html)
 
-print("Fitxer 'index.html' generat correctament amb la versio 1.2.1!")
+print("Fitxer 'index.html' generat correctament amb la versio 1.2.2 i arrels garantides!")
