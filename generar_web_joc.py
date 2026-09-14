@@ -37,7 +37,7 @@ if os.path.exists("dataset_esperanto_master.jsonl"):
             except Exception:
                 continue
 
-# 2. Carregar vortaro_paraulogic.txt com a base de suport
+# 2. Carregar vortaro_paraulogic.txt com a base
 paraules_set = set()
 if os.path.exists("vortaro_paraulogic.txt"):
     with open("vortaro_paraulogic.txt", "r", encoding="utf-8") as f:
@@ -46,28 +46,43 @@ if os.path.exists("vortaro_paraulogic.txt"):
             if len(w) >= 3:
                 paraules_set.add(w)
 
-# 3. Derivacio sistematica de les arrels leksiques (estil PIV / Fundamento)
+# 3. Extreure troncs de lemes per a flexió bàsica
 terminacions_nominals = ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "en", "i"]
+troncs_extrets = set()
 
-for mot in arrels_lexic:
-    if len(mot) >= 3:
-        paraules_set.add(mot)
-    # Si acaba en terminacio de lema bàsic, n'extreiem el tronc
+for mot in arrels_lexic.union(paraules_set):
     tronc = mot
-    for t_lema in ["o", "a", "i", "e"]:
+    for t_lema in ["ojn", "ajn", "oj", "aj", "on", "an", "en", "o", "a", "i", "e"]:
         if mot.endswith(t_lema) and len(mot) > len(t_lema) + 1:
             tronc = mot[:-len(t_lema)]
             break
+    if len(tronc) >= 2:
+        troncs_extrets.add(tronc)
+
+for tr in troncs_extrets:
     for t in terminacions_nominals:
-        derivat = tronc + t
+        derivat = tr + t
         if len(derivat) >= 3:
             paraules_set.add(derivat)
 
-# 4. Particules, preposicions i numerals
+# 4. Afixos productius del PIV i Fundamento (-il-, -ej-, -in-, -ist-, -ar-, -ec-, -ebl-, etc.)
+afixos_productius = [
+    "il", "ej", "in", "ist", "ar", "ec", "ebl", "et", "eg", "ig", "iĝ", "ad", "ul", "ajx", "aĵ"
+]
+
+for tr in troncs_extrets:
+    # Només per a troncs bàsics de fins a 5 lletres per no sobrecarregar
+    if len(tr) <= 5:
+        for af in afixos_productius:
+            base_af = tr + af
+            for t in ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "i"]:
+                paraules_set.add(base_af + t)
+
+# 5. Partícules, preposicions i numerals canònics
 particules_preposicions = [
     "jen", "en", "antaŭ", "post", "apud", "inter", "sub", "sur", "tra", "trans",
     "por", "per", "kun", "sen", "pri", "pro", "kontraŭ", "dum", "ĝis", "ekster",
-    "ĉirkaŭ", "malgraŭ", "anstataŭ", "laŭ", "po", "lit",
+    "ĉirkaŭ", "malgraŭ", "anstataŭ", "laŭ", "po", "lit", "lig",
     "unu", "du", "tri", "kvar", "kvin", "ses", "sep", "ok", "naŭ", "dek", "cent", "mil",
     "tuj", "nun", "jam", "tro", "tre", "plu", "for", "mem", "preskaŭ", "apenaŭ"
 ]
@@ -77,9 +92,12 @@ for base in particules_preposicions:
         mot = base + t
         if len(mot) >= 3:
             paraules_set.add(mot)
+    for af in ["il", "ej", "ec", "ar", "ig", "iĝ"]:
+        for t in ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "i"]:
+            paraules_set.add(base + af + t)
 
-# 5. Participis i derivats productius de verbs comuns
-verbs_arrels_comuns = ["est", "vid", "ir", "far", "dir", "hav", "don", "pren", "sci", "ven", "pas", "star", "viv"]
+# 6. Participis bàsics
+verbs_arrels_comuns = ["est", "vid", "ir", "far", "dir", "hav", "don", "pren", "sci", "ven", "pas", "star", "viv", "lig", "litig"]
 afixos_participi = ["ant", "int", "ont", "at", "it", "ot"]
 terminacions_part = ["a", "aj", "an", "ajn", "o", "oj", "on", "ojn", "e"]
 
@@ -92,26 +110,44 @@ for v in verbs_arrels_comuns:
 
 paraules = sorted(list(paraules_set))
 
-# 6. Determinisme diari basat en la data
+# 7. Determinisme diari basat en la data i selecció equilibrada del tauler
 avui_str = datetime.date.today().isoformat()
-random.seed(avui_str)
+rng = random.Random(avui_str)
 
 candidats_tuti = [p for p in paraules if len(set(p)) == 7 and len(p) >= 7]
-if candidats_tuti:
-    base_tuti = random.choice(candidats_tuti)
-    lletres = list(set(base_tuti))
-else:
+rng.shuffle(candidats_tuti)
+
+centre = "l"
+corones = ["m", "o", "n", "t", "e", "r"]
+solucions = []
+
+# Cerquem un tauler de bona qualitat amb un mínim de varietat
+for base_cand in candidats_tuti:
+    lletres_cand = list(set(base_cand))
+    rng.shuffle(lletres_cand)
+    c_cand = lletres_cand[0]
+    conjunt_cand = set(lletres_cand)
+    sols_cand = sorted([
+        p for p in paraules
+        if c_cand in p and set(p).issubset(conjunt_cand)
+    ])
+    # Comprovem que hi hagi prou solucions i diversitat d'inicials
+    inicials = set(w[0] for w in sols_cand)
+    if len(sols_cand) >= 35 and len(inicials) >= 3:
+        centre = c_cand
+        corones = lletres_cand[1:]
+        solucions = sols_cand
+        break
+
+if not solucions:
     lletres = list("lmonter")
-
-random.shuffle(lletres)
-centre = lletres[0]
-corones = lletres[1:]
-conjunt_lletres = set(lletres)
-
-solucions = sorted([
-    p for p in paraules
-    if centre in p and set(p).issubset(conjunt_lletres)
-])
+    centre = lletres[0]
+    corones = lletres[1:]
+    conjunt_lletres = set(lletres)
+    solucions = sorted([
+        p for p in paraules
+        if centre in p and set(p).issubset(conjunt_lletres)
+    ])
 
 def punts_de_paraula(p):
     l = len(p)
@@ -123,7 +159,7 @@ def punts_de_paraula(p):
 total_punts_partida = sum(punts_de_paraula(p) for p in solucions)
 total_tutis = sum(1 for p in solucions if len(set(p)) == 7)
 
-# Lematitzacio basica per a definicions
+# Lematització bàsica per a definicions
 def cercar_definicio(w):
     if w in definicions_raw:
         return definicions_raw[w]
@@ -137,7 +173,7 @@ def cercar_definicio(w):
 
 dict_solucions = {w: cercar_definicio(w) for w in solucions}
 
-# Generacio de matriu de pistes
+# Generació de matriu de pistes
 longituds_possibles = sorted(list(set(len(w) for w in solucions)))
 lletres_inicials = sorted(list(set(w[0].upper() for w in solucions)))
 
@@ -148,7 +184,7 @@ for ini in lletres_inicials:
 for w in solucions:
     graella_pistes[w[0].upper()][len(w)] += 1
 
-json_lletres = json.dumps(lletres, ensure_ascii=False)
+json_lletres = json.dumps([centre] + corones, ensure_ascii=False)
 json_solucions = json.dumps(solucions, ensure_ascii=False)
 json_definicions = json.dumps(dict_solucions, ensure_ascii=False)
 json_graella = json.dumps(graella_pistes, ensure_ascii=False)
@@ -637,7 +673,7 @@ html_template = """<!DOCTYPE html>
     <div class="rule-item">• Ĉiu vorto devas havi almenaŭ 3 literojn.</div>
     <div class="rule-item">• Ĉiu vorto <strong>nepre devas enhavi la centran literon</strong> (flavan).</div>
     <div class="rule-item">• Vi rajtas uzi la samajn literojn plurfoje en la sama vorto.</div>
-    <div class="rule-item">• <strong>Permesitaj formoj:</strong> Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), partikloj, numeraloj kaj participoj.</div>
+    <div class="rule-item">• <strong>Permesitaj formoj:</strong> Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), partikloj, numeraloj, participoj kaj regule derivitaj formoj (-il-, -ej-, -in-...).</div>
     <div class="rule-item">• <strong>Malpermesitaj formoj:</strong> Konjugaciitaj verboj (-as, -is, -os, -us, -u) kaj mallongigoj.</div>
     <div class="rule-item">• <strong>Tuti / Pangeromo:</strong> Vorto kiu uzas ĉiujn 7 literojn de la tago donas 10 kromajn poentojn!</div>
     <div class="rule-item">• <strong>Klavaro:</strong> Vi povas tajpi 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' aŭ per 'h' por ricevi la ĉapelajn literojn aŭtomate.</div>
@@ -1038,4 +1074,4 @@ final_html = (
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(final_html)
 
-print("Fitxer 'index.html' generat amb suport complet de tot el leksikono oficial!")
+print("Fitxer 'index.html' generat amb afixos productius i tauler equilibrat!")
