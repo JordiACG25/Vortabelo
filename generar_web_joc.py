@@ -144,6 +144,33 @@ html_template = """<!DOCTYPE html>
     transition: background-color 0.2s, color 0.2s;
   }
 
+  /* Logo i capçalera */
+  .brand-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 6px;
+  }
+  .brand-logo-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 999px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  }
+  .star-svg {
+    width: 26px;
+    height: 26px;
+  }
+  .crocodile-svg {
+    width: 32px;
+    height: 32px;
+  }
+
   header {
     width: 100%;
     max-width: 400px;
@@ -347,7 +374,6 @@ html_template = """<!DOCTYPE html>
     100% { transform: scale(1); box-shadow: none; }
   }
 
-  /* Modal de Normes */
   .modal-overlay {
     display: none;
     position: fixed;
@@ -380,7 +406,6 @@ html_template = """<!DOCTYPE html>
   .close-btn { background: none; border: none; font-size: 1.5rem; color: var(--text); cursor: pointer; }
   .rule-item { margin-bottom: 10px; font-size: 0.9rem; line-height: 1.4; }
 
-  /* Taula de pistes */
   .hints-table {
     width: 100%;
     border-collapse: collapse;
@@ -408,6 +433,32 @@ html_template = """<!DOCTYPE html>
 </style>
 </head>
 <body>
+
+<!-- Logo superior amb l'estrella verda i el krokodilo -->
+<div class="brand-banner">
+  <div class="brand-logo-wrap">
+    <svg class="star-svg" viewBox="0 0 100 100">
+      <rect width="100" height="100" fill="#ffffff" stroke="#22c55e" stroke-width="6" rx="14"/>
+      <polygon points="50,12 61,38 89,38 66,54 75,80 50,64 25,80 34,54 11,38 39,38" fill="#16a34a"/>
+    </svg>
+    <svg class="crocodile-svg" viewBox="0 0 64 64" fill="none">
+      <!-- Cap i musell -->
+      <path d="M10 38 C 14 26, 26 24, 38 24 C 48 24, 58 28, 60 36 C 60 40, 52 44, 40 44 C 28 44, 18 46, 12 44 Z" fill="#22c55e"/>
+      <!-- Mandíbula inferior -->
+      <path d="M18 42 C 30 42, 54 41, 58 37 C 54 44, 42 46, 28 46 C 20 46, 16 44, 18 42 Z" fill="#15803d"/>
+      <!-- Ull groc -->
+      <circle cx="28" cy="24" r="5" fill="#facc15"/>
+      <circle cx="28" cy="24" r="2.5" fill="#0f172a"/>
+      <!-- Dents -->
+      <polygon points="34,38 37,42 40,38" fill="#ffffff"/>
+      <polygon points="44,37 47,41 50,37" fill="#ffffff"/>
+      <!-- Crestes de l'esquena -->
+      <polygon points="16,28 19,23 22,28" fill="#15803d"/>
+      <polygon points="21,27 24,21 27,26" fill="#15803d"/>
+      <circle cx="56" cy="34" r="1.5" fill="#0f172a"/>
+    </svg>
+  </div>
+</div>
 
 <header>
   <div class="title-wrap">
@@ -827,4 +878,4 @@ final_html = (
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(final_html)
 
-print("Fitxer 'index.html' generat amb èxit amb totes les millores completes!")
+print("Fitxer 'index.html' generat amb l'emblema de l'estrella verda i el cocodril!")
