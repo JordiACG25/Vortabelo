@@ -4,7 +4,7 @@ import re
 import os
 import datetime
 
-print("Carregant dades per al generador complet de Vortabelo...")
+print("Carregant dades per al generador complet de Vortabelo v1.2...")
 
 # 1. Carregar definicions locals
 definicions_raw = {}
@@ -31,11 +31,44 @@ if os.path.exists("dataset_esperanto_master.jsonl"):
             except Exception:
                 continue
 
-# 2. Carregar vocabulari
+# 2. Carregar vocabulari base
 with open("vortaro_paraulogic.txt", "r", encoding="utf-8") as f:
-    paraules = [l.strip().lower() for l in f if len(l.strip()) >= 3]
+    paraules_set = set(l.strip().lower() for l in f if len(l.strip()) >= 3)
 
-# 3. Determinisme diari basat en la data
+# 3. Ampliacio canonica estil vortaro.net (particules, preposicions i numerals amb derivats)
+particules_preposicions = [
+    "jen", "en", "antaŭ", "post", "apud", "inter", "sub", "sur", "tra", "trans",
+    "por", "per", "kun", "sen", "pri", "pro", "kontraŭ", "dum", "ĝis", "ekster",
+    "ĉirkaŭ", "malgraŭ", "anstataŭ", "laŭ", "po",
+    "unu", "du", "tri", "kvar", "kvin", "ses", "sep", "ok", "naŭ", "dek", "cent", "mil",
+    "tuj", "nun", "jam", "tro", "tre", "plu", "for", "mem", "preskaŭ", "apenaŭ"
+]
+
+terminacions_canoniques = [
+    "", "o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "en", "i"
+]
+
+for base in particules_preposicions:
+    for t in terminacions_canoniques:
+        mot = base + t
+        if len(mot) >= 3:
+            paraules_set.add(mot)
+
+# Participis i derivats productius de verbs comuns
+verbs_arrels_comuns = ["est", "vid", "ir", "far", "dir", "hav", "don", "pren", "sci", "ven", "pas", "star", "viv"]
+afixos_participi = ["ant", "int", "ont", "at", "it", "ot"]
+terminacions_part = ["a", "aj", "an", "ajn", "o", "oj", "on", "ojn", "e"]
+
+for v in verbs_arrels_comuns:
+    for af in afixos_participi:
+        for t in terminacions_part:
+            mot = v + af + t
+            if len(mot) >= 3:
+                paraules_set.add(mot)
+
+paraules = sorted(list(paraules_set))
+
+# 4. Determinisme diari basat en la data
 avui_str = datetime.date.today().isoformat()
 random.seed(avui_str)
 
@@ -66,7 +99,7 @@ def punts_de_paraula(p):
 total_punts_partida = sum(punts_de_paraula(p) for p in solucions)
 total_tutis = sum(1 for p in solucions if len(set(p)) == 7)
 
-# Lematitzacio basica
+# Lematitzacio basica per a definicions
 def cercar_definicio(w):
     if w in definicions_raw:
         return definicions_raw[w]
@@ -462,6 +495,11 @@ html_template = """<!DOCTYPE html>
     font-size: 0.95rem;
     color: var(--primary);
   }
+  .version-tag {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
   footer a { color: var(--primary); text-decoration: none; }
 </style>
 </head>
@@ -561,10 +599,10 @@ html_template = """<!DOCTYPE html>
 
 <footer>
   <div class="creator-tag">Kreita de Esperantulo de la VA</div>
+  <div class="version-tag">Versio 1.2</div>
   <div style="margin-top:4px;">Bazita sur Fundamento kaj ReVo • <a href="https://github.com/JordiACG25/Vortabelo" target="_blank">Fontkodo ĉe GitHub</a></div>
 </footer>
 
-<!-- Modal Reguloj -->
 <div id="rules-modal" class="modal-overlay" onclick="closeOnOverlay(event, 'rules-modal')">
   <div class="modal-content">
     <div class="modal-header">
@@ -575,14 +613,13 @@ html_template = """<!DOCTYPE html>
     <div class="rule-item">• Ĉiu vorto devas havi almenaŭ 3 literojn.</div>
     <div class="rule-item">• Ĉiu vorto <strong>nepre devas enhavi la centran literon</strong> (flavan).</div>
     <div class="rule-item">• Vi rajtas uzi la samajn literojn plurfoje en la sama vorto.</div>
-    <div class="rule-item">• <strong>Permesitaj formoj:</strong> Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), participoj kaj ordinaraj vortfaradoj.</div>
+    <div class="rule-item">• <strong>Permesitaj formoj:</strong> Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), partikloj, numeraloj kaj participoj.</div>
     <div class="rule-item">• <strong>Malpermesitaj formoj:</strong> Konjugaciitaj verboj (-as, -is, -os, -us, -u) kaj mallongigoj.</div>
     <div class="rule-item">• <strong>Tuti / Pangeromo:</strong> Vorto kiu uzas ĉiujn 7 literojn de la tago donas 10 kromajn poentojn!</div>
     <div class="rule-item">• <strong>Klavaro:</strong> Vi povas tajpi 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' aŭ per 'h' por ricevi la ĉapelajn literojn aŭtomate.</div>
   </div>
 </div>
 
-<!-- Modal Usuari -->
 <div id="user-modal" class="modal-overlay" onclick="closeOnOverlay(event, 'user-modal')">
   <div class="modal-content">
     <div class="modal-header">
@@ -737,6 +774,33 @@ html_template = """<!DOCTYPE html>
     localStorage.setItem("vortabelo_" + gameDate, JSON.stringify(Array.from(foundWords)));
   }
 
+  const eoAlphabet = "abcĉdefgĝhĥijĵklmnoprsŝtuŭvz";
+  function compareEo(a, b) {
+    const minLen = Math.min(a.length, b.length);
+    for (let i = 0; i < minLen; i++) {
+      const idxA = eoAlphabet.indexOf(a[i]);
+      const idxB = eoAlphabet.indexOf(b[i]);
+      const posA = idxA === -1 ? 999 : idxA;
+      const posB = idxB === -1 ? 999 : idxB;
+      if (posA !== posB) return posA - posB;
+    }
+    return a.length - b.length;
+  }
+
+  function renderFoundWordsList() {
+    const listContainer = document.getElementById("words-list");
+    listContainer.innerHTML = "";
+    const sortedWords = Array.from(foundWords).sort(compareEo);
+    for (const w of sortedWords) {
+      const isTuti = new Set(w).size === 7;
+      const tag = document.createElement("span");
+      tag.className = "word-tag" + (isTuti ? " tuti" : "");
+      tag.innerText = w + (isTuti ? " ★" : "");
+      tag.onclick = () => displayDef(w);
+      listContainer.appendChild(tag);
+    }
+  }
+
   function loadProgress() {
     const saved = localStorage.getItem("vortabelo_" + gameDate);
     if (saved) {
@@ -745,11 +809,11 @@ html_template = """<!DOCTYPE html>
         if (solutions.has(w)) {
           foundWords.add(w);
           score += getWordPoints(w);
-          appendWordTag(w, false);
         }
       }
       document.getElementById("found-count").innerText = foundWords.size;
       updateRankAndScore();
+      renderFoundWordsList();
     }
   }
 
@@ -802,16 +866,6 @@ html_template = """<!DOCTYPE html>
     }
   }
 
-  function appendWordTag(w, triggerDef = true) {
-    const isTuti = new Set(w).size === 7;
-    const tag = document.createElement("span");
-    tag.className = "word-tag" + (isTuti ? " tuti" : "");
-    tag.innerText = w + (isTuti ? " ★" : "");
-    tag.onclick = () => displayDef(w);
-    document.getElementById("words-list").appendChild(tag);
-    if (triggerDef) displayDef(w);
-  }
-
   function triggerError(msg) {
     vibrate(60);
     const inputEl = document.getElementById("input-box");
@@ -858,7 +912,8 @@ html_template = """<!DOCTYPE html>
     score += getWordPoints(w);
     document.getElementById("found-count").innerText = foundWords.size;
     updateRankAndScore();
-    appendWordTag(w, true);
+    renderFoundWordsList();
+    displayDef(w);
     saveProgress();
     currentInput = "";
     updateInput();
@@ -872,7 +927,7 @@ html_template = """<!DOCTYPE html>
     }
     html += '<th>Σ</th></tr></thead><tbody>';
 
-    for (let ini of Object.keys(hintsMatrix).sort()) {
+    for (let ini of Object.keys(hintsMatrix).sort(compareEo)) {
       let rowSum = 0;
       html += '<tr><td>' + ini + '</td>';
       for (let l of lengthsList) {
@@ -890,7 +945,7 @@ html_template = """<!DOCTYPE html>
     const rank = document.getElementById("user-rank").innerText;
     const user = localStorage.getItem("vortabelo_username");
     const userStr = user ? ("Ludanto: " + user + "\\n") : "";
-    const txt = "Vortabelo (" + gameDate + ")\\n" +
+    const txt = "Vortabelo v1.2 (" + gameDate + ")\\n" +
                 userStr +
                 "Nivelo: " + rank + " | " + score + " pt\\n" +
                 "Trovitaj vortoj: " + foundWords.size + "/" + solutions.size;
@@ -959,4 +1014,4 @@ final_html = (
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(final_html)
 
-print("Fitxer 'index.html' generat amb suport complet de perfil d'usuari!")
+print("Fitxer 'index.html' generat amb les normes del PIV i Versio 1.2!")
