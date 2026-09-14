@@ -149,26 +149,25 @@ html_template = """<!DOCTYPE html>
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   .brand-logo-wrap {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 12px;
     background: var(--card-bg);
     border: 1px solid var(--border);
-    padding: 4px 10px;
+    padding: 6px 16px;
     border-radius: 999px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
   }
   .star-svg {
-    width: 26px;
-    height: 26px;
-  }
-  .crocodile-svg {
     width: 32px;
     height: 32px;
+  }
+  .crocodile-svg {
+    width: 46px;
+    height: 46px;
   }
 
   header {
@@ -422,19 +421,23 @@ html_template = """<!DOCTYPE html>
   footer {
     margin-top: 20px;
     text-align: center;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     color: var(--text-muted);
     border-top: 1px solid var(--border);
     padding-top: 14px;
     width: 100%;
     max-width: 380px;
   }
+  .creator-tag {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--primary);
+  }
   footer a { color: var(--primary); text-decoration: none; }
 </style>
 </head>
 <body>
 
-<!-- Logo superior amb l'estrella verda i el krokodilo -->
 <div class="brand-banner">
   <div class="brand-logo-wrap">
     <svg class="star-svg" viewBox="0 0 100 100">
@@ -442,20 +445,15 @@ html_template = """<!DOCTYPE html>
       <polygon points="50,12 61,38 89,38 66,54 75,80 50,64 25,80 34,54 11,38 39,38" fill="#16a34a"/>
     </svg>
     <svg class="crocodile-svg" viewBox="0 0 64 64" fill="none">
-      <!-- Cap i musell -->
-      <path d="M10 38 C 14 26, 26 24, 38 24 C 48 24, 58 28, 60 36 C 60 40, 52 44, 40 44 C 28 44, 18 46, 12 44 Z" fill="#22c55e"/>
-      <!-- Mandíbula inferior -->
-      <path d="M18 42 C 30 42, 54 41, 58 37 C 54 44, 42 46, 28 46 C 20 46, 16 44, 18 42 Z" fill="#15803d"/>
-      <!-- Ull groc -->
-      <circle cx="28" cy="24" r="5" fill="#facc15"/>
-      <circle cx="28" cy="24" r="2.5" fill="#0f172a"/>
-      <!-- Dents -->
-      <polygon points="34,38 37,42 40,38" fill="#ffffff"/>
-      <polygon points="44,37 47,41 50,37" fill="#ffffff"/>
-      <!-- Crestes de l'esquena -->
-      <polygon points="16,28 19,23 22,28" fill="#15803d"/>
-      <polygon points="21,27 24,21 27,26" fill="#15803d"/>
-      <circle cx="56" cy="34" r="1.5" fill="#0f172a"/>
+      <path d="M8 38 C 12 24, 26 22, 38 22 C 49 22, 59 26, 61 35 C 61 40, 52 44, 40 44 C 28 44, 16 46, 10 44 Z" fill="#22c55e"/>
+      <path d="M16 42 C 28 42, 55 41, 59 37 C 55 45, 42 47, 26 47 C 18 47, 14 45, 16 42 Z" fill="#15803d"/>
+      <circle cx="26" cy="22" r="6" fill="#facc15"/>
+      <circle cx="26" cy="22" r="3" fill="#0f172a"/>
+      <polygon points="32,38 35,43 38,38" fill="#ffffff"/>
+      <polygon points="42,37 45,42 48,37" fill="#ffffff"/>
+      <polygon points="14,26 17,19 20,26" fill="#15803d"/>
+      <polygon points="20,25 23,18 26,24" fill="#15803d"/>
+      <circle cx="57" cy="33" r="2" fill="#0f172a"/>
     </svg>
   </div>
 </div>
@@ -527,11 +525,10 @@ html_template = """<!DOCTYPE html>
 </div>
 
 <footer>
-  <div>Kreita de Esperantulo Mataró 2026</div>
+  <div class="creator-tag">Kreita de Esperantulo de la VA</div>
   <div style="margin-top:4px;">Bazita sur Fundamento kaj ReVo • <a href="https://github.com/JordiACG25/Vortabelo" target="_blank">Fontkodo ĉe GitHub</a></div>
 </footer>
 
-<!-- Modal Reguloj -->
 <div id="rules-modal" class="modal-overlay" onclick="closeOnOverlay(event, 'rules-modal')">
   <div class="modal-content">
     <div class="modal-header">
@@ -775,7 +772,6 @@ html_template = """<!DOCTYPE html>
       return;
     }
 
-    // Encis
     vibrate([40, 30, 40]);
     foundWords.add(w);
     score += getWordPoints(w);
@@ -878,4 +874,4 @@ final_html = (
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(final_html)
 
-print("Fitxer 'index.html' generat amb l'emblema de l'estrella verda i el cocodril!")
+print("Fitxer 'index.html' generat amb el krokodilo ampliat i Esperantulo de la VA!")
