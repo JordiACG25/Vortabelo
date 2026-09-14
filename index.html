@@ -363,6 +363,11 @@
     font-size: 0.95rem;
     color: var(--primary);
   }
+  .version-tag {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+  }
   footer a { color: var(--primary); text-decoration: none; }
 </style>
 </head>
@@ -408,7 +413,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 537 pt</span>
+    <span id="score-text">0 / 284 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -446,7 +451,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/80)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/32)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -455,17 +460,17 @@
 <div class="section-card">
   <div class="card-title">
     <span>Spuroj & Pangeromoj</span>
-    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/2 tutis</span>
+    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/4 tutis</span>
   </div>
   <div id="hints-table-container"></div>
 </div>
 
 <footer>
   <div class="creator-tag">Kreita de Esperantulo de la VA</div>
+  <div class="version-tag">Versio 1.2</div>
   <div style="margin-top:4px;">Bazita sur Fundamento kaj ReVo • <a href="https://github.com/JordiACG25/Vortabelo" target="_blank">Fontkodo ĉe GitHub</a></div>
 </footer>
 
-<!-- Modal Reguloj -->
 <div id="rules-modal" class="modal-overlay" onclick="closeOnOverlay(event, 'rules-modal')">
   <div class="modal-content">
     <div class="modal-header">
@@ -476,14 +481,13 @@
     <div class="rule-item">• Ĉiu vorto devas havi almenaŭ 3 literojn.</div>
     <div class="rule-item">• Ĉiu vorto <strong>nepre devas enhavi la centran literon</strong> (flavan).</div>
     <div class="rule-item">• Vi rajtas uzi la samajn literojn plurfoje en la sama vorto.</div>
-    <div class="rule-item">• <strong>Permesitaj formoj:</strong> Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), participoj kaj ordinaraj vortfaradoj.</div>
+    <div class="rule-item">• <strong>Permesitaj formoj:</strong> Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), partikloj, numeraloj kaj participoj.</div>
     <div class="rule-item">• <strong>Malpermesitaj formoj:</strong> Konjugaciitaj verboj (-as, -is, -os, -us, -u) kaj mallongigoj.</div>
     <div class="rule-item">• <strong>Tuti / Pangeromo:</strong> Vorto kiu uzas ĉiujn 7 literojn de la tago donas 10 kromajn poentojn!</div>
     <div class="rule-item">• <strong>Klavaro:</strong> Vi povas tajpi 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' aŭ per 'h' por ricevi la ĉapelajn literojn aŭtomate.</div>
   </div>
 </div>
 
-<!-- Modal Usuari -->
 <div id="user-modal" class="modal-overlay" onclick="closeOnOverlay(event, 'user-modal')">
   <div class="modal-content">
     <div class="modal-header">
@@ -503,14 +507,14 @@
 
 <script>
   const gameDate = '2026-09-14';
-  const centerLetter = 'n';
-  let outerLetters = ["e", "j", "u", "a", "t", "l"];
-  const solutions = new Set(["altajn", "altan", "altanta", "altantaj", "altantajn", "altantan", "altante", "altatajn", "altatan", "altejajn", "altejan", "alten", "altetajn", "altetan", "altulajn", "altulan", "jen", "juna", "junaj", "junajn", "junan", "junanta", "junantaj", "junantajn", "junantan", "junante", "junata", "junataj", "junatajn", "junatan", "junate", "june", "juneja", "junejaj", "junejajn", "junejan", "juneje", "junen", "juneta", "junetaj", "junetajn", "junetan", "junete", "junula", "junulaj", "junulajn", "junulan", "junule", "luna", "lunaj", "lunajn", "lunan", "lunanta", "lunantaj", "lunantajn", "lunantan", "lunante", "lunata", "lunataj", "lunatajn", "lunatan", "lunate", "lune", "luneja", "lunejaj", "lunejajn", "lunejan", "luneje", "lunen", "luneta", "lunetaj", "lunetajn", "lunetan", "lunete", "lunula", "lunulaj", "lunulajn", "lunulan", "lunule", "unu"]);
-  const dict = {"altajn": "", "altan": "", "altanta": "", "altantaj": "", "altantajn": "", "altantan": "", "altante": "", "altatajn": "", "altatan": "", "altejajn": "", "altejan": "", "alten": "", "altetajn": "", "altetan": "", "altulajn": "", "altulan": "", "jen": "", "juna": "", "junaj": "", "junajn": "", "junan": "", "junanta": "", "junantaj": "", "junantajn": "", "junantan": "", "junante": "", "junata": "", "junataj": "", "junatajn": "", "junatan": "", "junate": "", "june": "", "juneja": "", "junejaj": "", "junejajn": "", "junejan": "", "juneje": "", "junen": "", "juneta": "", "junetaj": "", "junetajn": "", "junetan": "", "junete": "", "junula": "", "junulaj": "", "junulajn": "", "junulan": "", "junule": "", "luna": "", "lunaj": "", "lunajn": "", "lunan": "", "lunanta": "", "lunantaj": "", "lunantajn": "", "lunantan": "", "lunante": "", "lunata": "", "lunataj": "", "lunatajn": "", "lunatan": "", "lunate": "", "lune": "", "luneja": "", "lunejaj": "", "lunejajn": "", "lunejan": "", "luneje": "", "lunen": "", "luneta": "", "lunetaj": "", "lunetajn": "", "lunetan": "", "lunete": "", "lunula": "", "lunulaj": "", "lunulajn": "", "lunulan": "", "lunule": "", "unu": ""};
-  const hintsMatrix = {"A": {"3": 0, "4": 0, "5": 2, "6": 1, "7": 6, "8": 6, "9": 1}, "J": {"3": 1, "4": 2, "5": 3, "6": 9, "7": 10, "8": 6, "9": 1}, "L": {"3": 0, "4": 2, "5": 3, "6": 9, "7": 10, "8": 6, "9": 1}, "U": {"3": 1, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0}};
-  const lengthsList = [3, 4, 5, 6, 7, 8, 9];
-  const maxScore = 537;
-  const totalTutis = 2;
+  const centerLetter = 'l';
+  let outerLetters = ["j", "g", "t", "o", "n", "i"];
+  const solutions = new Set(["ili", "longi", "longili", "longilo", "longiloj", "longilojn", "longilon", "longini", "longino", "longinoj", "longinojn", "longinon", "longinto", "longintoj", "longintojn", "longinton", "longito", "longitoj", "longitojn", "longiton", "longo", "longoj", "longojn", "longon", "longonto", "longontoj", "longontojn", "longonton", "longoto", "longotoj", "longotojn", "longoton"]);
+  const dict = {"ili": "", "longi": "", "longili": "", "longilo": "", "longiloj": "", "longilojn": "", "longilon": "", "longini": "", "longino": "", "longinoj": "", "longinojn": "", "longinon": "", "longinto": "", "longintoj": "", "longintojn": "", "longinton": "", "longito": "", "longitoj": "", "longitojn": "", "longiton": "", "longo": "", "longoj": "", "longojn": "", "longon": "", "longonto": "", "longontoj": "", "longontojn": "", "longonton": "", "longoto": "", "longotoj": "", "longotojn": "", "longoton": ""};
+  const hintsMatrix = {"I": {"3": 1, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0}, "L": {"3": 0, "5": 2, "6": 2, "7": 7, "8": 10, "9": 8, "10": 2}};
+  const lengthsList = [3, 5, 6, 7, 8, 9, 10];
+  const maxScore = 284;
+  const totalTutis = 4;
   
   let currentInput = "";
   let foundWords = new Set();
@@ -638,6 +642,33 @@
     localStorage.setItem("vortabelo_" + gameDate, JSON.stringify(Array.from(foundWords)));
   }
 
+  const eoAlphabet = "abcĉdefgĝhĥijĵklmnoprsŝtuŭvz";
+  function compareEo(a, b) {
+    const minLen = Math.min(a.length, b.length);
+    for (let i = 0; i < minLen; i++) {
+      const idxA = eoAlphabet.indexOf(a[i]);
+      const idxB = eoAlphabet.indexOf(b[i]);
+      const posA = idxA === -1 ? 999 : idxA;
+      const posB = idxB === -1 ? 999 : idxB;
+      if (posA !== posB) return posA - posB;
+    }
+    return a.length - b.length;
+  }
+
+  function renderFoundWordsList() {
+    const listContainer = document.getElementById("words-list");
+    listContainer.innerHTML = "";
+    const sortedWords = Array.from(foundWords).sort(compareEo);
+    for (const w of sortedWords) {
+      const isTuti = new Set(w).size === 7;
+      const tag = document.createElement("span");
+      tag.className = "word-tag" + (isTuti ? " tuti" : "");
+      tag.innerText = w + (isTuti ? " ★" : "");
+      tag.onclick = () => displayDef(w);
+      listContainer.appendChild(tag);
+    }
+  }
+
   function loadProgress() {
     const saved = localStorage.getItem("vortabelo_" + gameDate);
     if (saved) {
@@ -646,11 +677,11 @@
         if (solutions.has(w)) {
           foundWords.add(w);
           score += getWordPoints(w);
-          appendWordTag(w, false);
         }
       }
       document.getElementById("found-count").innerText = foundWords.size;
       updateRankAndScore();
+      renderFoundWordsList();
     }
   }
 
@@ -703,16 +734,6 @@
     }
   }
 
-  function appendWordTag(w, triggerDef = true) {
-    const isTuti = new Set(w).size === 7;
-    const tag = document.createElement("span");
-    tag.className = "word-tag" + (isTuti ? " tuti" : "");
-    tag.innerText = w + (isTuti ? " ★" : "");
-    tag.onclick = () => displayDef(w);
-    document.getElementById("words-list").appendChild(tag);
-    if (triggerDef) displayDef(w);
-  }
-
   function triggerError(msg) {
     vibrate(60);
     const inputEl = document.getElementById("input-box");
@@ -759,7 +780,8 @@
     score += getWordPoints(w);
     document.getElementById("found-count").innerText = foundWords.size;
     updateRankAndScore();
-    appendWordTag(w, true);
+    renderFoundWordsList();
+    displayDef(w);
     saveProgress();
     currentInput = "";
     updateInput();
@@ -773,7 +795,7 @@
     }
     html += '<th>Σ</th></tr></thead><tbody>';
 
-    for (let ini of Object.keys(hintsMatrix).sort()) {
+    for (let ini of Object.keys(hintsMatrix).sort(compareEo)) {
       let rowSum = 0;
       html += '<tr><td>' + ini + '</td>';
       for (let l of lengthsList) {
@@ -791,7 +813,7 @@
     const rank = document.getElementById("user-rank").innerText;
     const user = localStorage.getItem("vortabelo_username");
     const userStr = user ? ("Ludanto: " + user + "\n") : "";
-    const txt = "Vortabelo (" + gameDate + ")\n" +
+    const txt = "Vortabelo v1.2 (" + gameDate + ")\n" +
                 userStr +
                 "Nivelo: " + rank + " | " + score + " pt\n" +
                 "Trovitaj vortoj: " + foundWords.size + "/" + solutions.size;
