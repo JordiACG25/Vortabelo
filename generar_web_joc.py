@@ -4,7 +4,7 @@ import re
 import os
 import datetime
 
-print("Carregant dades i reconstruint vocabulari oficial per a Vortabelo v1.2...")
+print("Carregant dades i reconstruint vocabulari oficial per a Vortabelo v1.2.1...")
 
 definicions_raw = {}
 arrels_lexic = set()
@@ -37,16 +37,16 @@ if os.path.exists("dataset_esperanto_master.jsonl"):
             except Exception:
                 continue
 
-# 2. Carregar vortaro_paraulogic.txt com a base
+# 2. Carregar vortaro_paraulogic.txt com a suport
 paraules_set = set()
 if os.path.exists("vortaro_paraulogic.txt"):
     with open("vortaro_paraulogic.txt", "r", encoding="utf-8") as f:
         for l in f:
             w = l.strip().lower()
-            if len(w) >= 3:
+            if len(w) >= 3 and not any(c in w for c in "qwx"):
                 paraules_set.add(w)
 
-# 3. Extreure troncs de lemes per a flexió bàsica
+# 3. Troncs de lemes per a flexio i derivacio
 terminacions_nominals = ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "en", "i"]
 troncs_extrets = set()
 
@@ -65,20 +65,28 @@ for tr in troncs_extrets:
         if len(derivat) >= 3:
             paraules_set.add(derivat)
 
-# 4. Afixos productius del PIV i Fundamento (-il-, -ej-, -in-, -ist-, -ar-, -ec-, -ebl-, etc.)
+# 4. Prefixos essencials de l'esperanto (mal-, re-, ge-, ek-, dis-)
+prefixos_comuns = ["mal", "re", "ge", "ek", "dis"]
+for tr in troncs_extrets:
+    if 2 <= len(tr) <= 5:
+        for pref in prefixos_comuns:
+            base_pref = pref + tr
+            for t in ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "i"]:
+                paraules_set.add(base_pref + t)
+
+# 5. Afixos productius del PIV i Fundamento (sense caracters espuris com 'x')
 afixos_productius = [
-    "il", "ej", "in", "ist", "ar", "ec", "ebl", "et", "eg", "ig", "iĝ", "ad", "ul", "ajx", "aĵ"
+    "il", "ej", "in", "ist", "ar", "ec", "ebl", "et", "eg", "ig", "iĝ", "ad", "ul", "aĵ"
 ]
 
 for tr in troncs_extrets:
-    # Només per a troncs bàsics de fins a 5 lletres per no sobrecarregar
-    if len(tr) <= 5:
+    if 2 <= len(tr) <= 5:
         for af in afixos_productius:
             base_af = tr + af
             for t in ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "i"]:
                 paraules_set.add(base_af + t)
 
-# 5. Partícules, preposicions i numerals canònics
+# 6. Particules, preposicions i numerals canonics amb derivats
 particules_preposicions = [
     "jen", "en", "antaŭ", "post", "apud", "inter", "sub", "sur", "tra", "trans",
     "por", "per", "kun", "sen", "pri", "pro", "kontraŭ", "dum", "ĝis", "ekster",
@@ -92,11 +100,29 @@ for base in particules_preposicions:
         mot = base + t
         if len(mot) >= 3:
             paraules_set.add(mot)
-    for af in ["il", "ej", "ec", "ar", "ig", "iĝ"]:
+    for af in ["il", "ej", "ec", "ar", "ig", "iĝ", "in", "ist"]:
         for t in ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "i"]:
             paraules_set.add(base + af + t)
 
-# 6. Participis bàsics
+# 7. Correlatius de la llengua (Tabelvortoj)
+pref_tabel = ["k", "t", "", "ĉ", "nen"]
+suf_tabel = ["io", "iu", "ia", "ie", "iel", "ial", "iam", "iom", "ies"]
+
+for p in pref_tabel:
+    for s in suf_tabel:
+        base = p + s
+        if len(base) >= 3:
+            paraules_set.add(base)
+        if s == "io":
+            paraules_set.add(base + "n")
+        elif s in ["iu", "ia"]:
+            paraules_set.add(base + "j")
+            paraules_set.add(base + "n")
+            paraules_set.add(base + "jn")
+        elif s == "ie":
+            paraules_set.add(base + "n")
+
+# 8. Participis basics
 verbs_arrels_comuns = ["est", "vid", "ir", "far", "dir", "hav", "don", "pren", "sci", "ven", "pas", "star", "viv", "lig", "litig"]
 afixos_participi = ["ant", "int", "ont", "at", "it", "ot"]
 terminacions_part = ["a", "aj", "an", "ajn", "o", "oj", "on", "ojn", "e"]
@@ -108,30 +134,37 @@ for v in verbs_arrels_comuns:
             if len(mot) >= 3:
                 paraules_set.add(mot)
 
-paraules = sorted(list(paraules_set))
+# Neteja final: només paraules d'esperanto valides (sense x, q, w)
+paraules = sorted(list(p for p in paraules_set if not any(c in p for c in "qwx")))
 
-# 7. Determinisme diari basat en la data i selecció equilibrada del tauler
+# 9. Determinisme diari i seleccio equilibrada del tauler
 avui_str = datetime.date.today().isoformat()
 rng = random.Random(avui_str)
 
 candidats_tuti = [p for p in paraules if len(set(p)) == 7 and len(p) >= 7]
 rng.shuffle(candidats_tuti)
 
+vocals_esperanto = set("aeiou")
 centre = "l"
 corones = ["m", "o", "n", "t", "e", "r"]
 solucions = []
 
-# Cerquem un tauler de bona qualitat amb un mínim de varietat
 for base_cand in candidats_tuti:
     lletres_cand = list(set(base_cand))
     rng.shuffle(lletres_cand)
     c_cand = lletres_cand[0]
     conjunt_cand = set(lletres_cand)
+    
+    # Exigir minim 2 vocals al panell
+    num_vocals = len(conjunt_cand.intersection(vocals_esperanto))
+    if num_vocals < 2:
+        continue
+        
     sols_cand = sorted([
         p for p in paraules
         if c_cand in p and set(p).issubset(conjunt_cand)
     ])
-    # Comprovem que hi hagi prou solucions i diversitat d'inicials
+    
     inicials = set(w[0] for w in sols_cand)
     if len(sols_cand) >= 35 and len(inicials) >= 3:
         centre = c_cand
@@ -159,7 +192,6 @@ def punts_de_paraula(p):
 total_punts_partida = sum(punts_de_paraula(p) for p in solucions)
 total_tutis = sum(1 for p in solucions if len(set(p)) == 7)
 
-# Lematització bàsica per a definicions
 def cercar_definicio(w):
     if w in definicions_raw:
         return definicions_raw[w]
@@ -173,7 +205,6 @@ def cercar_definicio(w):
 
 dict_solucions = {w: cercar_definicio(w) for w in solucions}
 
-# Generació de matriu de pistes
 longituds_possibles = sorted(list(set(len(w) for w in solucions)))
 lletres_inicials = sorted(list(set(w[0].upper() for w in solucions)))
 
@@ -527,6 +558,11 @@ html_template = """<!DOCTYPE html>
     margin-bottom: 14px;
   }
 
+  .hints-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+  }
+
   .hints-table {
     width: 100%;
     border-collapse: collapse;
@@ -659,7 +695,7 @@ html_template = """<!DOCTYPE html>
 
 <footer>
   <div class="creator-tag">Kreita de Esperantulo de la VA</div>
-  <div class="version-tag">Versio 1.2</div>
+  <div class="version-tag">Versio 1.2.1</div>
   <div style="margin-top:4px;">Bazita sur Fundamento kaj ReVo • <a href="https://github.com/JordiACG25/Vortabelo" target="_blank">Fontkodo ĉe GitHub</a></div>
 </footer>
 
@@ -671,12 +707,12 @@ html_template = """<!DOCTYPE html>
     </div>
     <div class="rule-item">• Trovu kiom eble plej multajn Esperantajn vortojn uzante la 7 proponitajn literojn.</div>
     <div class="rule-item">• Ĉiu vorto devas havi almenaŭ 3 literojn.</div>
-    <div class="rule-item">• Ĉiu vorto <strong>nepre devas enhavi la centran literon</strong> (flavan).</div>
+    <div class="rule-item">• Ĉiu vorto nepre devas enhavi la centran literon (flavan).</div>
     <div class="rule-item">• Vi rajtas uzi la samajn literojn plurfoje en la sama vorto.</div>
-    <div class="rule-item">• <strong>Permesitaj formoj:</strong> Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), partikloj, numeraloj, participoj kaj regule derivitaj formoj (-il-, -ej-, -in-...).</div>
-    <div class="rule-item">• <strong>Malpermesitaj formoj:</strong> Konjugaciitaj verboj (-as, -is, -os, -us, -u) kaj mallongigoj.</div>
-    <div class="rule-item">• <strong>Tuti / Pangeromo:</strong> Vorto kiu uzas ĉiujn 7 literojn de la tago donas 10 kromajn poentojn!</div>
-    <div class="rule-item">• <strong>Klavaro:</strong> Vi povas tajpi 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' aŭ per 'h' por ricevi la ĉapelajn literojn aŭtomate.</div>
+    <div class="rule-item">• Permesitaj formoj: Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), partikloj, numeraloj, tabelvortoj, participoj kaj derivitaj formoj (mal-, re-, ge-, -il-, -ej-, -in-...).</div>
+    <div class="rule-item">• Malpermesitaj formoj: Konjugaciitaj verboj (-as, -is, -os, -us, -u) kaj mallongigoj.</div>
+    <div class="rule-item">• Tuti / Pangeromo: Vorto kiu uzas ĉiujn 7 literojn de la tago donas 10 kromajn poentojn!</div>
+    <div class="rule-item">• Klavaro: Tajpu 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' por ricevi la ĉapelajn literojn aŭtomate.</div>
   </div>
 </div>
 
@@ -836,15 +872,17 @@ html_template = """<!DOCTYPE html>
 
   const eoAlphabet = "abcĉdefgĝhĥijĵklmnoprsŝtuŭvz";
   function compareEo(a, b) {
-    const minLen = Math.min(a.length, b.length);
+    const lowerA = a.toLowerCase();
+    const lowerB = b.toLowerCase();
+    const minLen = Math.min(lowerA.length, lowerB.length);
     for (let i = 0; i < minLen; i++) {
-      const idxA = eoAlphabet.indexOf(a[i]);
-      const idxB = eoAlphabet.indexOf(b[i]);
+      const idxA = eoAlphabet.indexOf(lowerA[i]);
+      const idxB = eoAlphabet.indexOf(lowerB[i]);
       const posA = idxA === -1 ? 999 : idxA;
       const posB = idxB === -1 ? 999 : idxB;
       if (posA !== posB) return posA - posB;
     }
-    return a.length - b.length;
+    return lowerA.length - lowerB.length;
   }
 
   function renderFoundWordsList() {
@@ -981,13 +1019,14 @@ html_template = """<!DOCTYPE html>
 
   function renderHintsTable() {
     const container = document.getElementById("hints-table-container");
-    let html = '<table class="hints-table"><thead><tr><th>Lit</th>';
+    let html = '<div class="hints-table-wrapper"><table class="hints-table"><thead><tr><th>Lit</th>';
     for (let l of lengthsList) {
       html += '<th>' + l + '</th>';
     }
     html += '<th>Σ</th></tr></thead><tbody>';
 
-    for (let ini of Object.keys(hintsMatrix).sort(compareEo)) {
+    const sortedInitials = Object.keys(hintsMatrix).sort(compareEo);
+    for (let ini of sortedInitials) {
       let rowSum = 0;
       html += '<tr><td>' + ini + '</td>';
       for (let l of lengthsList) {
@@ -997,7 +1036,7 @@ html_template = """<!DOCTYPE html>
       }
       html += '<td>' + rowSum + '</td></tr>';
     }
-    html += '</tbody></table>';
+    html += '</tbody></table></div>';
     container.innerHTML = html;
   }
 
@@ -1005,7 +1044,7 @@ html_template = """<!DOCTYPE html>
     const rank = document.getElementById("user-rank").innerText;
     const user = localStorage.getItem("vortabelo_username");
     const userStr = user ? ("Ludanto: " + user + "\\n") : "";
-    const txt = "Vortabelo v1.2 (" + gameDate + ")\\n" +
+    const txt = "Vortabelo v1.2.1 (" + gameDate + ")\\n" +
                 userStr +
                 "Nivelo: " + rank + " | " + score + " pt\\n" +
                 "Trovitaj vortoj: " + foundWords.size + "/" + solutions.size;
@@ -1015,12 +1054,12 @@ html_template = """<!DOCTYPE html>
   }
 
   const surogatoMap = {
-    "cx": "ĉ", "ch": "ĉ",
-    "gx": "ĝ", "gh": "ĝ",
-    "hx": "ĥ", "hh": "ĥ",
-    "jx": "ĵ", "jh": "ĵ",
-    "sx": "ŝ", "sh": "ŝ",
-    "ux": "ŭ", "uh": "ŭ"
+    "cx": "ĉ",
+    "gx": "ĝ",
+    "hx": "ĥ",
+    "jx": "ĵ",
+    "sx": "ŝ",
+    "ux": "ŭ"
   };
 
   window.addEventListener("keydown", (e) => {
@@ -1033,9 +1072,9 @@ html_template = """<!DOCTYPE html>
       shuffleLetters();
     } else {
       const k = e.key.toLowerCase();
-      if (["x", "h"].includes(k) && currentInput.length > 0) {
+      if (k === "x" && currentInput.length > 0) {
         const lastChar = currentInput.slice(-1);
-        const combo = lastChar + k;
+        const combo = lastChar + "x";
         if (surogatoMap[combo]) {
           currentInput = currentInput.slice(0, -1) + surogatoMap[combo];
           updateInput();
@@ -1074,4 +1113,4 @@ final_html = (
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(final_html)
 
-print("Fitxer 'index.html' generat amb afixos productius i tauler equilibrat!")
+print("Fitxer 'index.html' generat correctament amb la versio 1.2.1!")
