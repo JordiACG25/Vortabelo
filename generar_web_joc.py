@@ -80,7 +80,7 @@ def cercar_definicio(w):
 
 dict_solucions = {w: cercar_definicio(w) for w in solucions}
 
-# Generacio de matriu de pistes: lletres inicials x longituds
+# Generacio de matriu de pistes
 longituds_possibles = sorted(list(set(len(w) for w in solucions)))
 lletres_inicials = sorted(list(set(w[0].upper() for w in solucions)))
 
@@ -144,7 +144,6 @@ html_template = """<!DOCTYPE html>
     transition: background-color 0.2s, color 0.2s;
   }
 
-  /* Logo i capçalera */
   .brand-banner {
     display: flex;
     align-items: center;
@@ -196,6 +195,24 @@ html_template = """<!DOCTYPE html>
     justify-content: center;
   }
   .icon-btn:hover { background: var(--border); }
+
+  .player-greeting {
+    width: 100%;
+    max-width: 380px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .player-greeting span.change-link {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    text-decoration: underline;
+  }
 
   .rank-container {
     width: 100%;
@@ -405,6 +422,18 @@ html_template = """<!DOCTYPE html>
   .close-btn { background: none; border: none; font-size: 1.5rem; color: var(--text); cursor: pointer; }
   .rule-item { margin-bottom: 10px; font-size: 0.9rem; line-height: 1.4; }
 
+  .user-input-field {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--text);
+    box-sizing: border-box;
+    margin-bottom: 14px;
+  }
+
   .hints-table {
     width: 100%;
     border-collapse: collapse;
@@ -464,10 +493,16 @@ html_template = """<!DOCTYPE html>
     <div class="subtitle">Taga defio - __DATA__</div>
   </div>
   <div class="header-actions">
+    <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
     <button class="icon-btn" onclick="toggleModal('rules-modal')" title="Reguloj">ℹ️</button>
     <button class="icon-btn" id="theme-btn" onclick="toggleTheme()" title="Reĝimo">🌙</button>
   </div>
 </header>
+
+<div class="player-greeting" id="player-banner" style="display: none;">
+  <span>Saluton, <span id="display-username">Ludanto</span>!</span>
+  <span class="change-link" onclick="toggleModal('user-modal')">ŝanĝi</span>
+</div>
 
 <div class="rank-container">
   <div class="rank-meta">
@@ -529,6 +564,7 @@ html_template = """<!DOCTYPE html>
   <div style="margin-top:4px;">Bazita sur Fundamento kaj ReVo • <a href="https://github.com/JordiACG25/Vortabelo" target="_blank">Fontkodo ĉe GitHub</a></div>
 </footer>
 
+<!-- Modal Reguloj -->
 <div id="rules-modal" class="modal-overlay" onclick="closeOnOverlay(event, 'rules-modal')">
   <div class="modal-content">
     <div class="modal-header">
@@ -543,6 +579,24 @@ html_template = """<!DOCTYPE html>
     <div class="rule-item">• <strong>Malpermesitaj formoj:</strong> Konjugaciitaj verboj (-as, -is, -os, -us, -u) kaj mallongigoj.</div>
     <div class="rule-item">• <strong>Tuti / Pangeromo:</strong> Vorto kiu uzas ĉiujn 7 literojn de la tago donas 10 kromajn poentojn!</div>
     <div class="rule-item">• <strong>Klavaro:</strong> Vi povas tajpi 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' aŭ per 'h' por ricevi la ĉapelajn literojn aŭtomate.</div>
+  </div>
+</div>
+
+<!-- Modal Usuari -->
+<div id="user-modal" class="modal-overlay" onclick="closeOnOverlay(event, 'user-modal')">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Profilo de Ludanto</h2>
+      <button class="close-btn" onclick="toggleModal('user-modal')">×</button>
+    </div>
+    <div style="font-size: 0.9rem; margin-bottom: 12px; color: var(--text-muted);">
+      Enigu vian nomon aŭ kromnomon por konservi viajn personajn lud-rezultojn:
+    </div>
+    <input type="text" id="username-input" class="user-input-field" placeholder="Ekz: Jordi, VerdaStelo..." maxlength="20" />
+    <div style="display:flex; justify-content:flex-end; gap:8px;">
+      <button class="action-btn btn-secondary" onclick="toggleModal('user-modal')">Nuligi</button>
+      <button class="action-btn" onclick="saveUsername()">Konservi</button>
+    </div>
   </div>
 </div>
 
@@ -580,10 +634,37 @@ html_template = """<!DOCTYPE html>
 
   function toggleModal(id) {
     document.getElementById(id).classList.toggle('open');
+    if (id === 'user-modal') {
+      const current = localStorage.getItem('vortabelo_username') || '';
+      document.getElementById('username-input').value = current;
+    }
   }
 
   function closeOnOverlay(e, id) {
     if (e.target.id === id) toggleModal(id);
+  }
+
+  function saveUsername() {
+    const val = document.getElementById('username-input').value.trim();
+    if (val) {
+      localStorage.setItem('vortabelo_username', val);
+    } else {
+      localStorage.removeItem('vortabelo_username');
+    }
+    updateUserDisplay();
+    toggleModal('user-modal');
+  }
+
+  function updateUserDisplay() {
+    const name = localStorage.getItem('vortabelo_username');
+    const banner = document.getElementById('player-banner');
+    const disp = document.getElementById('display-username');
+    if (name) {
+      disp.innerText = name;
+      banner.style.display = 'flex';
+    } else {
+      banner.style.display = 'none';
+    }
   }
 
   function toggleTheme() {
@@ -807,7 +888,10 @@ html_template = """<!DOCTYPE html>
 
   function shareResults() {
     const rank = document.getElementById("user-rank").innerText;
+    const user = localStorage.getItem("vortabelo_username");
+    const userStr = user ? ("Ludanto: " + user + "\\n") : "";
     const txt = "Vortabelo (" + gameDate + ")\\n" +
+                userStr +
                 "Nivelo: " + rank + " | " + score + " pt\\n" +
                 "Trovitaj vortoj: " + foundWords.size + "/" + solutions.size;
     navigator.clipboard.writeText(txt).then(() => {
@@ -851,6 +935,7 @@ html_template = """<!DOCTYPE html>
 
   renderHexes();
   renderHintsTable();
+  updateUserDisplay();
   loadProgress();
 </script>
 </body>
@@ -874,4 +959,4 @@ final_html = (
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(final_html)
 
-print("Fitxer 'index.html' generat amb el krokodilo ampliat i Esperantulo de la VA!")
+print("Fitxer 'index.html' generat amb suport complet de perfil d'usuari!")
