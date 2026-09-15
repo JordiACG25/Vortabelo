@@ -7,31 +7,32 @@ print("Llegint dataset_esperanto_master.jsonl per extreure el vocabulari canòni
 mots_trobats = set()
 
 # 1. Extracció directa de lemes i derivats del dataset
-with open("dataset_esperanto_master.jsonl", "r", encoding="utf-8") as f:
-    for linia in f:
-        if not linia.strip():
-            continue
-        try:
-            dada = json.loads(linia)
-            text = dada.get("text", "")
-            
-            # Entrades de tipus leksikono
-            if dada.get("tipus") == "leksikono" and "Vorto:" in text:
-                parts = text.split("\nDifino:")
-                if len(parts) >= 1:
-                    w = re.sub(r'[^a-zĉĝĥĵŝŭ]', '', parts[0].replace("Vorto:", "").strip().lower())
-                    if len(w) >= 3:
-                        mots_trobats.add(w)
-            
-            # Entrades d'instruccions / preguntes
-            elif dada.get("tipus") == "instrukcio" and "Demando:" in text:
-                m = re.search(r'Demando:\s*(.*?)\s*\nRespondo:', text)
-                if m:
-                    w = re.sub(r'[^a-zĉĝĥĵŝŭ]', '', m.group(1).lower())
-                    if len(w) >= 3:
-                        mots_trobats.add(w)
-        except Exception:
-            continue
+if os.path.exists("dataset_esperanto_master.jsonl"):
+    with open("dataset_esperanto_master.jsonl", "r", encoding="utf-8") as f:
+        for linia in f:
+            if not linia.strip():
+                continue
+            try:
+                dada = json.loads(linia)
+                text = dada.get("text", "")
+                
+                # Entrades de tipus leksikono
+                if dada.get("tipus") == "leksikono" and "Vorto:" in text:
+                    parts = text.split("\nDifino:")
+                    if len(parts) >= 1:
+                        w = re.sub(r'[^a-zĉĝĥĵŝŭ]', '', parts[0].replace("Vorto:", "").strip().lower())
+                        if len(w) >= 3:
+                            mots_trobats.add(w)
+                
+                # Entrades d'instruccions / preguntes
+                elif dada.get("tipus") == "instrukcio" and "Demando:" in text:
+                    m = re.search(r'Demando:\s*(.*?)\s*\nRespondo:', text)
+                    if m:
+                        w = re.sub(r'[^a-zĉĝĥĵŝŭ]', '', m.group(1).lower())
+                        if len(w) >= 3:
+                            mots_trobats.add(w)
+            except Exception:
+                continue
 
 print(f"Lemes bàsics extrets: {len(mots_trobats)}")
 
@@ -54,12 +55,9 @@ for pref in ["k", "t", "", "ĉ", "nen"]:
 
 # 3. Generar les flexions regulars legítimes (plurals, acusatius, ordinals)
 vortaro_final = set()
-
-# Veto estricte a formes verbals conjugades
 terminacions_prohibides = ("as", "is", "os", "us")
 
 for mot in mots_trobats:
-    # Descartar caràcters estranys o paraules curtes
     if len(mot) < 3 or any(c in mot for c in "qwx"):
         continue
 
@@ -70,19 +68,19 @@ for mot in mots_trobats:
 
     # Flexions de substantius (-o)
     if mot.endswith("o"):
-        vortaro_final.add(mot + "j")   # -oj
-        vortaro_final.add(mot + "n")   # -on
-        vortaro_final.add(mot + "jn")  # -ojn
+        vortaro_final.add(mot + "j")
+        vortaro_final.add(mot + "n")
+        vortaro_final.add(mot + "jn")
 
     # Flexions d'adjectius (-a)
     elif mot.endswith("a"):
-        vortaro_final.add(mot + "j")   # -aj
-        vortaro_final.add(mot + "n")   # -an
-        vortaro_final.add(mot + "jn")  # -ajn
+        vortaro_final.add(mot + "j")
+        vortaro_final.add(mot + "n")
+        vortaro_final.add(mot + "jn")
 
     # Adverbis amb acusatiu de direcció (-en)
     elif mot.endswith("e"):
-        vortaro_final.add(mot + "n")   # -en
+        vortaro_final.add(mot + "n")
 
     # Derivats d'adjectiu i substantiu per a numerals i partícules
     elif mot in particules_i_correlatius:
@@ -96,4 +94,4 @@ with open("vortaro_paraulogic.txt", "w", encoding="utf-8") as f:
         f.write(w + "\n")
 
 print(f"Fitxer 'vortaro_paraulogic.txt' generat amb èxit!")
-print(f"Total de paraules vàlides llestes per al joc: {len(llista_ordenada)}")
+print(f"Total de paraules vàlides: {len(llista_ordenada)}")
