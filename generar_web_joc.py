@@ -4,12 +4,10 @@ import re
 import os
 import datetime
 
-print("Carregant dades i reconstruint vocabulari oficial per a Vortabelo v1.2.2...")
+print("Generant Vortabelo v1.2.2 amb el nou vocabulari canònic...")
 
+# 1. Carregar definicions locals per a consulta
 definicions_raw = {}
-arrels_lexic = set()
-
-# 1. Extreure lemes i definicions de dataset_esperanto_master.jsonl
 if os.path.exists("dataset_esperanto_master.jsonl"):
     with open("dataset_esperanto_master.jsonl", "r", encoding="utf-8") as f:
         for linia in f:
@@ -22,140 +20,23 @@ if os.path.exists("dataset_esperanto_master.jsonl"):
                     parts = text.split("\nDifino:")
                     if len(parts) == 2:
                         k = re.sub(r'[^a-zĉĝĥĵŝŭ]', '', parts[0].replace("Vorto:", "").strip().lower())
-                        if k:
-                            arrels_lexic.add(k)
-                            if k not in definicions_raw:
-                                definicions_raw[k] = parts[1].strip()
+                        if k and k not in definicions_raw:
+                            definicions_raw[k] = parts[1].strip()
                 elif dada.get("tipus") == "instrukcio" and "Demando:" in text:
                     m = re.search(r'Demando:\s*(.*?)\s*\nRespondo:\s*(.*)', text)
                     if m:
                         k = re.sub(r'[^a-zĉĝĥĵŝŭ]', '', m.group(1).lower())
-                        if k:
-                            arrels_lexic.add(k)
-                            if k not in definicions_raw:
-                                definicions_raw[k] = m.group(2).strip()
+                        if k and k not in definicions_raw:
+                            definicions_raw[k] = m.group(2).strip()
             except Exception:
                 continue
 
-# 2. Carregar vortaro_paraulogic.txt com a suport
-paraules_set = set()
-if os.path.exists("vortaro_paraulogic.txt"):
-    with open("vortaro_paraulogic.txt", "r", encoding="utf-8") as f:
-        for l in f:
-            w = l.strip().lower()
-            if len(w) >= 3 and not any(c in w for c in "qwx"):
-                paraules_set.add(w)
+# 2. Carregar el vocabulari consolidat (generat per construir_vortaro.py)
+paraules = []
+with open("vortaro_paraulogic.txt", "r", encoding="utf-8") as f:
+    paraules = sorted(list(set(l.strip().lower() for l in f if len(l.strip()) >= 3)))
 
-# 3. Troncs de lemes per a flexio i derivacio
-terminacions_nominals = ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "en", "i"]
-troncs_extrets = set()
-
-for mot in arrels_lexic.union(paraules_set):
-    tronc = mot
-    for t_lema in ["ojn", "ajn", "oj", "aj", "on", "an", "en", "o", "a", "i", "e"]:
-        if mot.endswith(t_lema) and len(mot) > len(t_lema) + 1:
-            tronc = mot[:-len(t_lema)]
-            break
-    if len(tronc) >= 2:
-        troncs_extrets.add(tronc)
-
-# AFEGIR ARRELS FONAMENTALS GARANTIDES (dies, mesos, colors, vocabulari base)
-arrels_basiques = [
-    "lund", "mard", "merkred", "ĵaŭd", "vendred", "sabat", "dimanĉ",
-    "januar", "februar", "mart", "april", "maj", "juni", "juli", "aŭgust", "septembr", "oktobr", "novembr", "decembr",
-    "printemp", "somer", "aŭtun", "vintr",
-    "nigr", "blank", "ruĝ", "verd", "blu", "flav", "griz", "brun",
-    "knab", "vir", "hom", "infan", "patr", "edz", "fil", "frat", "amik",
-    "arb", "flor", "best", "hund", "kat", "bird", "fiŝ",
-    "akv", "fajr", "ter", "aer", "sun", "lun", "stel", "nub", "vent",
-    "dom", "ĉambr", "pord", "fenestr", "tabl", "seĝ", "lit", "lig",
-    "manĝ", "trink", "dorm", "pens", "sci", "kompren", "leg", "skrib",
-    "grand", "bon", "bel", "nov", "jun", "alt", "long", "fort", "san",
-    "vort", "liter", "lingv", "nom", "temp", "tag", "nokt", "maten", "vesper"
-]
-for ab in arrels_basiques:
-    troncs_extrets.add(ab)
-
-# Generem totes les flexions directes
-for tr in troncs_extrets:
-    for t in terminacions_nominals:
-        derivat = tr + t
-        if len(derivat) >= 3:
-            paraules_set.add(derivat)
-
-# 4. Prefixos essencials de l'esperanto (mal-, re-, ge-, ek-, dis-)
-prefixos_comuns = ["mal", "re", "ge", "ek", "dis"]
-for tr in troncs_extrets:
-    if 2 <= len(tr) <= 5:
-        for pref in prefixos_comuns:
-            base_pref = pref + tr
-            for t in ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "i"]:
-                paraules_set.add(base_pref + t)
-
-# 5. Afixos productius del PIV i Fundamento (sense caracters espuris com 'x')
-afixos_productius = [
-    "il", "ej", "in", "ist", "ar", "ec", "ebl", "et", "eg", "ig", "iĝ", "ad", "ul", "aĵ"
-]
-
-for tr in troncs_extrets:
-    if 2 <= len(tr) <= 5:
-        for af in afixos_productius:
-            base_af = tr + af
-            for t in ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "i"]:
-                paraules_set.add(base_af + t)
-
-# 6. Particules, preposicions i numerals canonics amb derivats
-particules_preposicions = [
-    "jen", "en", "antaŭ", "post", "apud", "inter", "sub", "sur", "tra", "trans",
-    "por", "per", "kun", "sen", "pri", "pro", "kontraŭ", "dum", "ĝis", "ekster",
-    "ĉirkaŭ", "malgraŭ", "anstataŭ", "laŭ", "po",
-    "unu", "du", "tri", "kvar", "kvin", "ses", "sep", "ok", "naŭ", "dek", "cent", "mil",
-    "tuj", "nun", "jam", "tro", "tre", "plu", "for", "mem", "preskaŭ", "apenaŭ"
-]
-
-for base in particules_preposicions:
-    for t in ["", "o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "en", "i"]:
-        mot = base + t
-        if len(mot) >= 3:
-            paraules_set.add(mot)
-    for af in ["il", "ej", "ec", "ar", "ig", "iĝ", "in", "ist"]:
-        for t in ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "i"]:
-            paraules_set.add(base + af + t)
-
-# 7. Correlatius de la llengua (Tabelvortoj)
-pref_tabel = ["k", "t", "", "ĉ", "nen"]
-suf_tabel = ["io", "iu", "ia", "ie", "iel", "ial", "iam", "iom", "ies"]
-
-for p in pref_tabel:
-    for s in suf_tabel:
-        base = p + s
-        if len(base) >= 3:
-            paraules_set.add(base)
-        if s == "io":
-            paraules_set.add(base + "n")
-        elif s in ["iu", "ia"]:
-            paraules_set.add(base + "j")
-            paraules_set.add(base + "n")
-            paraules_set.add(base + "jn")
-        elif s == "ie":
-            paraules_set.add(base + "n")
-
-# 8. Participis basics
-verbs_arrels_comuns = ["est", "vid", "ir", "far", "dir", "hav", "don", "pren", "sci", "ven", "pas", "star", "viv"]
-afixos_participi = ["ant", "int", "ont", "at", "it", "ot"]
-terminacions_part = ["a", "aj", "an", "ajn", "o", "oj", "on", "ojn", "e"]
-
-for v in verbs_arrels_comuns:
-    for af in afixos_participi:
-        for t in terminacions_part:
-            mot = v + af + t
-            if len(mot) >= 3:
-                paraules_set.add(mot)
-
-# Neteja final: només paraules d'esperanto valides (sense x, q, w)
-paraules = sorted(list(p for p in paraules_set if not any(c in p for c in "qwx")))
-
-# 9. Determinisme diari i seleccio equilibrada del tauler
+# 3. Determinisme diari i selecció equilibrada del tauler
 avui_str = datetime.date.today().isoformat()
 rng = random.Random(avui_str)
 
@@ -173,7 +54,7 @@ for base_cand in candidats_tuti:
     c_cand = lletres_cand[0]
     conjunt_cand = set(lletres_cand)
     
-    # Exigir minim 2 vocals al panell
+    # Exigir mínim 2 vocals al panell
     num_vocals = len(conjunt_cand.intersection(vocals_esperanto))
     if num_vocals < 2:
         continue
@@ -1131,4 +1012,4 @@ final_html = (
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(final_html)
 
-print("Fitxer 'index.html' generat correctament amb la versio 1.2.2 i arrels garantides!")
+print("Fitxer 'index.html' generat correctament amb la versio 1.2.2!")
