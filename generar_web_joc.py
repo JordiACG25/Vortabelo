@@ -4,7 +4,7 @@ import re
 import os
 import datetime
 
-print("Generant Vortabelo v1.2.2...")
+print("Generant Vortabelo amb pistes limitades i controls nets...")
 
 # 1. Carregar definicions locals per a consulta
 definicions_raw = {}
@@ -40,7 +40,6 @@ if os.path.exists("vortaro_paraulogic.txt"):
             if len(w) >= 3:
                 paraules_set.add(w)
 
-# Assegurança addicional per si vortaro_paraulogic.txt encara no tenia totes les arrels
 arrels_auxiliars = [
     "melon", "pom", "pan", "lakt", "fromaĝ", "viand", "karn", "ov", "suker", "sal", "akv", "vin", "bier", "kaf", "te",
     "manĝ", "trink", "kuir", "frukt", "legom", "sup", "drink",
@@ -70,7 +69,7 @@ for p in ["jes", "ne", "jen", "jam", "tuj", "nun", "tro", "tre", "plu", "for", "
 
 paraules = sorted(list(p for p in paraules_set if not any(c in p for c in "qwx")))
 
-# 3. Determinisme diari i seleccio equilibrada del tauler
+# 3. Determinisme diari i seleccio del tauler
 avui_str = datetime.date.today().isoformat()
 rng = random.Random(avui_str)
 
@@ -79,7 +78,7 @@ rng.shuffle(candidats_tuti)
 
 vocals_esperanto = set("aeiou")
 centre = "l"
-corones = ["m", "o", "n", "t", "e", "r"]
+corones = ["m", "o", "n", "t", "e", "u"]
 solucions = []
 
 for base_cand in candidats_tuti:
@@ -105,8 +104,6 @@ for base_cand in candidats_tuti:
         break
 
 if not solucions:
-    base_segura = "melonto"
-    lletres = list("lmonteu")
     centre = "l"
     corones = ["m", "o", "n", "t", "e", "u"]
     conjunt_lletres = set([centre] + corones)
@@ -137,7 +134,6 @@ def cercar_definicio(w):
     return ""
 
 dict_solucions = {w: cercar_definicio(w) for w in solucions}
-
 longituds_possibles = sorted(list(set(len(w) for w in solucions)))
 lletres_inicials = sorted(list(set(w[0].upper() for w in solucions)))
 
@@ -222,14 +218,8 @@ html_template = """<!DOCTYPE html>
     border-radius: 999px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.06);
   }
-  .star-svg {
-    width: 32px;
-    height: 32px;
-  }
-  .crocodile-svg {
-    width: 46px;
-    height: 46px;
-  }
+  .star-svg { width: 32px; height: 32px; }
+  .crocodile-svg { width: 46px; height: 46px; }
 
   header {
     width: 100%;
@@ -397,22 +387,38 @@ html_template = """<!DOCTYPE html>
   }
   button.action-btn:hover { background: var(--primary-hover); }
   button.btn-secondary { background: var(--tag-bg); color: var(--text); }
+  button.btn-hint {
+    background: #fef08a;
+    color: #854d0e;
+    border: 1px solid #fde047;
+  }
+  button.btn-hint:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 
-  #definition-box {
+  #definition-box, #hint-box {
     max-width: 380px;
     width: 100%;
     background: var(--card-bg);
-    border: 2px solid var(--primary);
-    border-left: 6px solid var(--primary);
     border-radius: 8px;
     padding: 12px;
     margin-bottom: 15px;
     box-sizing: border-box;
   }
-  #def-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
-  #def-title { font-size: 1.1rem; font-weight: 700; color: var(--primary); text-transform: uppercase; }
-  #def-link { font-size: 0.8rem; color: var(--primary); text-decoration: none; }
-  #def-body { font-size: 0.9rem; line-height: 1.35; color: var(--text); }
+  #definition-box {
+    border: 2px solid var(--primary);
+    border-left: 6px solid var(--primary);
+  }
+  #hint-box {
+    display: none;
+    border: 2px solid #f59e0b;
+    border-left: 6px solid #f59e0b;
+  }
+  .box-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+  .box-title { font-size: 1.05rem; font-weight: 700; color: var(--primary); text-transform: uppercase; }
+  .box-link { font-size: 0.8rem; color: var(--primary); text-decoration: none; }
+  .box-body { font-size: 0.9rem; line-height: 1.35; color: var(--text); }
 
   .section-card {
     max-width: 380px;
@@ -496,11 +502,7 @@ html_template = """<!DOCTYPE html>
     margin-bottom: 14px;
   }
 
-  .hints-table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-  }
-
+  .hints-table-wrapper { width: 100%; overflow-x: auto; }
   .hints-table {
     width: 100%;
     border-collapse: collapse;
@@ -524,16 +526,8 @@ html_template = """<!DOCTYPE html>
     width: 100%;
     max-width: 380px;
   }
-  .creator-tag {
-    font-weight: 600;
-    font-size: 0.95rem;
-    color: var(--primary);
-  }
-  .version-tag {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    margin-top: 2px;
-  }
+  .creator-tag { font-weight: 600; font-size: 0.95rem; color: var(--primary); }
+  .version-tag { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
   footer a { color: var(--primary); text-decoration: none; }
 </style>
 </head>
@@ -604,15 +598,24 @@ html_template = """<!DOCTYPE html>
 <div class="controls">
   <button class="action-btn btn-secondary" onclick="deleteLetter()">Forigi</button>
   <button class="action-btn btn-secondary" onclick="shuffleLetters()">Miksi</button>
+  <button class="action-btn btn-hint" id="hint-btn" onclick="requestHint()">💡 Pisto (<span id="hints-left">3</span>)</button>
   <button class="action-btn" onclick="submitWord()">Enmeti</button>
 </div>
 
-<div id="definition-box" style="display: none;">
-  <div id="def-header">
-    <span id="def-title"></span>
-    <a id="def-link" href="#" target="_blank">Vortaro.net ↗</a>
+<div id="hint-box">
+  <div class="box-header">
+    <span class="box-title" style="color:#d97706;">Pisto</span>
+    <span style="font-size:0.8rem; color:var(--text-muted); cursor:pointer;" onclick="closeHintBox()">✕</span>
   </div>
-  <div id="def-body"></div>
+  <div class="box-body" id="hint-body"></div>
+</div>
+
+<div id="definition-box" style="display: none;">
+  <div class="box-header">
+    <span class="box-title" id="def-title"></span>
+    <a class="box-link" id="def-link" href="#" target="_blank">Vortaro.net ↗</a>
+  </div>
+  <div class="box-body" id="def-body"></div>
 </div>
 
 <div class="section-card">
@@ -633,7 +636,7 @@ html_template = """<!DOCTYPE html>
 
 <footer>
   <div class="creator-tag">Kreita de Esperantulo de la VA</div>
-  <div class="version-tag">Versio 1.2.2</div>
+  <div class="version-tag">Versio 1.3.0</div>
   <div style="margin-top:4px;">Bazita sur Fundamento kaj ReVo • <a href="https://github.com/JordiACG25/Vortabelo" target="_blank">Fontkodo ĉe GitHub</a></div>
 </footer>
 
@@ -644,13 +647,13 @@ html_template = """<!DOCTYPE html>
       <button class="close-btn" onclick="toggleModal('rules-modal')">×</button>
     </div>
     <div class="rule-item">• Trovu kiom eble plej multajn Esperantajn vortojn uzante la 7 proponitajn literojn.</div>
-    <div class="rule-item">• Ĉiu vorto devas havi almenaŭ 3 literojn.</div>
-    <div class="rule-item">• Ĉiu vorto nepre devas enhavi la centran literon (flavan).</div>
+    <div class="rule-item">• Ĉiu vorto devas havi almenaŭ 3 literojn kaj enhavi la centran flavan literon.</div>
     <div class="rule-item">• Vi rajtas uzi la samajn literojn plurfoje en la sama vorto.</div>
-    <div class="rule-item">• Permesitaj formoj: Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), partikloj, numeraloj, tabelvortoj, participoj kaj derivitaj formoj (mal-, re-, ge-, -il-, -ej-, -in-...).</div>
+    <div class="rule-item">• Permesitaj formoj: Substantivoj (-o), adjektivoj (-a), adverboj (-e), infinitivoj (-i), partikloj, numeraloj, tabelvortoj, participoj kaj derivitaj formoj (mal-, re-, ge-, -il-, -ej-, -in-...).</div>
     <div class="rule-item">• Malpermesitaj formoj: Konjugaciitaj verboj (-as, -is, -os, -us, -u) kaj mallongigoj.</div>
-    <div class="rule-item">• Tuti / Pangeromo: Vorto kiu uzas ĉiujn 7 literojn de la tago donas 10 kromajn poentojn!</div>
-    <div class="rule-item">• Klavaro: Tajpu 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' por ricevi la ĉapelajn literojn aŭtomate.</div>
+    <div class="rule-item">• Pangeromo (Tuti): Vorto kiu uzas ĉiujn 7 literojn donas 10 kromajn poentojn.</div>
+    <div class="rule-item">• Pitoj: Vi havas 3 helpojn tage per la butono 💡 Pisto.</div>
+    <div class="rule-item">• Klavaro: Tajpu 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' por ricevi la ĉapelajn literojn kiam ili troviĝas en la hodiaŭa abelujo.</div>
   </div>
 </div>
 
@@ -676,6 +679,7 @@ html_template = """<!DOCTYPE html>
   const centerLetter = '__CENTRE__';
   let outerLetters = __JSON_CORONES__;
   const solutions = new Set(__JSON_SOLUCIONS__);
+  const solutionsList = __JSON_SOLUCIONS__;
   const dict = __JSON_DEFINICIONS__;
   const hintsMatrix = __JSON_GRAELLA__;
   const lengthsList = __JSON_LONGITUDS__;
@@ -686,6 +690,8 @@ html_template = """<!DOCTYPE html>
   let foundWords = new Set();
   let score = 0;
   let isShaking = false;
+  let hintsUsed = 0;
+  const MAX_HINTS = 3;
 
   const ranks = [
     { min: 0.85, name: "Zamenhof" },
@@ -698,9 +704,7 @@ html_template = """<!DOCTYPE html>
   ];
 
   function vibrate(ms) {
-    if (navigator.vibrate) {
-      navigator.vibrate(ms);
-    }
+    if (navigator.vibrate) navigator.vibrate(ms);
   }
 
   function toggleModal(id) {
@@ -774,8 +778,13 @@ html_template = """<!DOCTYPE html>
 
   function addLetter(ch) {
     if (isShaking) return;
-    currentInput += ch.toLowerCase();
-    updateInput();
+    const lk = ch.toLowerCase();
+    if ([centerLetter, ...outerLetters].includes(lk)) {
+      currentInput += lk;
+      updateInput();
+    } else {
+      triggerError("Ne en la abelujo!");
+    }
   }
 
   function deleteLetter() {
@@ -812,6 +821,48 @@ html_template = """<!DOCTYPE html>
 
   function saveProgress() {
     localStorage.setItem("vortabelo_" + gameDate, JSON.stringify(Array.from(foundWords)));
+    localStorage.setItem("vortabelo_hints_" + gameDate, hintsUsed.toString());
+  }
+
+  function updateHintsUi() {
+    const left = Math.max(0, MAX_HINTS - hintsUsed);
+    document.getElementById("hints-left").innerText = left;
+    const btn = document.getElementById("hint-btn");
+    if (left <= 0) {
+      btn.disabled = true;
+    }
+  }
+
+  function closeHintBox() {
+    document.getElementById("hint-box").style.display = "none";
+  }
+
+  function requestHint() {
+    if (hintsUsed >= MAX_HINTS) {
+      triggerError("Neniom da pistoj restas!");
+      return;
+    }
+    const unfound = solutionsList.filter(w => !foundWords.has(w));
+    if (unfound.length === 0) {
+      triggerError("Vi jam trovis ĉion!");
+      return;
+    }
+
+    const targetWord = unfound[Math.floor(Math.random() * unfound.length)];
+    hintsUsed++;
+    saveProgress();
+    updateHintsUi();
+
+    const hintBox = document.getElementById("hint-box");
+    const hintBody = document.getElementById("hint-body");
+    const prefix = targetWord.slice(0, 2).toUpperCase();
+    const len = targetWord.length;
+    const isTuti = new Set(targetWord).size === 7;
+    const def = dict[targetWord] ? ("<br><em>Signifo:</em> " + dict[targetWord]) : "";
+
+    hintBody.innerHTML = "Vorto komenciĝanta per <strong>" + prefix + "...</strong> (" + len + " literoj)" +
+                         (isTuti ? " <strong>[PANGEROMO / TUTI]</strong>" : "") + def;
+    hintBox.style.display = "block";
   }
 
   const eoAlphabet = "abcĉdefgĝhĥijĵklmnoprsŝtuŭvz";
@@ -857,6 +908,11 @@ html_template = """<!DOCTYPE html>
       updateRankAndScore();
       renderFoundWordsList();
     }
+    const savedHints = localStorage.getItem("vortabelo_hints_" + gameDate);
+    if (savedHints) {
+      hintsUsed = parseInt(savedHints, 10) || 0;
+    }
+    updateHintsUi();
   }
 
   function cleanHtml(raw) {
@@ -988,7 +1044,7 @@ html_template = """<!DOCTYPE html>
     const rank = document.getElementById("user-rank").innerText;
     const user = localStorage.getItem("vortabelo_username");
     const userStr = user ? ("Ludanto: " + user + "\\n") : "";
-    const txt = "Vortabelo v1.2.2 (" + gameDate + ")\\n" +
+    const txt = "Vortabelo v1.3.0 (" + gameDate + ")\\n" +
                 userStr +
                 "Nivelo: " + rank + " | " + score + " pt\\n" +
                 "Trovitaj vortoj: " + foundWords.size + "/" + solutions.size;
@@ -998,12 +1054,7 @@ html_template = """<!DOCTYPE html>
   }
 
   const surogatoMap = {
-    "cx": "ĉ",
-    "gx": "ĝ",
-    "hx": "ĥ",
-    "jx": "ĵ",
-    "sx": "ŝ",
-    "ux": "ŭ"
+    "cx": "ĉ", "gx": "ĝ", "hx": "ĥ", "jx": "ĵ", "sx": "ŝ", "ux": "ŭ"
   };
 
   window.addEventListener("keydown", (e) => {
@@ -1019,8 +1070,9 @@ html_template = """<!DOCTYPE html>
       if (k === "x" && currentInput.length > 0) {
         const lastChar = currentInput.slice(-1);
         const combo = lastChar + "x";
-        if (surogatoMap[combo]) {
-          currentInput = currentInput.slice(0, -1) + surogatoMap[combo];
+        const converted = surogatoMap[combo];
+        if (converted && [centerLetter, ...outerLetters].includes(converted)) {
+          currentInput = currentInput.slice(0, -1) + converted;
           updateInput();
           return;
         }
@@ -1057,4 +1109,4 @@ final_html = (
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(final_html)
 
-print("Fitxer 'index.html' generat correctament amb la versio 1.2.2!")
+print("Fitxer 'index.html' generat correctament!")
