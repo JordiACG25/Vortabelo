@@ -418,7 +418,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 297 pt</span>
+    <span id="score-text">0 / 216 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -456,7 +456,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/41)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/48)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -465,7 +465,7 @@
 <div class="section-card">
   <div class="card-title">
     <span>Spuroj & Pangeromoj</span>
-    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/6 tutis</span>
+    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/1 tutis</span>
   </div>
   <div id="hints-table-container"></div>
 </div>
@@ -489,6 +489,7 @@
     <div class="rule-item">• Permesitaj formoj: Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), partikloj, numeraloj, tabelvortoj, participoj kaj derivitaj formoj (mal-, re-, ge-, -il-, -ej-, -in-...).</div>
     <div class="rule-item">• Malpermesitaj formoj: Konjugaciitaj verboj (-as, -is, -os, -us, -u) kaj mallongigoj.</div>
     <div class="rule-item">• Tuti / Pangeromo: Vorto kiu uzas ĉiujn 7 literojn de la tago donas 10 kromajn poentojn!</div>
+    <div class="rule-item">• Ĉapelo ĉe poŝtelefono: Duobla rapida klako sur litero (ekz: C, G, H, J, S, U) kreas la ĉapelan literon (Ĉ, Ĝ, Ĥ, Ĵ, Ŝ, Ŭ).</div>
     <div class="rule-item">• Klavaro: Tajpu 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' por ricevi la ĉapelajn literojn aŭtomate.</div>
   </div>
 </div>
@@ -512,14 +513,14 @@
 
 <script>
   const gameDate = '2026-09-15';
-  const centerLetter = 't';
-  let outerLetters = ["k", "a", "j", "i", "r", "n"];
-  const solutions = new Set(["arta", "artaj", "artajn", "artan", "kata", "kataj", "katajn", "katan", "katara", "kataraj", "katarajn", "kataran", "kati", "katina", "katinaj", "katinajn", "katinan", "kritiki", "tia", "tiaj", "tiajn", "tian", "tra", "tri", "tria", "triaj", "triajn", "trian", "trinka", "trinkaj", "trinkajn", "trinkan", "trinkara", "trinkaraj", "trinkarajn", "trinkaran", "trinki", "trinkina", "trinkinaj", "trinkinajn", "trinkinan"]);
-  const dict = {"arta": "", "artaj": "", "artajn": "", "artan": "", "kata": "", "kataj": "", "katajn": "", "katan": "", "katara": "", "kataraj": "", "katarajn": "", "kataran": "", "kati": "", "katina": "", "katinaj": "", "katinajn": "", "katinan": "", "kritiki": "", "tia": "", "tiaj": "", "tiajn": "", "tian": "", "tra": "", "tri": "", "tria": "", "triaj": "", "triajn": "", "trian": "", "trinka": "", "trinkaj": "", "trinkajn": "", "trinkan": "", "trinkara": "", "trinkaraj": "", "trinkarajn": "", "trinkaran": "", "trinki": "", "trinkina": "", "trinkinaj": "", "trinkinajn": "", "trinkinan": ""};
-  const hintsMatrix = {"A": {"3": 0, "4": 1, "5": 2, "6": 1, "7": 0, "8": 0, "9": 0, "10": 0}, "K": {"3": 0, "4": 2, "5": 2, "6": 3, "7": 5, "8": 2, "9": 0, "10": 0}, "T": {"3": 3, "4": 3, "5": 3, "6": 3, "7": 2, "8": 3, "9": 4, "10": 2}};
-  const lengthsList = [3, 4, 5, 6, 7, 8, 9, 10];
-  const maxScore = 297;
-  const totalTutis = 6;
+  const centerLetter = 'i';
+  let outerLetters = ["f", "n", "l", "a", "e", "ĉ"];
+  const solutions = new Set(["alia", "alian", "alili", "alli", "alni", "feliĉa", "feliĉan", "feliĉe", "feliĉen", "feliĉi", "fila", "filan", "file", "filen", "fili", "filila", "fililan", "filile", "fililen", "filina", "filinan", "filine", "filinen", "fine", "finen", "ial", "iel", "ili", "ilin", "infana", "infanan", "infane", "infanen", "infani", "lin", "nei", "nenia", "nenial", "nenian", "nenie", "neniel", "nenien", "ĉia", "ĉial", "ĉian", "ĉie", "ĉiel", "ĉien"]);
+  const dict = {"alia": "", "alian": "", "alili": "", "alli": "", "alni": "", "feliĉa": "", "feliĉan": "", "feliĉe": "", "feliĉen": "", "feliĉi": "", "fila": "", "filan": "", "file": "", "filen": "", "fili": "", "filila": "", "fililan": "", "filile": "", "fililen": "", "filina": "", "filinan": "", "filine": "", "filinen": "", "fine": "", "finen": "", "ial": "", "iel": "", "ili": "", "ilin": "", "infana": "", "infanan": "", "infane": "", "infanen": "", "infani": "", "lin": "", "nei": "", "nenia": "", "nenial": "", "nenian": "", "nenie": "", "neniel": "", "nenien": "", "ĉia": "", "ĉial": "", "ĉian": "", "ĉie": "", "ĉiel": "", "ĉien": ""};
+  const hintsMatrix = {"A": {"3": 0, "4": 3, "5": 2, "6": 0, "7": 0}, "F": {"3": 0, "4": 4, "5": 3, "6": 7, "7": 6}, "I": {"3": 3, "4": 1, "5": 0, "6": 3, "7": 2}, "L": {"3": 1, "4": 0, "5": 0, "6": 0, "7": 0}, "N": {"3": 1, "4": 0, "5": 2, "6": 4, "7": 0}, "Ĉ": {"3": 2, "4": 4, "5": 0, "6": 0, "7": 0}};
+  const lengthsList = [3, 4, 5, 6, 7];
+  const maxScore = 216;
+  const totalTutis = 1;
   
   let currentInput = "";
   let foundWords = new Set();
@@ -605,15 +606,43 @@
     document.getElementById("input-box").innerText = currentInput;
   }
 
+  const mapChapeus = {
+    "c": "ĉ",
+    "g": "ĝ",
+    "h": "ĥ",
+    "j": "ĵ",
+    "s": "ŝ",
+    "u": "ŭ"
+  };
+
+  let lastClickTime = 0;
+  let lastLetterClicked = "";
+
   function addLetter(ch) {
     if (isShaking) return;
-    currentInput += ch;
+    
+    const now = Date.now();
+    const lk = ch.toLowerCase();
+    const esDobleToc = (now - lastClickTime < 320) && (lastLetterClicked === lk);
+    
+    if (esDobleToc && mapChapeus[lk]) {
+      currentInput = currentInput.slice(0, -1) + mapChapeus[lk];
+      lastLetterClicked = "";
+      lastClickTime = 0;
+    } else {
+      currentInput += lk;
+      lastLetterClicked = lk;
+      lastClickTime = now;
+    }
+    
     updateInput();
   }
 
   function deleteLetter() {
     if (isShaking) return;
     currentInput = currentInput.slice(0, -1);
+    lastLetterClicked = "";
+    lastClickTime = 0;
     updateInput();
   }
 
@@ -791,6 +820,8 @@
     displayDef(w);
     saveProgress();
     currentInput = "";
+    lastLetterClicked = "";
+    lastClickTime = 0;
     updateInput();
   }
 
