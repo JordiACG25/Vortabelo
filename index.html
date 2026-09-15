@@ -418,7 +418,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 0 pt</span>
+    <span id="score-text">0 / 297 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -456,7 +456,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/0)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/41)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -465,7 +465,7 @@
 <div class="section-card">
   <div class="card-title">
     <span>Spuroj & Pangeromoj</span>
-    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/0 tutis</span>
+    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/6 tutis</span>
   </div>
   <div id="hints-table-container"></div>
 </div>
@@ -512,14 +512,14 @@
 
 <script>
   const gameDate = '2026-09-15';
-  const centerLetter = 'l';
-  let outerLetters = ["m", "o", "n", "t", "e", "r"];
-  const solutions = new Set([]);
-  const dict = {};
-  const hintsMatrix = {};
-  const lengthsList = [];
-  const maxScore = 0;
-  const totalTutis = 0;
+  const centerLetter = 't';
+  let outerLetters = ["k", "a", "j", "i", "r", "n"];
+  const solutions = new Set(["arta", "artaj", "artajn", "artan", "kata", "kataj", "katajn", "katan", "katara", "kataraj", "katarajn", "kataran", "kati", "katina", "katinaj", "katinajn", "katinan", "kritiki", "tia", "tiaj", "tiajn", "tian", "tra", "tri", "tria", "triaj", "triajn", "trian", "trinka", "trinkaj", "trinkajn", "trinkan", "trinkara", "trinkaraj", "trinkarajn", "trinkaran", "trinki", "trinkina", "trinkinaj", "trinkinajn", "trinkinan"]);
+  const dict = {"arta": "", "artaj": "", "artajn": "", "artan": "", "kata": "", "kataj": "", "katajn": "", "katan": "", "katara": "", "kataraj": "", "katarajn": "", "kataran": "", "kati": "", "katina": "", "katinaj": "", "katinajn": "", "katinan": "", "kritiki": "", "tia": "", "tiaj": "", "tiajn": "", "tian": "", "tra": "", "tri": "", "tria": "", "triaj": "", "triajn": "", "trian": "", "trinka": "", "trinkaj": "", "trinkajn": "", "trinkan": "", "trinkara": "", "trinkaraj": "", "trinkarajn": "", "trinkaran": "", "trinki": "", "trinkina": "", "trinkinaj": "", "trinkinajn": "", "trinkinan": ""};
+  const hintsMatrix = {"A": {"3": 0, "4": 1, "5": 2, "6": 1, "7": 0, "8": 0, "9": 0, "10": 0}, "K": {"3": 0, "4": 2, "5": 2, "6": 3, "7": 5, "8": 2, "9": 0, "10": 0}, "T": {"3": 3, "4": 3, "5": 3, "6": 3, "7": 2, "8": 3, "9": 4, "10": 2}};
+  const lengthsList = [3, 4, 5, 6, 7, 8, 9, 10];
+  const maxScore = 297;
+  const totalTutis = 6;
   
   let currentInput = "";
   let foundWords = new Set();
