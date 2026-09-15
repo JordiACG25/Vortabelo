@@ -2,7 +2,7 @@
 <html lang="eo">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Vortabelo - Esperanta Paraulògic</title>
 <style>
   :root {
@@ -31,6 +31,11 @@
     --border: #334155;
     --error: #f87171;
     --tag-bg: #334155;
+  }
+
+  * {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
@@ -418,7 +423,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 216 pt</span>
+    <span id="score-text">0 / 177 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -431,13 +436,13 @@
 </div>
 
 <div class="hive">
-  <div id="hex-0" class="hex center pos-0" onclick="addLetter(centerLetter)"></div>
-  <div id="hex-1" class="hex pos-1" onclick="addLetter(outerLetters[0])"></div>
-  <div id="hex-2" class="hex pos-2" onclick="addLetter(outerLetters[1])"></div>
-  <div id="hex-3" class="hex pos-3" onclick="addLetter(outerLetters[2])"></div>
-  <div id="hex-4" class="hex pos-4" onclick="addLetter(outerLetters[3])"></div>
-  <div id="hex-5" class="hex pos-5" onclick="addLetter(outerLetters[4])"></div>
-  <div id="hex-6" class="hex pos-6" onclick="addLetter(outerLetters[5])"></div>
+  <div id="hex-0" class="hex center pos-0"></div>
+  <div id="hex-1" class="hex pos-1"></div>
+  <div id="hex-2" class="hex pos-2"></div>
+  <div id="hex-3" class="hex pos-3"></div>
+  <div id="hex-4" class="hex pos-4"></div>
+  <div id="hex-5" class="hex pos-5"></div>
+  <div id="hex-6" class="hex pos-6"></div>
 </div>
 
 <div class="controls">
@@ -456,7 +461,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/48)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/46)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -465,7 +470,7 @@
 <div class="section-card">
   <div class="card-title">
     <span>Spuroj & Pangeromoj</span>
-    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/1 tutis</span>
+    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/2 tutis</span>
   </div>
   <div id="hints-table-container"></div>
 </div>
@@ -489,7 +494,6 @@
     <div class="rule-item">• Permesitaj formoj: Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), partikloj, numeraloj, tabelvortoj, participoj kaj derivitaj formoj (mal-, re-, ge-, -il-, -ej-, -in-...).</div>
     <div class="rule-item">• Malpermesitaj formoj: Konjugaciitaj verboj (-as, -is, -os, -us, -u) kaj mallongigoj.</div>
     <div class="rule-item">• Tuti / Pangeromo: Vorto kiu uzas ĉiujn 7 literojn de la tago donas 10 kromajn poentojn!</div>
-    <div class="rule-item">• Ĉapelo ĉe poŝtelefono: Duobla rapida klako sur litero (ekz: C, G, H, J, S, U) kreas la ĉapelan literon (Ĉ, Ĝ, Ĥ, Ĵ, Ŝ, Ŭ).</div>
     <div class="rule-item">• Klavaro: Tajpu 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' por ricevi la ĉapelajn literojn aŭtomate.</div>
   </div>
 </div>
@@ -513,14 +517,14 @@
 
 <script>
   const gameDate = '2026-09-15';
-  const centerLetter = 'i';
-  let outerLetters = ["f", "n", "l", "a", "e", "ĉ"];
-  const solutions = new Set(["alia", "alian", "alili", "alli", "alni", "feliĉa", "feliĉan", "feliĉe", "feliĉen", "feliĉi", "fila", "filan", "file", "filen", "fili", "filila", "fililan", "filile", "fililen", "filina", "filinan", "filine", "filinen", "fine", "finen", "ial", "iel", "ili", "ilin", "infana", "infanan", "infane", "infanen", "infani", "lin", "nei", "nenia", "nenial", "nenian", "nenie", "neniel", "nenien", "ĉia", "ĉial", "ĉian", "ĉie", "ĉiel", "ĉien"]);
-  const dict = {"alia": "", "alian": "", "alili": "", "alli": "", "alni": "", "feliĉa": "", "feliĉan": "", "feliĉe": "", "feliĉen": "", "feliĉi": "", "fila": "", "filan": "", "file": "", "filen": "", "fili": "", "filila": "", "fililan": "", "filile": "", "fililen": "", "filina": "", "filinan": "", "filine": "", "filinen": "", "fine": "", "finen": "", "ial": "", "iel": "", "ili": "", "ilin": "", "infana": "", "infanan": "", "infane": "", "infanen": "", "infani": "", "lin": "", "nei": "", "nenia": "", "nenial": "", "nenian": "", "nenie": "", "neniel": "", "nenien": "", "ĉia": "", "ĉial": "", "ĉian": "", "ĉie": "", "ĉiel": "", "ĉien": ""};
-  const hintsMatrix = {"A": {"3": 0, "4": 3, "5": 2, "6": 0, "7": 0}, "F": {"3": 0, "4": 4, "5": 3, "6": 7, "7": 6}, "I": {"3": 3, "4": 1, "5": 0, "6": 3, "7": 2}, "L": {"3": 1, "4": 0, "5": 0, "6": 0, "7": 0}, "N": {"3": 1, "4": 0, "5": 2, "6": 4, "7": 0}, "Ĉ": {"3": 2, "4": 4, "5": 0, "6": 0, "7": 0}};
-  const lengthsList = [3, 4, 5, 6, 7];
-  const maxScore = 216;
-  const totalTutis = 1;
+  const centerLetter = 't';
+  let outerLetters = ["r", "i", "a", "s", "e", "p"];
+  const solutions = new Set(["arta", "esta", "estastia", "este", "esti", "estissprita", "parta", "parte", "parti", "patra", "patrara", "patrare", "patre", "patri", "patrista", "patriste", "peta", "pete", "peti", "preta", "prete", "preti", "stara", "stare", "stari", "tea", "tee", "tei", "tera", "tere", "teri", "tia", "tie", "ties", "tra", "traa", "trae", "trai", "tre", "trea", "tree", "trei", "tri", "tria", "trie", "trii"]);
+  const dict = {"arta": "", "esta": "", "estastia": "", "este": "", "esti": "", "estissprita": "", "parta": "", "parte": "", "parti": "", "patra": "", "patrara": "", "patrare": "", "patre": "", "patri": "", "patrista": "", "patriste": "", "peta": "", "pete": "", "peti": "", "preta": "", "prete": "", "preti": "", "stara": "", "stare": "", "stari": "", "tea": "", "tee": "", "tei": "", "tera": "", "tere": "", "teri": "", "tia": "", "tie": "", "ties": "", "tra": "", "traa": "", "trae": "", "trai": "", "tre": "", "trea": "", "tree": "", "trei": "", "tri": "", "tria": "", "trie": "", "trii": ""};
+  const hintsMatrix = {"A": {"3": 0, "4": 1, "5": 0, "7": 0, "8": 0, "11": 0}, "E": {"3": 0, "4": 3, "5": 0, "7": 0, "8": 1, "11": 1}, "P": {"3": 0, "4": 3, "5": 9, "7": 2, "8": 2, "11": 0}, "S": {"3": 0, "4": 0, "5": 3, "7": 0, "8": 0, "11": 0}, "T": {"3": 8, "4": 13, "5": 0, "7": 0, "8": 0, "11": 0}};
+  const lengthsList = [3, 4, 5, 7, 8, 11];
+  const maxScore = 177;
+  const totalTutis = 2;
   
   let currentInput = "";
   let foundWords = new Set();
@@ -591,9 +595,15 @@
   }
 
   function renderHexes() {
-    document.getElementById("hex-0").innerText = centerLetter.toUpperCase();
+    const cEl = document.getElementById("hex-0");
+    cEl.innerText = centerLetter.toUpperCase();
+    cEl.onclick = () => addLetter(centerLetter);
+
     for (let i = 0; i < 6; i++) {
-      document.getElementById("hex-" + (i + 1)).innerText = outerLetters[i].toUpperCase();
+      const el = document.getElementById("hex-" + (i + 1));
+      const letVal = outerLetters[i];
+      el.innerText = letVal.toUpperCase();
+      el.onclick = () => addLetter(letVal);
     }
   }
 
@@ -606,43 +616,15 @@
     document.getElementById("input-box").innerText = currentInput;
   }
 
-  const mapChapeus = {
-    "c": "ĉ",
-    "g": "ĝ",
-    "h": "ĥ",
-    "j": "ĵ",
-    "s": "ŝ",
-    "u": "ŭ"
-  };
-
-  let lastClickTime = 0;
-  let lastLetterClicked = "";
-
   function addLetter(ch) {
     if (isShaking) return;
-    
-    const now = Date.now();
-    const lk = ch.toLowerCase();
-    const esDobleToc = (now - lastClickTime < 320) && (lastLetterClicked === lk);
-    
-    if (esDobleToc && mapChapeus[lk]) {
-      currentInput = currentInput.slice(0, -1) + mapChapeus[lk];
-      lastLetterClicked = "";
-      lastClickTime = 0;
-    } else {
-      currentInput += lk;
-      lastLetterClicked = lk;
-      lastClickTime = now;
-    }
-    
+    currentInput += ch.toLowerCase();
     updateInput();
   }
 
   function deleteLetter() {
     if (isShaking) return;
     currentInput = currentInput.slice(0, -1);
-    lastLetterClicked = "";
-    lastClickTime = 0;
     updateInput();
   }
 
@@ -820,8 +802,6 @@
     displayDef(w);
     saveProgress();
     currentInput = "";
-    lastLetterClicked = "";
-    lastClickTime = 0;
     updateInput();
   }
 
