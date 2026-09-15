@@ -401,7 +401,7 @@
 <header>
   <div class="title-wrap">
     <h1>Vortabelo</h1>
-    <div class="subtitle">Taga defio - 2026-09-14</div>
+    <div class="subtitle">Taga defio - 2026-09-15</div>
   </div>
   <div class="header-actions">
     <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
@@ -418,7 +418,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 487 pt</span>
+    <span id="score-text">0 / 1171 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -456,7 +456,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/66)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/147)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -465,7 +465,7 @@
 <div class="section-card">
   <div class="card-title">
     <span>Spuroj & Pangeromoj</span>
-    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/5 tutis</span>
+    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/11 tutis</span>
   </div>
   <div id="hints-table-container"></div>
 </div>
@@ -511,15 +511,15 @@
 </div>
 
 <script>
-  const gameDate = '2026-09-14';
-  const centerLetter = 'a';
-  let outerLetters = ["r", "u", "b", "o", "l", "j"];
-  const solutions = new Set(["arba", "arbaj", "arbara", "arbaraj", "arbaro", "arbaroj", "arbo", "arboj", "arbula", "arbulaj", "arbulo", "arbuloj", "blua", "bluaj", "bluara", "bluaraj", "bluaro", "bluaroj", "bluula", "bluulaj", "jara", "jaraj", "jarara", "jararaj", "jararo", "jararoj", "jaro", "jaroj", "jarula", "jarulaj", "jarulara", "jarularaj", "jarularo", "jarularoj", "jarulo", "jaruloj", "jarulula", "jarululaj", "jarululo", "jarululoj", "labora", "laboraj", "laborara", "laboraraj", "laboraro", "laboraroj", "laboro", "laboroj", "laborula", "laborulaj", "laborulo", "laboruloj", "urba", "urbaj", "urbara", "urbaraj", "urbaro", "urbaroj", "urbula", "urbulaj", "urbulara", "urbularaj", "urbularo", "urbularoj", "urbulula", "urbululaj"]);
-  const dict = {"arba": "", "arbaj": "", "arbara": "", "arbaraj": "", "arbaro": "", "arbaroj": "", "arbo": "", "arboj": "", "arbula": "", "arbulaj": "", "arbulo": "", "arbuloj": "", "blua": "", "bluaj": "", "bluara": "", "bluaraj": "", "bluaro": "", "bluaroj": "", "bluula": "", "bluulaj": "", "jara": "", "jaraj": "", "jarara": "", "jararaj": "", "jararo": "", "jararoj": "", "jaro": "", "jaroj": "", "jarula": "", "jarulaj": "", "jarulara": "", "jarularaj": "", "jarularo": "", "jarularoj": "", "jarulo": "", "jaruloj": "", "jarulula": "", "jarululaj": "", "jarululo": "", "jarululoj": "", "labora": "", "laboraj": "", "laborara": "", "laboraraj": "", "laboraro": "", "laboraroj": "", "laboro": "", "laboroj": "", "laborula": "", "laborulaj": "", "laborulo": "", "laboruloj": "", "urba": "", "urbaj": "", "urbara": "", "urbaraj": "", "urbaro": "", "urbaroj": "", "urbula": "", "urbulaj": "", "urbulara": "", "urbularaj": "", "urbularo": "", "urbularoj": "", "urbulula": "", "urbululaj": ""};
-  const hintsMatrix = {"A": {"4": 2, "5": 2, "6": 4, "7": 4, "8": 0, "9": 0}, "B": {"4": 1, "5": 1, "6": 3, "7": 3, "8": 0, "9": 0}, "J": {"4": 2, "5": 2, "6": 4, "7": 4, "8": 4, "9": 4}, "L": {"4": 0, "5": 0, "6": 2, "7": 2, "8": 4, "9": 4}, "U": {"4": 1, "5": 1, "6": 3, "7": 3, "8": 3, "9": 3}};
-  const lengthsList = [4, 5, 6, 7, 8, 9];
-  const maxScore = 487;
-  const totalTutis = 5;
+  const gameDate = '2026-09-15';
+  const centerLetter = 'j';
+  let outerLetters = ["a", "l", "e", "i", "t", "s"];
+  const solutions = new Set(["altaj", "altataj", "altateja", "altatejaj", "altateje", "altateji", "altatetaj", "altatilaj", "altatistaj", "alteja", "altejaj", "alteje", "altejeja", "altejejaj", "altejeje", "altejeji", "altejeta", "altejetaj", "altejete", "altejeti", "alteji", "altejila", "altejilaj", "altejile", "altejili", "altejista", "altejistaj", "altejiste", "altejisti", "altetaj", "alteteja", "altetejaj", "alteteje", "alteteji", "altetetaj", "altetilaj", "altetistaj", "altilaj", "altileja", "altilejaj", "altileje", "altileji", "altiletaj", "altililaj", "altilistaj", "altistaj", "altitaj", "altiteja", "altitejaj", "altiteje", "altiteji", "altitetaj", "altitilaj", "altitistaj", "estataj", "estitaj", "iaj", "ialaj", "ialeja", "ialejaj", "ialeje", "ialeji", "ialetaj", "ialilaj", "ialistaj", "ielaj", "ieleja", "ielejaj", "ieleje", "ieleji", "ieletaj", "ielilaj", "ielistaj", "iesaj", "ieseja", "iesejaj", "ieseje", "ieseji", "iesetaj", "iesilaj", "iesistaj", "ilaj", "ileja", "ilejaj", "ileje", "ileji", "iletaj", "ililaj", "ilistaj", "litaj", "liteja", "litejaj", "liteje", "liteji", "litetaj", "litilaj", "litistaj", "sesaj", "seseja", "sesejaj", "seseje", "seseji", "sesetaj", "sesilaj", "sesistaj", "stelaj", "stelataj", "steleja", "stelejaj", "steleje", "steleji", "steletaj", "stelilaj", "stelistaj", "stelitaj", "tiaj", "tialaj", "tialeja", "tialejaj", "tialeje", "tialeji", "tialetaj", "tialilaj", "tialistaj", "tieja", "tiejaj", "tieje", "tieji", "tielaj", "tieleja", "tielejaj", "tieleje", "tieleji", "tieletaj", "tielilaj", "tielistaj", "tiesaj", "tieseja", "tiesejaj", "tieseje", "tieseji", "tiesetaj", "tiesilaj", "tiesistaj", "tietaj", "tiilaj", "tiistaj"]);
+  const dict = {"altaj": "", "altataj": "", "altateja": "", "altatejaj": "", "altateje": "", "altateji": "", "altatetaj": "", "altatilaj": "", "altatistaj": "", "alteja": "", "altejaj": "", "alteje": "", "altejeja": "", "altejejaj": "", "altejeje": "", "altejeji": "", "altejeta": "", "altejetaj": "", "altejete": "", "altejeti": "", "alteji": "", "altejila": "", "altejilaj": "", "altejile": "", "altejili": "", "altejista": "", "altejistaj": "", "altejiste": "", "altejisti": "", "altetaj": "", "alteteja": "", "altetejaj": "", "alteteje": "", "alteteji": "", "altetetaj": "", "altetilaj": "", "altetistaj": "", "altilaj": "", "altileja": "", "altilejaj": "", "altileje": "", "altileji": "", "altiletaj": "", "altililaj": "", "altilistaj": "", "altistaj": "", "altitaj": "", "altiteja": "", "altitejaj": "", "altiteje": "", "altiteji": "", "altitetaj": "", "altitilaj": "", "altitistaj": "", "estataj": "", "estitaj": "", "iaj": "", "ialaj": "", "ialeja": "", "ialejaj": "", "ialeje": "", "ialeji": "", "ialetaj": "", "ialilaj": "", "ialistaj": "", "ielaj": "", "ieleja": "", "ielejaj": "", "ieleje": "", "ieleji": "", "ieletaj": "", "ielilaj": "", "ielistaj": "", "iesaj": "", "ieseja": "", "iesejaj": "", "ieseje": "", "ieseji": "", "iesetaj": "", "iesilaj": "", "iesistaj": "", "ilaj": "", "ileja": "", "ilejaj": "", "ileje": "", "ileji": "", "iletaj": "", "ililaj": "", "ilistaj": "", "litaj": "", "liteja": "", "litejaj": "", "liteje": "", "liteji": "", "litetaj": "", "litilaj": "", "litistaj": "", "sesaj": "", "seseja": "", "sesejaj": "", "seseje": "", "seseji": "", "sesetaj": "", "sesilaj": "", "sesistaj": "", "stelaj": "", "stelataj": "", "steleja": "", "stelejaj": "", "steleje": "", "steleji": "", "steletaj": "", "stelilaj": "", "stelistaj": "", "stelitaj": "", "tiaj": "", "tialaj": "", "tialeja": "", "tialejaj": "", "tialeje": "", "tialeji": "", "tialetaj": "", "tialilaj": "", "tialistaj": "", "tieja": "", "tiejaj": "", "tieje": "", "tieji": "", "tielaj": "", "tieleja": "", "tielejaj": "", "tieleje": "", "tieleji": "", "tieletaj": "", "tielilaj": "", "tielistaj": "", "tiesaj": "", "tieseja": "", "tiesejaj": "", "tieseje": "", "tieseji": "", "tiesetaj": "", "tiesilaj": "", "tiesistaj": "", "tietaj": "", "tiilaj": "", "tiistaj": ""};
+  const hintsMatrix = {"A": {"3": 0, "4": 0, "5": 1, "6": 3, "7": 5, "8": 22, "9": 18, "10": 5}, "E": {"3": 0, "4": 0, "5": 0, "6": 0, "7": 2, "8": 0, "9": 0, "10": 0}, "I": {"3": 1, "4": 1, "5": 6, "6": 12, "7": 10, "8": 3, "9": 0, "10": 0}, "L": {"3": 0, "4": 0, "5": 1, "6": 3, "7": 3, "8": 1, "9": 0, "10": 0}, "S": {"3": 0, "4": 0, "5": 1, "6": 4, "7": 6, "8": 6, "9": 1, "10": 0}, "T": {"3": 0, "4": 1, "5": 3, "6": 6, "7": 10, "8": 9, "9": 3, "10": 0}};
+  const lengthsList = [3, 4, 5, 6, 7, 8, 9, 10];
+  const maxScore = 1171;
+  const totalTutis = 11;
   
   let currentInput = "";
   let foundWords = new Set();
