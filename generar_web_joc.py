@@ -4,7 +4,7 @@ import re
 import os
 import datetime
 
-print("Generant Vortabelo v1.2.2 amb suport per a doble toc de ĉapelo...")
+print("Generant Vortabelo v1.2.2...")
 
 # 1. Carregar definicions locals per a consulta
 definicions_raw = {}
@@ -31,11 +31,44 @@ if os.path.exists("dataset_esperanto_master.jsonl"):
             except Exception:
                 continue
 
-# 2. Carregar el vocabulari consolidat (generat per construir_vortaro.py)
-paraules = []
+# 2. Carregar el vocabulari consolidat
+paraules_set = set()
 if os.path.exists("vortaro_paraulogic.txt"):
     with open("vortaro_paraulogic.txt", "r", encoding="utf-8") as f:
-        paraules = sorted(list(set(l.strip().lower() for l in f if len(l.strip()) >= 3)))
+        for l in f:
+            w = l.strip().lower()
+            if len(w) >= 3:
+                paraules_set.add(w)
+
+# Assegurança addicional per si vortaro_paraulogic.txt encara no tenia totes les arrels
+arrels_auxiliars = [
+    "melon", "pom", "pan", "lakt", "fromaĝ", "viand", "karn", "ov", "suker", "sal", "akv", "vin", "bier", "kaf", "te",
+    "manĝ", "trink", "kuir", "frukt", "legom", "sup", "drink",
+    "lund", "mard", "merkred", "ĵaŭd", "vendred", "sabat", "dimanĉ",
+    "januar", "februar", "mart", "april", "maj", "juni", "juli", "aŭgust", "septembr", "oktobr", "novembr", "decembr",
+    "printemp", "somer", "aŭtun", "vintr", "temp", "hor", "minut", "sekund", "tag", "nokt", "maten", "vesper", "jar", "semajn",
+    "nigr", "blank", "ruĝ", "verd", "blu", "flav", "griz", "brun",
+    "knab", "vir", "hom", "infan", "patr", "edz", "fil", "frat", "amik", "sinjor", "person",
+    "arb", "flor", "best", "hund", "kat", "bird", "fiŝ", "ĉeval", "bov", "pork",
+    "fajr", "ter", "aer", "sun", "lun", "stel", "nub", "vent", "pluv", "mar", "mont", "river",
+    "dom", "ĉambr", "pord", "fenestr", "tabl", "seĝ", "lit", "lig", "libr", "paper", "plum", "horloĝ", "vest",
+    "est", "hav", "far", "dir", "vid", "ir", "ven", "pren", "don", "sci", "vol", "pov", "dev",
+    "pens", "kred", "kompren", "leg", "skrib", "parol", "dorm", "star", "sid", "viv", "mort",
+    "labor", "lud", "kur", "marŝ", "port", "met", "trov", "pet", "demand", "respond",
+    "bon", "bel", "nov", "jun", "malnov", "grand", "malgrand", "alt", "long", "vast", "plen", "facil", "grav",
+    "fort", "san", "varm", "ver", "cert", "pur", "klar", "feliĉ", "liber", "pret",
+    "vort", "liter", "lingv", "nom", "mond", "lok", "part", "voj", "urb", "land", "ŝtat"
+]
+for ar in arrels_auxiliars:
+    for f in ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "en", "i"]:
+        paraules_set.add(ar + f)
+
+for p in ["jes", "ne", "jen", "jam", "tuj", "nun", "tro", "tre", "plu", "for", "mem", "dum", "por", "per", "kun", "sen", "pri", "pro", "ĝis", "tra", "sur", "sub", "apud", "laŭ", "unu", "du", "tri", "dek", "mil"]:
+    paraules_set.add(p)
+    for f in ["o", "oj", "on", "ojn", "a", "aj", "an", "ajn", "e", "i"]:
+        paraules_set.add(p + f)
+
+paraules = sorted(list(p for p in paraules_set if not any(c in p for c in "qwx")))
 
 # 3. Determinisme diari i seleccio equilibrada del tauler
 avui_str = datetime.date.today().isoformat()
@@ -55,7 +88,6 @@ for base_cand in candidats_tuti:
     c_cand = lletres_cand[0]
     conjunt_cand = set(lletres_cand)
     
-    # Exigir minim 2 vocals al panell
     num_vocals = len(conjunt_cand.intersection(vocals_esperanto))
     if num_vocals < 2:
         continue
@@ -66,17 +98,18 @@ for base_cand in candidats_tuti:
     ])
     
     inicials = set(w[0] for w in sols_cand)
-    if len(sols_cand) >= 35 and len(inicials) >= 3:
+    if len(sols_cand) >= 25 and len(inicials) >= 3:
         centre = c_cand
         corones = lletres_cand[1:]
         solucions = sols_cand
         break
 
 if not solucions:
-    lletres = list("lmonter")
-    centre = lletres[0]
-    corones = lletres[1:]
-    conjunt_lletres = set(lletres)
+    base_segura = "melonto"
+    lletres = list("lmonteu")
+    centre = "l"
+    corones = ["m", "o", "n", "t", "e", "u"]
+    conjunt_lletres = set([centre] + corones)
     solucions = sorted([
         p for p in paraules
         if centre in p and set(p).issubset(conjunt_lletres)
@@ -125,7 +158,7 @@ html_template = """<!DOCTYPE html>
 <html lang="eo">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Vortabelo - Esperanta Paraulògic</title>
 <style>
   :root {
@@ -154,6 +187,11 @@ html_template = """<!DOCTYPE html>
     --border: #334155;
     --error: #f87171;
     --tag-bg: #334155;
+  }
+
+  * {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   body {
@@ -554,13 +592,13 @@ html_template = """<!DOCTYPE html>
 </div>
 
 <div class="hive">
-  <div id="hex-0" class="hex center pos-0" onclick="addLetter(centerLetter)"></div>
-  <div id="hex-1" class="hex pos-1" onclick="addLetter(outerLetters[0])"></div>
-  <div id="hex-2" class="hex pos-2" onclick="addLetter(outerLetters[1])"></div>
-  <div id="hex-3" class="hex pos-3" onclick="addLetter(outerLetters[2])"></div>
-  <div id="hex-4" class="hex pos-4" onclick="addLetter(outerLetters[3])"></div>
-  <div id="hex-5" class="hex pos-5" onclick="addLetter(outerLetters[4])"></div>
-  <div id="hex-6" class="hex pos-6" onclick="addLetter(outerLetters[5])"></div>
+  <div id="hex-0" class="hex center pos-0"></div>
+  <div id="hex-1" class="hex pos-1"></div>
+  <div id="hex-2" class="hex pos-2"></div>
+  <div id="hex-3" class="hex pos-3"></div>
+  <div id="hex-4" class="hex pos-4"></div>
+  <div id="hex-5" class="hex pos-5"></div>
+  <div id="hex-6" class="hex pos-6"></div>
 </div>
 
 <div class="controls">
@@ -612,7 +650,6 @@ html_template = """<!DOCTYPE html>
     <div class="rule-item">• Permesitaj formoj: Substantivoj (-o, -oj, -on), adjektivoj (-a, -aj, -an), adverboj (-e, -en), infinitivoj (-i), partikloj, numeraloj, tabelvortoj, participoj kaj derivitaj formoj (mal-, re-, ge-, -il-, -ej-, -in-...).</div>
     <div class="rule-item">• Malpermesitaj formoj: Konjugaciitaj verboj (-as, -is, -os, -us, -u) kaj mallongigoj.</div>
     <div class="rule-item">• Tuti / Pangeromo: Vorto kiu uzas ĉiujn 7 literojn de la tago donas 10 kromajn poentojn!</div>
-    <div class="rule-item">• Ĉapelo ĉe poŝtelefono: Duobla rapida klako sur litero (ekz: C, G, H, J, S, U) kreas la ĉapelan literon (Ĉ, Ĝ, Ĥ, Ĵ, Ŝ, Ŭ).</div>
     <div class="rule-item">• Klavaro: Tajpu 'cx', 'gx', 'hx', 'jx', 'sx', 'ux' por ricevi la ĉapelajn literojn aŭtomate.</div>
   </div>
 </div>
@@ -714,9 +751,15 @@ html_template = """<!DOCTYPE html>
   }
 
   function renderHexes() {
-    document.getElementById("hex-0").innerText = centerLetter.toUpperCase();
+    const cEl = document.getElementById("hex-0");
+    cEl.innerText = centerLetter.toUpperCase();
+    cEl.onclick = () => addLetter(centerLetter);
+
     for (let i = 0; i < 6; i++) {
-      document.getElementById("hex-" + (i + 1)).innerText = outerLetters[i].toUpperCase();
+      const el = document.getElementById("hex-" + (i + 1));
+      const letVal = outerLetters[i];
+      el.innerText = letVal.toUpperCase();
+      el.onclick = () => addLetter(letVal);
     }
   }
 
@@ -729,43 +772,15 @@ html_template = """<!DOCTYPE html>
     document.getElementById("input-box").innerText = currentInput;
   }
 
-  const mapChapeus = {
-    "c": "ĉ",
-    "g": "ĝ",
-    "h": "ĥ",
-    "j": "ĵ",
-    "s": "ŝ",
-    "u": "ŭ"
-  };
-
-  let lastClickTime = 0;
-  let lastLetterClicked = "";
-
   function addLetter(ch) {
     if (isShaking) return;
-    
-    const now = Date.now();
-    const lk = ch.toLowerCase();
-    const esDobleToc = (now - lastClickTime < 320) && (lastLetterClicked === lk);
-    
-    if (esDobleToc && mapChapeus[lk]) {
-      currentInput = currentInput.slice(0, -1) + mapChapeus[lk];
-      lastLetterClicked = "";
-      lastClickTime = 0;
-    } else {
-      currentInput += lk;
-      lastLetterClicked = lk;
-      lastClickTime = now;
-    }
-    
+    currentInput += ch.toLowerCase();
     updateInput();
   }
 
   function deleteLetter() {
     if (isShaking) return;
     currentInput = currentInput.slice(0, -1);
-    lastLetterClicked = "";
-    lastClickTime = 0;
     updateInput();
   }
 
@@ -943,8 +958,6 @@ html_template = """<!DOCTYPE html>
     displayDef(w);
     saveProgress();
     currentInput = "";
-    lastLetterClicked = "";
-    lastClickTime = 0;
     updateInput();
   }
 
