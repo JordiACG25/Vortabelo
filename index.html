@@ -404,7 +404,7 @@
 <header>
   <div class="title-wrap">
     <h1>Vortabelo</h1>
-    <div class="subtitle">Taga defio - 2026-09-23</div>
+    <div class="subtitle">Taga defio - 2026-09-24</div>
   </div>
   <div class="header-actions">
     <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
@@ -421,7 +421,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 150 pt</span>
+    <span id="score-text">0 / 273 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -468,7 +468,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/26)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/48)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -477,7 +477,7 @@
 <div class="section-card">
   <div class="card-title">
     <span>Spuroj & Pangeromoj</span>
-    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/1 tutis</span>
+    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/2 tutis</span>
   </div>
   <div id="hints-table-container"></div>
 </div>
@@ -523,16 +523,16 @@
 </div>
 
 <script>
-  const gameDate = '2026-09-23';
-  const centerLetter = 'j';
-  let outerLetters = ["k", "r", "t", "a", "b", "o"];
-  const solutions = new Set(["araboj", "arbaj", "arbaroj", "arboj", "artaj", "jara", "jaraj", "jaro", "jaroj", "kaj", "kartoj", "kataj", "kataraj", "kataroakraj", "kataroj", "katoj", "korboj", "koroj", "oktobraj", "oktobroj", "oroj", "tabakoj", "traaj", "traoj", "troaj", "trooj"]);
-  const solutionsList = ["araboj", "arbaj", "arbaroj", "arboj", "artaj", "jara", "jaraj", "jaro", "jaroj", "kaj", "kartoj", "kataj", "kataraj", "kataroakraj", "kataroj", "katoj", "korboj", "koroj", "oktobraj", "oktobroj", "oroj", "tabakoj", "traaj", "traoj", "troaj", "trooj"];
-  const dict = {"araboj": "", "arbaj": "", "arbaroj": "", "arboj": "", "artaj": "", "jara": "", "jaraj": "", "jaro": "", "jaroj": "", "kaj": "", "kartoj": "", "kataj": "", "kataraj": "", "kataroakraj": "", "kataroj": "", "katoj": "", "korboj": "", "koroj": "", "oktobraj": "", "oktobroj": "", "oroj": "", "tabakoj": "", "traaj": "", "traoj": "", "troaj": "", "trooj": ""};
-  const hintsMatrix = {"A": {"3": 0, "4": 0, "5": 3, "6": 1, "7": 1, "8": 0, "11": 0}, "J": {"3": 0, "4": 2, "5": 2, "6": 0, "7": 0, "8": 0, "11": 0}, "K": {"3": 1, "4": 0, "5": 3, "6": 2, "7": 2, "8": 0, "11": 1}, "O": {"3": 0, "4": 1, "5": 0, "6": 0, "7": 0, "8": 2, "11": 0}, "T": {"3": 0, "4": 0, "5": 4, "6": 0, "7": 1, "8": 0, "11": 0}};
-  const lengthsList = [3, 4, 5, 6, 7, 8, 11];
-  const maxScore = 150;
-  const totalTutis = 1;
+  const gameDate = '2026-09-24';
+  const centerLetter = 'a';
+  let outerLetters = ["i", "j", "e", "l", "f", "n"];
+  const solutions = new Set(["alia", "aliaj", "aliajn", "alian", "alili", "alli", "alni", "ella", "ellaj", "ellajn", "ellan", "fila", "filaj", "filajn", "filan", "fileja", "filejaj", "filejajn", "filejan", "filila", "fililaj", "fililajn", "fililan", "filina", "filinaj", "filinajn", "filinan", "ial", "infana", "infanaj", "infanajn", "infanan", "infane", "infanen", "infani", "jena", "jenaj", "jenajn", "jenan", "nea", "neaj", "neajn", "nean", "nenia", "neniaj", "neniajn", "nenial", "nenian"]);
+  const solutionsList = ["alia", "aliaj", "aliajn", "alian", "alili", "alli", "alni", "ella", "ellaj", "ellajn", "ellan", "fila", "filaj", "filajn", "filan", "fileja", "filejaj", "filejajn", "filejan", "filila", "fililaj", "fililajn", "fililan", "filina", "filinaj", "filinajn", "filinan", "ial", "infana", "infanaj", "infanajn", "infanan", "infane", "infanen", "infani", "jena", "jenaj", "jenajn", "jenan", "nea", "neaj", "neajn", "nean", "nenia", "neniaj", "neniajn", "nenial", "nenian"];
+  const dict = {"alia": "", "aliaj": "", "aliajn": "", "alian": "", "alili": "", "alli": "", "alni": "", "ella": "", "ellaj": "", "ellajn": "", "ellan": "", "fila": "", "filaj": "", "filajn": "", "filan": "", "fileja": "", "filejaj": "", "filejajn": "", "filejan": "", "filila": "", "fililaj": "", "fililajn": "", "fililan": "", "filina": "", "filinaj": "", "filinajn": "", "filinan": "", "ial": "", "infana": "", "infanaj": "", "infanajn": "", "infanan": "", "infane": "", "infanen": "", "infani": "", "jena": "", "jenaj": "", "jenajn": "", "jenan": "", "nea": "", "neaj": "", "neajn": "", "nean": "", "nenia": "", "neniaj": "", "neniajn": "", "nenial": "", "nenian": ""};
+  const hintsMatrix = {"A": {"3": 0, "4": 3, "5": 3, "6": 1, "7": 0, "8": 0}, "E": {"3": 0, "4": 1, "5": 2, "6": 1, "7": 0, "8": 0}, "F": {"3": 0, "4": 1, "5": 2, "6": 4, "7": 6, "8": 3}, "I": {"3": 1, "4": 0, "5": 0, "6": 3, "7": 3, "8": 1}, "J": {"3": 0, "4": 1, "5": 2, "6": 1, "7": 0, "8": 0}, "N": {"3": 1, "4": 2, "5": 2, "6": 3, "7": 1, "8": 0}};
+  const lengthsList = [3, 4, 5, 6, 7, 8];
+  const maxScore = 273;
+  const totalTutis = 2;
   
   let currentInput = "";
   let foundWords = new Set();
