@@ -404,7 +404,7 @@
 <header>
   <div class="title-wrap">
     <h1>Vortabelo</h1>
-    <div class="subtitle">Taga defio - 2026-09-30</div>
+    <div class="subtitle">Taga defio - 2026-10-01</div>
   </div>
   <div class="header-actions">
     <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
@@ -421,7 +421,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 142 pt</span>
+    <span id="score-text">0 / 320 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -468,7 +468,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/27)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/41)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -477,7 +477,7 @@
 <div class="section-card">
   <div class="card-title">
     <span>Spuroj & Pangeromoj</span>
-    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/2 tutis</span>
+    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/6 tutis</span>
   </div>
   <div id="hints-table-container"></div>
 </div>
@@ -523,16 +523,16 @@
 </div>
 
 <script>
-  const gameDate = '2026-09-30';
+  const gameDate = '2026-10-01';
   const centerLetter = 'n';
-  let outerLetters = ["l", "p", "i", "s", "m", "a"];
-  const solutions = new Set(["alian", "alni", "aman", "ilin", "liamasmin", "lin", "mian", "milan", "min", "pana", "panan", "pani", "panila", "panilan", "panina", "paninan", "plisimplan", "salan", "sana", "sanan", "sani", "sanila", "sanilan", "sanina", "saninan", "simplan", "sin"]);
-  const solutionsList = ["alian", "alni", "aman", "ilin", "liamasmin", "lin", "mian", "milan", "min", "pana", "panan", "pani", "panila", "panilan", "panina", "paninan", "plisimplan", "salan", "sana", "sanan", "sani", "sanila", "sanilan", "sanina", "saninan", "simplan", "sin"];
-  const dict = {"alian": "", "alni": "", "aman": "", "ilin": "", "liamasmin": "", "lin": "", "mian": "", "milan": "", "min": "", "pana": "", "panan": "", "pani": "", "panila": "", "panilan": "", "panina": "", "paninan": "", "plisimplan": "", "salan": "", "sana": "", "sanan": "", "sani": "", "sanila": "", "sanilan": "", "sanina": "", "saninan": "", "simplan": "", "sin": ""};
-  const hintsMatrix = {"A": {"3": 0, "4": 2, "5": 1, "6": 0, "7": 0, "9": 0, "10": 0}, "I": {"3": 0, "4": 1, "5": 0, "6": 0, "7": 0, "9": 0, "10": 0}, "L": {"3": 1, "4": 0, "5": 0, "6": 0, "7": 0, "9": 1, "10": 0}, "M": {"3": 1, "4": 1, "5": 1, "6": 0, "7": 0, "9": 0, "10": 0}, "P": {"3": 0, "4": 2, "5": 1, "6": 2, "7": 2, "9": 0, "10": 1}, "S": {"3": 1, "4": 2, "5": 2, "6": 2, "7": 3, "9": 0, "10": 0}};
-  const lengthsList = [3, 4, 5, 6, 7, 9, 10];
-  const maxScore = 142;
-  const totalTutis = 2;
+  let outerLetters = ["i", "r", "k", "t", "a", "j"];
+  const solutions = new Set(["artajn", "artan", "irajn", "iran", "jarajn", "jaran", "karna", "karnaj", "karnajn", "karnan", "karni", "katajn", "katan", "katarajn", "kataran", "katina", "katinaj", "katinajn", "katinan", "kiaajn", "kiajn", "kian", "tiajn", "tian", "traajn", "traan", "triajn", "trian", "trinka", "trinkaj", "trinkajn", "trinkan", "trinkara", "trinkaraj", "trinkarajn", "trinkaran", "trinki", "trinkina", "trinkinaj", "trinkinajn", "trinkinan"]);
+  const solutionsList = ["artajn", "artan", "irajn", "iran", "jarajn", "jaran", "karna", "karnaj", "karnajn", "karnan", "karni", "katajn", "katan", "katarajn", "kataran", "katina", "katinaj", "katinajn", "katinan", "kiaajn", "kiajn", "kian", "tiajn", "tian", "traajn", "traan", "triajn", "trian", "trinka", "trinkaj", "trinkajn", "trinkan", "trinkara", "trinkaraj", "trinkarajn", "trinkaran", "trinki", "trinkina", "trinkinaj", "trinkinajn", "trinkinan"];
+  const dict = {"artajn": "", "artan": "", "irajn": "", "iran": "", "jarajn": "", "jaran": "", "karna": "", "karnaj": "", "karnajn": "", "karnan": "", "karni": "", "katajn": "", "katan": "", "katarajn": "", "kataran": "", "katina": "", "katinaj": "", "katinajn": "", "katinan": "", "kiaajn": "", "kiajn": "", "kian": "", "tiajn": "", "tian": "", "traajn": "", "traan": "", "triajn": "", "trian": "", "trinka": "", "trinkaj": "", "trinkajn": "", "trinkan": "", "trinkara": "", "trinkaraj": "", "trinkarajn": "", "trinkaran": "", "trinki": "", "trinkina": "", "trinkinaj": "", "trinkinajn": "", "trinkinan": ""};
+  const hintsMatrix = {"A": {"4": 0, "5": 1, "6": 1, "7": 0, "8": 0, "9": 0, "10": 0}, "I": {"4": 1, "5": 1, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0}, "J": {"4": 0, "5": 1, "6": 1, "7": 0, "8": 0, "9": 0, "10": 0}, "K": {"4": 1, "5": 4, "6": 5, "7": 4, "8": 2, "9": 0, "10": 0}, "T": {"4": 1, "5": 3, "6": 4, "7": 2, "8": 3, "9": 4, "10": 2}};
+  const lengthsList = [4, 5, 6, 7, 8, 9, 10];
+  const maxScore = 320;
+  const totalTutis = 6;
   
   let currentInput = "";
   let foundWords = new Set();
