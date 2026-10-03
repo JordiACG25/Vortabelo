@@ -404,7 +404,7 @@
 <header>
   <div class="title-wrap">
     <h1>Vortabelo</h1>
-    <div class="subtitle">Taga defio - 2026-10-02</div>
+    <div class="subtitle">Taga defio - 2026-10-03</div>
   </div>
   <div class="header-actions">
     <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
@@ -421,7 +421,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 198 pt</span>
+    <span id="score-text">0 / 125 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -477,7 +477,7 @@
 <div class="section-card">
   <div class="card-title">
     <span>Spuroj & Pangeromoj</span>
-    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/4 tutis</span>
+    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/1 tutis</span>
   </div>
   <div id="hints-table-container"></div>
 </div>
@@ -523,16 +523,16 @@
 </div>
 
 <script>
-  const gameDate = '2026-10-02';
+  const gameDate = '2026-10-03';
   const centerLetter = 't';
-  let outerLetters = ["n", "l", "b", "a", "o", "j"];
-  const solutions = new Set(["alta", "altablo", "altabloj", "altablojn", "altablon", "altaj", "altajn", "altan", "alto", "altoj", "altojn", "alton", "batalantoj", "latablo", "latabloj", "latablojn", "latablon", "tabla", "tablaj", "tablajn", "tablan", "tablo", "tabloj", "tablojn", "tablon"]);
-  const solutionsList = ["alta", "altablo", "altabloj", "altablojn", "altablon", "altaj", "altajn", "altan", "alto", "altoj", "altojn", "alton", "batalantoj", "latablo", "latabloj", "latablojn", "latablon", "tabla", "tablaj", "tablajn", "tablan", "tablo", "tabloj", "tablojn", "tablon"];
-  const dict = {"alta": "", "altablo": "", "altabloj": "", "altablojn": "", "altablon": "", "altaj": "", "altajn": "", "altan": "", "alto": "", "altoj": "", "altojn": "", "alton": "", "batalantoj": "", "latablo": "", "latabloj": "", "latablojn": "", "latablon": "", "tabla": "", "tablaj": "", "tablajn": "", "tablan": "", "tablo": "", "tabloj": "", "tablojn": "", "tablon": ""};
-  const hintsMatrix = {"A": {"4": 2, "5": 4, "6": 2, "7": 1, "8": 2, "9": 1, "10": 0}, "B": {"4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 1}, "L": {"4": 0, "5": 0, "6": 0, "7": 1, "8": 2, "9": 1, "10": 0}, "T": {"4": 0, "5": 2, "6": 4, "7": 2, "8": 0, "9": 0, "10": 0}};
-  const lengthsList = [4, 5, 6, 7, 8, 9, 10];
-  const maxScore = 198;
-  const totalTutis = 4;
+  let outerLetters = ["e", "j", "s", "k", "n", "o"];
+  const solutions = new Set(["este", "esten", "esto", "estoj", "estojn", "eston", "kestojn", "nokte", "nokten", "nokto", "noktoj", "noktojn", "nokton", "sente", "senten", "sento", "sentoj", "sentojn", "senton", "tee", "teen", "teo", "teoj", "teojn", "teon"]);
+  const solutionsList = ["este", "esten", "esto", "estoj", "estojn", "eston", "kestojn", "nokte", "nokten", "nokto", "noktoj", "noktojn", "nokton", "sente", "senten", "sento", "sentoj", "sentojn", "senton", "tee", "teen", "teo", "teoj", "teojn", "teon"];
+  const dict = {"este": "", "esten": "", "esto": "", "estoj": "", "estojn": "", "eston": "", "kestojn": "", "nokte": "", "nokten": "", "nokto": "", "noktoj": "", "noktojn": "", "nokton": "", "sente": "", "senten": "", "sento": "", "sentoj": "", "sentojn": "", "senton": "", "tee": "", "teen": "", "teo": "", "teoj": "", "teojn": "", "teon": ""};
+  const hintsMatrix = {"E": {"3": 0, "4": 2, "5": 3, "6": 1, "7": 0}, "K": {"3": 0, "4": 0, "5": 0, "6": 0, "7": 1}, "N": {"3": 0, "4": 0, "5": 2, "6": 3, "7": 1}, "S": {"3": 0, "4": 0, "5": 2, "6": 3, "7": 1}, "T": {"3": 2, "4": 3, "5": 1, "6": 0, "7": 0}};
+  const lengthsList = [3, 4, 5, 6, 7];
+  const maxScore = 125;
+  const totalTutis = 1;
   
   let currentInput = "";
   let foundWords = new Set();
