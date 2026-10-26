@@ -404,7 +404,7 @@
 <header>
   <div class="title-wrap">
     <h1>Vortabelo</h1>
-    <div class="subtitle">Taga defio - 2026-10-25</div>
+    <div class="subtitle">Taga defio - 2026-10-26</div>
   </div>
   <div class="header-actions">
     <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
@@ -421,7 +421,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 284 pt</span>
+    <span id="score-text">0 / 113 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -468,7 +468,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/54)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/26)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -477,7 +477,7 @@
 <div class="section-card">
   <div class="card-title">
     <span>Spuroj & Pangeromoj</span>
-    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/3 tutis</span>
+    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/1 tutis</span>
   </div>
   <div id="hints-table-container"></div>
 </div>
@@ -523,16 +523,16 @@
 </div>
 
 <script>
-  const gameDate = '2026-10-25';
-  const centerLetter = 'o';
-  let outerLetters = ["u", "k", "i", "j", "r", "n"];
-  const solutions = new Set(["ion", "iro", "iroj", "irojn", "iron", "junio", "junioj", "juniojn", "junion", "juno", "junoj", "junojn", "junon", "kio", "kioj", "kiojn", "kion", "kokino", "kokinoj", "kokinojn", "kokinon", "koro", "koroj", "korojn", "koron", "koronnu", "kuirino", "kuirinoj", "kuirinojn", "kuirinon", "kuiro", "kuiroj", "kuirojn", "kuiron", "kuno", "kunoj", "kunojn", "kunon", "kuro", "kuroj", "kurojn", "kuron", "nuno", "nunoj", "nunojn", "nunon", "oro", "oroj", "orojn", "oron", "unuo", "unuoj", "unuojn", "unuon"]);
-  const solutionsList = ["ion", "iro", "iroj", "irojn", "iron", "junio", "junioj", "juniojn", "junion", "juno", "junoj", "junojn", "junon", "kio", "kioj", "kiojn", "kion", "kokino", "kokinoj", "kokinojn", "kokinon", "koro", "koroj", "korojn", "koron", "koronnu", "kuirino", "kuirinoj", "kuirinojn", "kuirinon", "kuiro", "kuiroj", "kuirojn", "kuiron", "kuno", "kunoj", "kunojn", "kunon", "kuro", "kuroj", "kurojn", "kuron", "nuno", "nunoj", "nunojn", "nunon", "oro", "oroj", "orojn", "oron", "unuo", "unuoj", "unuojn", "unuon"];
-  const dict = {"ion": "", "iro": "", "iroj": "", "irojn": "", "iron": "", "junio": "", "junioj": "", "juniojn": "", "junion": "", "juno": "", "junoj": "", "junojn": "", "junon": "", "kio": "", "kioj": "", "kiojn": "", "kion": "", "kokino": "", "kokinoj": "", "kokinojn": "", "kokinon": "", "koro": "", "koroj": "", "korojn": "", "koron": "", "koronnu": "", "kuirino": "", "kuirinoj": "", "kuirinojn": "", "kuirinon": "", "kuiro": "", "kuiroj": "", "kuirojn": "", "kuiron": "", "kuno": "", "kunoj": "", "kunojn": "", "kunon": "", "kuro": "", "kuroj": "", "kurojn": "", "kuron": "", "nuno": "", "nunoj": "", "nunojn": "", "nunon": "", "oro": "", "oroj": "", "orojn": "", "oron": "", "unuo": "", "unuoj": "", "unuojn": "", "unuon": ""};
-  const hintsMatrix = {"I": {"3": 2, "4": 2, "5": 1, "6": 0, "7": 0, "8": 0, "9": 0}, "J": {"3": 0, "4": 1, "5": 3, "6": 3, "7": 1, "8": 0, "9": 0}, "K": {"3": 1, "4": 5, "5": 8, "6": 6, "7": 5, "8": 3, "9": 1}, "N": {"3": 0, "4": 1, "5": 2, "6": 1, "7": 0, "8": 0, "9": 0}, "O": {"3": 1, "4": 2, "5": 1, "6": 0, "7": 0, "8": 0, "9": 0}, "U": {"3": 0, "4": 1, "5": 2, "6": 1, "7": 0, "8": 0, "9": 0}};
-  const lengthsList = [3, 4, 5, 6, 7, 8, 9];
-  const maxScore = 284;
-  const totalTutis = 3;
+  const gameDate = '2026-10-26';
+  const centerLetter = 'i';
+  let outerLetters = ["r", "j", "b", "e", "a", "n"];
+  const solutions = new Set(["aeri", "arbi", "biera", "bieraj", "bierajn", "bieran", "biere", "bieren", "bieri", "ira", "iraj", "irajn", "iran", "ire", "iren", "iri", "jari", "jeni", "nei", "nenia", "neniaj", "neniajn", "nenian", "nenie", "nenien", "reiri"]);
+  const solutionsList = ["aeri", "arbi", "biera", "bieraj", "bierajn", "bieran", "biere", "bieren", "bieri", "ira", "iraj", "irajn", "iran", "ire", "iren", "iri", "jari", "jeni", "nei", "nenia", "neniaj", "neniajn", "nenian", "nenie", "nenien", "reiri"];
+  const dict = {"aeri": "", "arbi": "", "biera": "", "bieraj": "", "bierajn": "", "bieran": "", "biere": "", "bieren": "", "bieri": "", "ira": "", "iraj": "", "irajn": "", "iran": "", "ire": "", "iren": "", "iri": "", "jari": "", "jeni": "", "nei": "", "nenia": "", "neniaj": "", "neniajn": "", "nenian": "", "nenie": "", "nenien": "", "reiri": ""};
+  const hintsMatrix = {"A": {"3": 0, "4": 2, "5": 0, "6": 0, "7": 0}, "B": {"3": 0, "4": 0, "5": 3, "6": 3, "7": 1}, "I": {"3": 3, "4": 3, "5": 1, "6": 0, "7": 0}, "J": {"3": 0, "4": 2, "5": 0, "6": 0, "7": 0}, "N": {"3": 1, "4": 0, "5": 2, "6": 3, "7": 1}, "R": {"3": 0, "4": 0, "5": 1, "6": 0, "7": 0}};
+  const lengthsList = [3, 4, 5, 6, 7];
+  const maxScore = 113;
+  const totalTutis = 1;
   
   let currentInput = "";
   let foundWords = new Set();
