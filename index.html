@@ -404,7 +404,7 @@
 <header>
   <div class="title-wrap">
     <h1>Vortabelo</h1>
-    <div class="subtitle">Taga defio - 2026-10-30</div>
+    <div class="subtitle">Taga defio - 2026-10-31</div>
   </div>
   <div class="header-actions">
     <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
@@ -421,7 +421,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 194 pt</span>
+    <span id="score-text">0 / 170 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -468,7 +468,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/27)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/28)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -523,15 +523,15 @@
 </div>
 
 <script>
-  const gameDate = '2026-10-30';
-  const centerLetter = 'j';
-  let outerLetters = ["n", "o", "l", "p", "u", "m"];
-  const solutions = new Set(["juno", "junoj", "junojn", "junon", "junulo", "junuloj", "junulojn", "junulon", "lunoj", "lunojn", "nomoj", "nomojn", "nunoj", "nunojn", "plumoj", "plumojn", "plumujo", "plumujoj", "plumujojn", "plumujon", "pluoj", "pluojn", "pomoj", "pomojn", "popoloj", "unuoj", "unuojn"]);
-  const solutionsList = ["juno", "junoj", "junojn", "junon", "junulo", "junuloj", "junulojn", "junulon", "lunoj", "lunojn", "nomoj", "nomojn", "nunoj", "nunojn", "plumoj", "plumojn", "plumujo", "plumujoj", "plumujojn", "plumujon", "pluoj", "pluojn", "pomoj", "pomojn", "popoloj", "unuoj", "unuojn"];
-  const dict = {"juno": "", "junoj": "", "junojn": "", "junon": "", "junulo": "", "junuloj": "", "junulojn": "", "junulon": "", "lunoj": "", "lunojn": "", "nomoj": "", "nomojn": "", "nunoj": "", "nunojn": "", "plumoj": "", "plumojn": "", "plumujo": "", "plumujoj": "", "plumujojn": "", "plumujon": "", "pluoj": "", "pluojn": "", "pomoj": "", "pomojn": "", "popoloj": "", "unuoj": "", "unuojn": ""};
-  const hintsMatrix = {"J": {"4": 1, "5": 2, "6": 2, "7": 2, "8": 1, "9": 0}, "L": {"4": 0, "5": 1, "6": 1, "7": 0, "8": 0, "9": 0}, "N": {"4": 0, "5": 2, "6": 2, "7": 0, "8": 0, "9": 0}, "P": {"4": 0, "5": 2, "6": 3, "7": 3, "8": 2, "9": 1}, "U": {"4": 0, "5": 1, "6": 1, "7": 0, "8": 0, "9": 0}};
-  const lengthsList = [4, 5, 6, 7, 8, 9];
-  const maxScore = 194;
+  const gameDate = '2026-10-31';
+  const centerLetter = 'l';
+  let outerLetters = ["g", "n", "r", "d", "a", "i"];
+  const solutions = new Set(["algranda", "algrandan", "alia", "alian", "alili", "alli", "alni", "grandila", "grandilan", "ial", "ili", "ilin", "landa", "landan", "landi", "liga", "ligan", "ligara", "ligaran", "ligi", "ligila", "ligilan", "ligina", "liginan", "ligna", "lignan", "lin", "linrigardi"]);
+  const solutionsList = ["algranda", "algrandan", "alia", "alian", "alili", "alli", "alni", "grandila", "grandilan", "ial", "ili", "ilin", "landa", "landan", "landi", "liga", "ligan", "ligara", "ligaran", "ligi", "ligila", "ligilan", "ligina", "liginan", "ligna", "lignan", "lin", "linrigardi"];
+  const dict = {"algranda": "", "algrandan": "", "alia": "", "alian": "", "alili": "", "alli": "", "alni": "", "grandila": "", "grandilan": "", "ial": "", "ili": "", "ilin": "", "landa": "", "landan": "", "landi": "", "liga": "", "ligan": "", "ligara": "", "ligaran": "", "ligi": "", "ligila": "", "ligilan": "", "ligina": "", "liginan": "", "ligna": "", "lignan": "", "lin": "", "linrigardi": ""};
+  const hintsMatrix = {"A": {"3": 0, "4": 3, "5": 2, "6": 0, "7": 0, "8": 1, "9": 1, "10": 0}, "G": {"3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 1, "9": 1, "10": 0}, "I": {"3": 2, "4": 1, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0, "10": 0}, "L": {"3": 1, "4": 2, "5": 4, "6": 5, "7": 3, "8": 0, "9": 0, "10": 1}};
+  const lengthsList = [3, 4, 5, 6, 7, 8, 9, 10];
+  const maxScore = 170;
   const totalTutis = 3;
   
   let currentInput = "";
