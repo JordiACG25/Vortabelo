@@ -404,7 +404,7 @@
 <header>
   <div class="title-wrap">
     <h1>Vortabelo</h1>
-    <div class="subtitle">Taga defio - 2026-11-02</div>
+    <div class="subtitle">Taga defio - 2026-11-03</div>
   </div>
   <div class="header-actions">
     <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
@@ -421,7 +421,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 140 pt</span>
+    <span id="score-text">0 / 216 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -468,7 +468,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/28)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/32)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -477,7 +477,7 @@
 <div class="section-card">
   <div class="card-title">
     <span>Spuroj & Pangeromoj</span>
-    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/1 tutis</span>
+    <span id="tuti-counter" style="font-size:0.8rem; color:var(--primary);">0/3 tutis</span>
   </div>
   <div id="hints-table-container"></div>
 </div>
@@ -523,16 +523,16 @@
 </div>
 
 <script>
-  const gameDate = '2026-11-02';
-  const centerLetter = 'r';
-  let outerLetters = ["ŝ", "a", "j", "n", "o", "m"];
-  const solutions = new Set(["jara", "jaraj", "jarajn", "jaran", "jaro", "jaroj", "jarojn", "jaron", "mara", "maraj", "marajn", "maran", "maro", "maroj", "marojn", "maron", "marŝa", "marŝaj", "marŝajn", "marŝan", "marŝo", "marŝoj", "marŝojn", "marŝon", "oro", "oroj", "orojn", "oron"]);
-  const solutionsList = ["jara", "jaraj", "jarajn", "jaran", "jaro", "jaroj", "jarojn", "jaron", "mara", "maraj", "marajn", "maran", "maro", "maroj", "marojn", "maron", "marŝa", "marŝaj", "marŝajn", "marŝan", "marŝo", "marŝoj", "marŝojn", "marŝon", "oro", "oroj", "orojn", "oron"];
-  const dict = {"jara": "", "jaraj": "", "jarajn": "", "jaran": "", "jaro": "", "jaroj": "", "jarojn": "", "jaron": "", "mara": "", "maraj": "", "marajn": "", "maran": "", "maro": "", "maroj": "", "marojn": "", "maron": "", "marŝa": "", "marŝaj": "", "marŝajn": "", "marŝan": "", "marŝo": "", "marŝoj": "", "marŝojn": "", "marŝon": "", "oro": "", "oroj": "", "orojn": "", "oron": ""};
-  const hintsMatrix = {"J": {"3": 0, "4": 2, "5": 4, "6": 2, "7": 0}, "M": {"3": 0, "4": 2, "5": 6, "6": 6, "7": 2}, "O": {"3": 1, "4": 2, "5": 1, "6": 0, "7": 0}};
-  const lengthsList = [3, 4, 5, 6, 7];
-  const maxScore = 140;
-  const totalTutis = 1;
+  const gameDate = '2026-11-03';
+  const centerLetter = 'd';
+  let outerLetters = ["n", "r", "e", "j", "v", "o"];
+  const solutions = new Set(["deve", "deven", "devo", "devoj", "devojn", "devon", "done", "donen", "dono", "donoj", "donojn", "donon", "odoro", "odoroj", "odorojn", "odoron", "rondo", "rondoj", "rondojn", "rondon", "vendrede", "vendreden", "vendredo", "vendredoj", "vendredojn", "vendredon", "verde", "verden", "verdo", "verdoj", "verdojn", "verdon"]);
+  const solutionsList = ["deve", "deven", "devo", "devoj", "devojn", "devon", "done", "donen", "dono", "donoj", "donojn", "donon", "odoro", "odoroj", "odorojn", "odoron", "rondo", "rondoj", "rondojn", "rondon", "vendrede", "vendreden", "vendredo", "vendredoj", "vendredojn", "vendredon", "verde", "verden", "verdo", "verdoj", "verdojn", "verdon"];
+  const dict = {"deve": "", "deven": "", "devo": "", "devoj": "", "devojn": "", "devon": "", "done": "", "donen": "", "dono": "", "donoj": "", "donojn": "", "donon": "", "odoro": "", "odoroj": "", "odorojn": "", "odoron": "", "rondo": "", "rondoj": "", "rondojn": "", "rondon": "", "vendrede": "", "vendreden": "", "vendredo": "", "vendredoj": "", "vendredojn": "", "vendredon": "", "verde": "", "verden": "", "verdo": "", "verdoj": "", "verdojn": "", "verdon": ""};
+  const hintsMatrix = {"D": {"4": 4, "5": 6, "6": 2, "7": 0, "8": 0, "9": 0, "10": 0}, "O": {"4": 0, "5": 1, "6": 2, "7": 1, "8": 0, "9": 0, "10": 0}, "R": {"4": 0, "5": 1, "6": 2, "7": 1, "8": 0, "9": 0, "10": 0}, "V": {"4": 0, "5": 2, "6": 3, "7": 1, "8": 2, "9": 3, "10": 1}};
+  const lengthsList = [4, 5, 6, 7, 8, 9, 10];
+  const maxScore = 216;
+  const totalTutis = 3;
   
   let currentInput = "";
   let foundWords = new Set();
