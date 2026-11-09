@@ -404,7 +404,7 @@
 <header>
   <div class="title-wrap">
     <h1>Vortabelo</h1>
-    <div class="subtitle">Taga defio - 2026-11-08</div>
+    <div class="subtitle">Taga defio - 2026-11-09</div>
   </div>
   <div class="header-actions">
     <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
@@ -421,7 +421,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 207 pt</span>
+    <span id="score-text">0 / 169 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -468,7 +468,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/39)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/25)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -523,15 +523,15 @@
 </div>
 
 <script>
-  const gameDate = '2026-11-08';
-  const centerLetter = 'n';
-  let outerLetters = ["k", "m", "i", "r", "o", "a"];
-  const solutions = new Set(["aman", "amikan", "amikaran", "amikaron", "amikina", "amikinan", "amikino", "amikinon", "amikon", "amon", "ion", "iran", "iron", "karna", "karnan", "karni", "karno", "karnon", "kian", "kion", "kokino", "kokinon", "kormian", "koron", "manon", "maran", "maron", "miaamikon", "miakaran", "mian", "min", "minio", "minion", "noma", "noman", "nomi", "nomo", "nomon", "oron"]);
-  const solutionsList = ["aman", "amikan", "amikaran", "amikaron", "amikina", "amikinan", "amikino", "amikinon", "amikon", "amon", "ion", "iran", "iron", "karna", "karnan", "karni", "karno", "karnon", "kian", "kion", "kokino", "kokinon", "kormian", "koron", "manon", "maran", "maron", "miaamikon", "miakaran", "mian", "min", "minio", "minion", "noma", "noman", "nomi", "nomo", "nomon", "oron"];
-  const dict = {"aman": "", "amikan": "", "amikaran": "", "amikaron": "", "amikina": "", "amikinan": "", "amikino": "", "amikinon": "", "amikon": "", "amon": "", "ion": "", "iran": "", "iron": "", "karna": "", "karnan": "", "karni": "", "karno": "", "karnon": "", "kian": "", "kion": "", "kokino": "", "kokinon": "", "kormian": "", "koron": "", "manon": "", "maran": "", "maron": "", "miaamikon": "", "miakaran": "", "mian": "", "min": "", "minio": "", "minion": "", "noma": "", "noman": "", "nomi": "", "nomo": "", "nomon": "", "oron": ""};
-  const hintsMatrix = {"A": {"3": 0, "4": 2, "5": 0, "6": 2, "7": 2, "8": 4, "9": 0}, "I": {"3": 1, "4": 2, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0}, "K": {"3": 0, "4": 2, "5": 4, "6": 3, "7": 2, "8": 0, "9": 0}, "M": {"3": 1, "4": 1, "5": 4, "6": 1, "7": 0, "8": 1, "9": 1}, "N": {"3": 0, "4": 3, "5": 2, "6": 0, "7": 0, "8": 0, "9": 0}, "O": {"3": 0, "4": 1, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0}};
+  const gameDate = '2026-11-09';
+  const centerLetter = 'k';
+  let outerLetters = ["ĵ", "a", "n", "r", "i", "t"];
+  const solutions = new Set(["akiri", "karna", "karnan", "karni", "kata", "katan", "katara", "kataran", "kataĵa", "kataĵan", "kati", "katina", "katinan", "kia", "kian", "kritiki", "trinka", "trinkan", "trinkara", "trinkaran", "trinkaĵa", "trinkaĵan", "trinki", "trinkina", "trinkinan"]);
+  const solutionsList = ["akiri", "karna", "karnan", "karni", "kata", "katan", "katara", "kataran", "kataĵa", "kataĵan", "kati", "katina", "katinan", "kia", "kian", "kritiki", "trinka", "trinkan", "trinkara", "trinkaran", "trinkaĵa", "trinkaĵan", "trinki", "trinkina", "trinkinan"];
+  const dict = {"akiri": "", "karna": "", "karnan": "", "karni": "", "kata": "", "katan": "", "katara": "", "kataran": "", "kataĵa": "", "kataĵan": "", "kati": "", "katina": "", "katinan": "", "kia": "", "kian": "", "kritiki": "", "trinka": "", "trinkan": "", "trinkara": "", "trinkaran": "", "trinkaĵa": "", "trinkaĵan": "", "trinki": "", "trinkina": "", "trinkinan": ""};
+  const hintsMatrix = {"A": {"3": 0, "4": 0, "5": 1, "6": 0, "7": 0, "8": 0, "9": 0}, "K": {"3": 1, "4": 3, "5": 3, "6": 4, "7": 4, "8": 0, "9": 0}, "T": {"3": 0, "4": 0, "5": 0, "6": 2, "7": 1, "8": 3, "9": 3}};
   const lengthsList = [3, 4, 5, 6, 7, 8, 9];
-  const maxScore = 207;
+  const maxScore = 169;
   const totalTutis = 2;
   
   let currentInput = "";
