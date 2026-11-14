@@ -404,7 +404,7 @@
 <header>
   <div class="title-wrap">
     <h1>Vortabelo</h1>
-    <div class="subtitle">Taga defio - 2026-11-13</div>
+    <div class="subtitle">Taga defio - 2026-11-14</div>
   </div>
   <div class="header-actions">
     <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
@@ -421,7 +421,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 224 pt</span>
+    <span id="score-text">0 / 284 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -468,7 +468,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/45)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/53)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -523,15 +523,15 @@
 </div>
 
 <script>
-  const gameDate = '2026-11-13';
-  const centerLetter = 'v';
-  let outerLetters = ["n", "i", "l", "g", "j", "o"];
-  const solutions = new Set(["lingvi", "lingvo", "lingvoj", "lingvojn", "lingvon", "novi", "novilo", "noviloj", "novilojn", "novilon", "novino", "novinoj", "novinojn", "novinon", "novo", "novoj", "novojn", "novon", "olvi", "ovi", "ovo", "ovoj", "ovojn", "ovon", "vin", "vini", "vino", "vinoj", "vinojn", "vinon", "vivi", "vivo", "vivoj", "vivojn", "vivon", "voji", "vojo", "vojoj", "vojojn", "vojon", "voli", "volo", "voloj", "volojn", "volon"]);
-  const solutionsList = ["lingvi", "lingvo", "lingvoj", "lingvojn", "lingvon", "novi", "novilo", "noviloj", "novilojn", "novilon", "novino", "novinoj", "novinojn", "novinon", "novo", "novoj", "novojn", "novon", "olvi", "ovi", "ovo", "ovoj", "ovojn", "ovon", "vin", "vini", "vino", "vinoj", "vinojn", "vinon", "vivi", "vivo", "vivoj", "vivojn", "vivon", "voji", "vojo", "vojoj", "vojojn", "vojon", "voli", "volo", "voloj", "volojn", "volon"];
-  const dict = {"lingvi": "", "lingvo": "", "lingvoj": "", "lingvojn": "", "lingvon": "", "novi": "", "novilo": "", "noviloj": "", "novilojn": "", "novilon": "", "novino": "", "novinoj": "", "novinojn": "", "novinon": "", "novo": "", "novoj": "", "novojn": "", "novon": "", "olvi": "", "ovi": "", "ovo": "", "ovoj": "", "ovojn": "", "ovon": "", "vin": "", "vini": "", "vino": "", "vinoj": "", "vinojn": "", "vinon": "", "vivi": "", "vivo": "", "vivoj": "", "vivojn": "", "vivon": "", "voji": "", "vojo": "", "vojoj": "", "vojojn": "", "vojon": "", "voli": "", "volo": "", "voloj": "", "volojn": "", "volon": ""};
-  const hintsMatrix = {"L": {"3": 0, "4": 0, "5": 0, "6": 2, "7": 2, "8": 1}, "N": {"3": 0, "4": 2, "5": 2, "6": 3, "7": 4, "8": 2}, "O": {"3": 2, "4": 3, "5": 1, "6": 0, "7": 0, "8": 0}, "V": {"3": 1, "4": 8, "5": 8, "6": 4, "7": 0, "8": 0}};
+  const gameDate = '2026-11-14';
+  const centerLetter = 'i';
+  let outerLetters = ["a", "e", "j", "g", "l", "n"];
+  const solutions = new Set(["alia", "aliaj", "aliajn", "alian", "alili", "alli", "alni", "ial", "iel", "ili", "ilin", "jeni", "jenli", "legi", "liga", "ligaj", "ligajn", "ligan", "lige", "ligeja", "ligejaj", "ligejajn", "ligejan", "ligeje", "ligejen", "ligen", "ligi", "ligila", "ligilaj", "ligilajn", "ligilan", "ligile", "ligilen", "ligina", "liginaj", "liginajn", "liginan", "ligine", "liginen", "ligna", "lignaj", "lignajn", "lignan", "lin", "nei", "nenia", "neniaj", "neniajn", "nenial", "nenian", "nenie", "neniel", "nenien"]);
+  const solutionsList = ["alia", "aliaj", "aliajn", "alian", "alili", "alli", "alni", "ial", "iel", "ili", "ilin", "jeni", "jenli", "legi", "liga", "ligaj", "ligajn", "ligan", "lige", "ligeja", "ligejaj", "ligejajn", "ligejan", "ligeje", "ligejen", "ligen", "ligi", "ligila", "ligilaj", "ligilajn", "ligilan", "ligile", "ligilen", "ligina", "liginaj", "liginajn", "liginan", "ligine", "liginen", "ligna", "lignaj", "lignajn", "lignan", "lin", "nei", "nenia", "neniaj", "neniajn", "nenial", "nenian", "nenie", "neniel", "nenien"];
+  const dict = {"alia": "", "aliaj": "", "aliajn": "", "alian": "", "alili": "", "alli": "", "alni": "", "ial": "", "iel": "", "ili": "", "ilin": "", "jeni": "", "jenli": "", "legi": "", "liga": "", "ligaj": "", "ligajn": "", "ligan": "", "lige": "", "ligeja": "", "ligejaj": "", "ligejajn": "", "ligejan": "", "ligeje": "", "ligejen": "", "ligen": "", "ligi": "", "ligila": "", "ligilaj": "", "ligilajn": "", "ligilan": "", "ligile": "", "ligilen": "", "ligina": "", "liginaj": "", "liginajn": "", "liginan": "", "ligine": "", "liginen": "", "ligna": "", "lignaj": "", "lignajn": "", "lignan": "", "lin": "", "nei": "", "nenia": "", "neniaj": "", "neniajn": "", "nenial": "", "nenian": "", "nenie": "", "neniel": "", "nenien": ""};
+  const hintsMatrix = {"A": {"3": 0, "4": 3, "5": 3, "6": 1, "7": 0, "8": 0}, "I": {"3": 3, "4": 1, "5": 0, "6": 0, "7": 0, "8": 0}, "J": {"3": 0, "4": 1, "5": 1, "6": 0, "7": 0, "8": 0}, "L": {"3": 1, "4": 4, "5": 4, "6": 9, "7": 10, "8": 3}, "N": {"3": 1, "4": 0, "5": 2, "6": 5, "7": 1, "8": 0}};
   const lengthsList = [3, 4, 5, 6, 7, 8];
-  const maxScore = 224;
+  const maxScore = 284;
   const totalTutis = 2;
   
   let currentInput = "";
