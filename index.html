@@ -404,7 +404,7 @@
 <header>
   <div class="title-wrap">
     <h1>Vortabelo</h1>
-    <div class="subtitle">Taga defio - 2026-11-19</div>
+    <div class="subtitle">Taga defio - 2026-11-20</div>
   </div>
   <div class="header-actions">
     <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
@@ -421,7 +421,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 124 pt</span>
+    <span id="score-text">0 / 198 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -468,7 +468,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/26)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/50)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -523,15 +523,15 @@
 </div>
 
 <script>
-  const gameDate = '2026-11-19';
-  const centerLetter = 'd';
-  let outerLetters = ["r", "u", "n", "i", "h", "o"];
-  const solutions = new Set(["dio", "dion", "diri", "diro", "diron", "diru", "doni", "dono", "donon", "du", "dui", "duo", "duon", "hirundo", "hirundon", "hundi", "hundino", "hundinon", "hundo", "hundon", "nudo", "nudon", "odoro", "odoron", "rondo", "rondon"]);
-  const solutionsList = ["dio", "dion", "diri", "diro", "diron", "diru", "doni", "dono", "donon", "du", "dui", "duo", "duon", "hirundo", "hirundon", "hundi", "hundino", "hundinon", "hundo", "hundon", "nudo", "nudon", "odoro", "odoron", "rondo", "rondon"];
-  const dict = {"dio": "", "dion": "", "diri": "", "diro": "", "diron": "", "diru": "", "doni": "", "dono": "", "donon": "", "du": "", "dui": "", "duo": "", "duon": "", "hirundo": "", "hirundon": "", "hundi": "", "hundino": "", "hundinon": "", "hundo": "", "hundon": "", "nudo": "", "nudon": "", "odoro": "", "odoron": "", "rondo": "", "rondon": ""};
-  const hintsMatrix = {"D": {"2": 1, "3": 3, "4": 7, "5": 2, "6": 0, "7": 0, "8": 0}, "H": {"2": 0, "3": 0, "4": 0, "5": 2, "6": 1, "7": 2, "8": 2}, "N": {"2": 0, "3": 0, "4": 1, "5": 1, "6": 0, "7": 0, "8": 0}, "O": {"2": 0, "3": 0, "4": 0, "5": 1, "6": 1, "7": 0, "8": 0}, "R": {"2": 0, "3": 0, "4": 0, "5": 1, "6": 1, "7": 0, "8": 0}};
-  const lengthsList = [2, 3, 4, 5, 6, 7, 8];
-  const maxScore = 124;
+  const gameDate = '2026-11-20';
+  const centerLetter = 'm';
+  let outerLetters = ["k", "a", "o", "j", "e", "i"];
+  const solutions = new Set(["ama", "amaj", "ame", "ami", "amika", "amikaj", "amike", "amikeja", "amikejaj", "amikeje", "amikejo", "amikejoj", "amiki", "amiko", "amikoj", "amo", "amoj", "amoja", "amojaj", "iam", "iom", "jam", "jama", "jamaj", "jame", "jami", "jamo", "jamoj", "jim", "kemi", "kiam", "kiom", "maja", "majaj", "maje", "maji", "majo", "majoj", "mamoj", "mem", "mema", "memaj", "meme", "memi", "memo", "memoj", "mia", "miaamiko", "miaamikoj", "miaj"]);
+  const solutionsList = ["ama", "amaj", "ame", "ami", "amika", "amikaj", "amike", "amikeja", "amikejaj", "amikeje", "amikejo", "amikejoj", "amiki", "amiko", "amikoj", "amo", "amoj", "amoja", "amojaj", "iam", "iom", "jam", "jama", "jamaj", "jame", "jami", "jamo", "jamoj", "jim", "kemi", "kiam", "kiom", "maja", "majaj", "maje", "maji", "majo", "majoj", "mamoj", "mem", "mema", "memaj", "meme", "memi", "memo", "memoj", "mia", "miaamiko", "miaamikoj", "miaj"];
+  const dict = {"ama": "", "amaj": "", "ame": "", "ami": "", "amika": "", "amikaj": "", "amike": "", "amikeja": "", "amikejaj": "", "amikeje": "", "amikejo": "", "amikejoj": "", "amiki": "", "amiko": "", "amikoj": "", "amo": "", "amoj": "", "amoja": "", "amojaj": "", "iam": "", "iom": "", "jam": "", "jama": "", "jamaj": "", "jame": "", "jami": "", "jamo": "", "jamoj": "", "jim": "", "kemi": "", "kiam": "", "kiom": "", "maja": "", "majaj": "", "maje": "", "maji": "", "majo": "", "majoj": "", "mamoj": "", "mem": "", "mema": "", "memaj": "", "meme": "", "memi": "", "memo": "", "memoj": "", "mia": "", "miaamiko": "", "miaamikoj": "", "miaj": ""};
+  const hintsMatrix = {"A": {"3": 4, "4": 2, "5": 5, "6": 3, "7": 3, "8": 2, "9": 0}, "I": {"3": 2, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0}, "J": {"3": 2, "4": 4, "5": 2, "6": 0, "7": 0, "8": 0, "9": 0}, "K": {"3": 0, "4": 3, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0}, "M": {"3": 2, "4": 9, "5": 5, "6": 0, "7": 0, "8": 1, "9": 1}};
+  const lengthsList = [3, 4, 5, 6, 7, 8, 9];
+  const maxScore = 198;
   const totalTutis = 2;
   
   let currentInput = "";
