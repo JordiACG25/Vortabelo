@@ -404,7 +404,7 @@
 <header>
   <div class="title-wrap">
     <h1>Vortabelo</h1>
-    <div class="subtitle">Taga defio - 2026-11-22</div>
+    <div class="subtitle">Taga defio - 2026-11-23</div>
   </div>
   <div class="header-actions">
     <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
@@ -421,7 +421,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 193 pt</span>
+    <span id="score-text">0 / 202 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -468,7 +468,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/27)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/32)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -523,15 +523,15 @@
 </div>
 
 <script>
-  const gameDate = '2026-11-22';
-  const centerLetter = 'n';
-  let outerLetters = ["k", "p", "j", "l", "a", "o"];
-  const solutions = new Set(["alapolojn", "alapolon", "kanoj", "kapojn", "kapon", "kolonoj", "lakapojn", "lakapon", "lakokojn", "lakokon", "lokajn", "lokan", "lokojn", "lokon", "pana", "panaj", "panajn", "panan", "pano", "panoj", "panojn", "panon", "planko", "plankoj", "plankojn", "plankon", "pokalon"]);
-  const solutionsList = ["alapolojn", "alapolon", "kanoj", "kapojn", "kapon", "kolonoj", "lakapojn", "lakapon", "lakokojn", "lakokon", "lokajn", "lokan", "lokojn", "lokon", "pana", "panaj", "panajn", "panan", "pano", "panoj", "panojn", "panon", "planko", "plankoj", "plankojn", "plankon", "pokalon"];
-  const dict = {"alapolojn": "", "alapolon": "", "kanoj": "", "kapojn": "", "kapon": "", "kolonoj": "", "lakapojn": "", "lakapon": "", "lakokojn": "", "lakokon": "", "lokajn": "", "lokan": "", "lokojn": "", "lokon": "", "pana": "", "panaj": "", "panajn": "", "panan": "", "pano": "", "panoj": "", "panojn": "", "panon": "", "planko": "", "plankoj": "", "plankojn": "", "plankon": "", "pokalon": ""};
-  const hintsMatrix = {"A": {"4": 0, "5": 0, "6": 0, "7": 0, "8": 1, "9": 1}, "K": {"4": 0, "5": 2, "6": 1, "7": 1, "8": 0, "9": 0}, "L": {"4": 0, "5": 2, "6": 2, "7": 2, "8": 2, "9": 0}, "P": {"4": 2, "5": 4, "6": 3, "7": 3, "8": 1, "9": 0}};
-  const lengthsList = [4, 5, 6, 7, 8, 9];
-  const maxScore = 193;
+  const gameDate = '2026-11-23';
+  const centerLetter = 'l';
+  let outerLetters = ["o", "k", "a", "n", "u", "d"];
+  const solutions = new Set(["aluno", "alunon", "konkludo", "konkludon", "ladua", "laduan", "laduko", "ladukon", "lakoko", "lakokon", "lakonkludo", "lakonkludon", "landa", "landan", "lando", "landon", "loka", "lokan", "loko", "lokon", "luda", "ludan", "ludo", "ludon", "luna", "lunan", "lunda", "lundan", "lundo", "lundon", "luno", "lunon"]);
+  const solutionsList = ["aluno", "alunon", "konkludo", "konkludon", "ladua", "laduan", "laduko", "ladukon", "lakoko", "lakokon", "lakonkludo", "lakonkludon", "landa", "landan", "lando", "landon", "loka", "lokan", "loko", "lokon", "luda", "ludan", "ludo", "ludon", "luna", "lunan", "lunda", "lundan", "lundo", "lundon", "luno", "lunon"];
+  const dict = {"aluno": "", "alunon": "", "konkludo": "", "konkludon": "", "ladua": "", "laduan": "", "laduko": "", "ladukon": "", "lakoko": "", "lakokon": "", "lakonkludo": "", "lakonkludon": "", "landa": "", "landan": "", "lando": "", "landon": "", "loka": "", "lokan": "", "loko": "", "lokon": "", "luda": "", "ludan": "", "ludo": "", "ludon": "", "luna": "", "lunan": "", "lunda": "", "lundan": "", "lundo": "", "lundon": "", "luno": "", "lunon": ""};
+  const hintsMatrix = {"A": {"4": 0, "5": 1, "6": 1, "7": 0, "8": 0, "9": 0, "10": 0, "11": 0}, "K": {"4": 0, "5": 0, "6": 0, "7": 0, "8": 1, "9": 1, "10": 0, "11": 0}, "L": {"4": 6, "5": 11, "6": 7, "7": 2, "8": 0, "9": 0, "10": 1, "11": 1}};
+  const lengthsList = [4, 5, 6, 7, 8, 9, 10, 11];
+  const maxScore = 202;
   const totalTutis = 3;
   
   let currentInput = "";
