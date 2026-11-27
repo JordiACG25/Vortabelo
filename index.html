@@ -404,7 +404,7 @@
 <header>
   <div class="title-wrap">
     <h1>Vortabelo</h1>
-    <div class="subtitle">Taga defio - 2026-11-26</div>
+    <div class="subtitle">Taga defio - 2026-11-27</div>
   </div>
   <div class="header-actions">
     <button class="icon-btn" onclick="toggleModal('user-modal')" title="Uzanto">👤</button>
@@ -421,7 +421,7 @@
 <div class="rank-container">
   <div class="rank-meta">
     <span id="user-rank">Novulo</span>
-    <span id="score-text">0 / 177 pt</span>
+    <span id="score-text">0 / 218 pt</span>
   </div>
   <div class="progress-bar">
     <div id="progress-fill" class="progress-fill"></div>
@@ -468,7 +468,7 @@
 
 <div class="section-card">
   <div class="card-title">
-    <span>Trovitaj vortoj (<span id="found-count">0</span>/46)</span>
+    <span>Trovitaj vortoj (<span id="found-count">0</span>/45)</span>
     <button class="action-btn btn-secondary" style="font-size:0.75rem; padding:3px 8px;" onclick="shareResults()">Kopii</button>
   </div>
   <div id="words-list"></div>
@@ -523,15 +523,15 @@
 </div>
 
 <script>
-  const gameDate = '2026-11-26';
+  const gameDate = '2026-11-27';
   const centerLetter = 't';
-  let outerLetters = ["r", "e", "i", "s", "p", "a"];
-  const solutions = new Set(["arta", "esta", "estastia", "este", "esti", "estissprita", "parta", "parte", "parti", "patra", "patrara", "patrare", "patre", "patri", "patrista", "patriste", "peta", "pete", "peti", "preta", "prete", "preti", "stara", "stare", "stari", "tea", "tee", "tei", "tera", "tere", "teri", "tia", "tie", "ties", "tra", "traa", "trae", "trai", "tre", "trea", "tree", "trei", "tri", "tria", "trie", "trii"]);
-  const solutionsList = ["arta", "esta", "estastia", "este", "esti", "estissprita", "parta", "parte", "parti", "patra", "patrara", "patrare", "patre", "patri", "patrista", "patriste", "peta", "pete", "peti", "preta", "prete", "preti", "stara", "stare", "stari", "tea", "tee", "tei", "tera", "tere", "teri", "tia", "tie", "ties", "tra", "traa", "trae", "trai", "tre", "trea", "tree", "trei", "tri", "tria", "trie", "trii"];
-  const dict = {"arta": "", "esta": "", "estastia": "", "este": "", "esti": "", "estissprita": "", "parta": "", "parte": "", "parti": "", "patra": "", "patrara": "", "patrare": "", "patre": "", "patri": "", "patrista": "", "patriste": "", "peta": "", "pete": "", "peti": "", "preta": "", "prete": "", "preti": "", "stara": "", "stare": "", "stari": "", "tea": "", "tee": "", "tei": "", "tera": "", "tere": "", "teri": "", "tia": "", "tie": "", "ties": "", "tra": "", "traa": "", "trae": "", "trai": "", "tre": "", "trea": "", "tree": "", "trei": "", "tri": "", "tria": "", "trie": "", "trii": ""};
-  const hintsMatrix = {"A": {"3": 0, "4": 1, "5": 0, "7": 0, "8": 0, "11": 0}, "E": {"3": 0, "4": 3, "5": 0, "7": 0, "8": 1, "11": 1}, "P": {"3": 0, "4": 3, "5": 9, "7": 2, "8": 2, "11": 0}, "S": {"3": 0, "4": 0, "5": 3, "7": 0, "8": 0, "11": 0}, "T": {"3": 8, "4": 13, "5": 0, "7": 0, "8": 0, "11": 0}};
-  const lengthsList = [3, 4, 5, 7, 8, 11];
-  const maxScore = 177;
+  let outerLetters = ["i", "r", "f", "a", "o", "n"];
+  const solutions = new Set(["arta", "artan", "forta", "fortan", "forti", "forto", "forton", "frata", "fratan", "fratara", "frataran", "frataro", "frataron", "frati", "fratina", "fratinan", "fratino", "fratinon", "frato", "fraton", "iontian", "tia", "tian", "tio", "tion", "tra", "traa", "traan", "trai", "trairo", "trairon", "trao", "traon", "tri", "tria", "trian", "trii", "trio", "trion", "tro", "troa", "troan", "troi", "troo", "troon"]);
+  const solutionsList = ["arta", "artan", "forta", "fortan", "forti", "forto", "forton", "frata", "fratan", "fratara", "frataran", "frataro", "frataron", "frati", "fratina", "fratinan", "fratino", "fratinon", "frato", "fraton", "iontian", "tia", "tian", "tio", "tion", "tra", "traa", "traan", "trai", "trairo", "trairon", "trao", "traon", "tri", "tria", "trian", "trii", "trio", "trion", "tro", "troa", "troan", "troi", "troo", "troon"];
+  const dict = {"arta": "", "artan": "", "forta": "", "fortan": "", "forti": "", "forto": "", "forton": "", "frata": "", "fratan": "", "fratara": "", "frataran": "", "frataro": "", "frataron": "", "frati": "", "fratina": "", "fratinan": "", "fratino": "", "fratinon": "", "frato": "", "fraton": "", "iontian": "", "tia": "", "tian": "", "tio": "", "tion": "", "tra": "", "traa": "", "traan": "", "trai": "", "trairo": "", "trairon": "", "trao": "", "traon": "", "tri": "", "tria": "", "trian": "", "trii": "", "trio": "", "trion": "", "tro": "", "troa": "", "troan": "", "troi": "", "troo": "", "troon": ""};
+  const hintsMatrix = {"A": {"3": 0, "4": 1, "5": 1, "6": 0, "7": 0, "8": 0}, "F": {"3": 0, "4": 0, "5": 6, "6": 4, "7": 4, "8": 4}, "I": {"3": 0, "4": 0, "5": 0, "6": 0, "7": 1, "8": 0}, "T": {"3": 5, "4": 11, "5": 6, "6": 1, "7": 1, "8": 0}};
+  const lengthsList = [3, 4, 5, 6, 7, 8];
+  const maxScore = 218;
   const totalTutis = 2;
   
   let currentInput = "";
